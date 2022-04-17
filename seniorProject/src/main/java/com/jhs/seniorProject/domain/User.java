@@ -4,6 +4,7 @@ import com.jhs.seniorProject.domain.baseentity.TimeInfo;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Table(name = "USERS")
+@ToString(of = {"id", "name"})
 public class User extends TimeInfo implements Persistable<String> {
 
     @Id
