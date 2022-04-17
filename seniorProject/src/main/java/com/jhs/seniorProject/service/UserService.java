@@ -36,4 +36,8 @@ public class UserService {
         if(userRepository.findById(user.getId()).isPresent())
             throw new DuplicatedUserException("이미 존재하는 회원입니다");
     }
+
+    public User findUser(String userId) {
+        return userRepository.findById(userId).orElse(null);
+    }
 }
