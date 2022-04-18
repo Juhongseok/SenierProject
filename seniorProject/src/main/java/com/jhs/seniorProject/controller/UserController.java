@@ -4,6 +4,7 @@ import com.jhs.seniorProject.controller.form.LoginForm;
 import com.jhs.seniorProject.controller.form.SignUpForm;
 import com.jhs.seniorProject.domain.User;
 import com.jhs.seniorProject.domain.exception.DuplicatedUserException;
+import com.jhs.seniorProject.domain.exception.NoSuchUserException;
 import com.jhs.seniorProject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +56,12 @@ public class UserController {
     @PostMapping("/withDrawl")
     public String withDrawl(String userId, @SessionAttribute(name = LOGIN_USER, required = false) User user) {
         if (user != null) {
-            userService.withdrawal(userId);
+            try {
+                userService.withdrawal(userId);
+            } catch (NoSuchUserException e) {
+                log.error("UserController.withDrawl error", e);
+                return "redirect:/";
+            }
         }
 
         return "redirect:/";
@@ -76,8 +82,10 @@ public class UserController {
         }
 
         User loginUser = new User(loginForm.getUserId(), loginForm.getPassword(), null);
-        if (userService.login(loginUser) == null) {
-            log.info("has no login user");
+        try {
+            userService.login(loginUser);
+        } catch (NoSuchUserException e) {
+            log.error("UserController.login error", e);
             return "users/loginForm";
         }
 

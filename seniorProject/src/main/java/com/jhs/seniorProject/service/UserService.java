@@ -2,6 +2,7 @@ package com.jhs.seniorProject.service;
 
 import com.jhs.seniorProject.domain.User;
 import com.jhs.seniorProject.domain.exception.DuplicatedUserException;
+import com.jhs.seniorProject.domain.exception.NoSuchUserException;
 import com.jhs.seniorProject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,22 +23,23 @@ public class UserService {
         return user.getId();
     }
 
-    public void withdrawal(String id) {
-        userRepository.delete(userRepository.findById(id).get());
+    public void withdrawal(String id) throws NoSuchUserException {
+        userRepository.delete(ifHasUser(id));
     }
 
     @Transactional(readOnly = true)
-    public User login(User user) {
-        log.info("user.id: {}, user.password: {}", user.getId(), user.getPassword());
-        return userRepository.findByIdAndPassword(user.getId(), user.getPassword()).orElse(null);
+    public User login(User user) throws NoSuchUserException {
+        return userRepository.findByIdAndPassword(user.getId(), user.getPassword())
+                .orElseThrow(() -> new NoSuchUserException("일치하는 회원이 없습니다"));
+    }
+
+    private User ifHasUser(String id) throws NoSuchUserException {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchUserException("일치하는 회원이 없습니다"));
     }
 
     private void validateDuplicateUser(User user) throws DuplicatedUserException {
-        if(userRepository.findById(user.getId()).isPresent())
+        if (userRepository.findById(user.getId()).isPresent())
             throw new DuplicatedUserException("이미 존재하는 회원입니다");
-    }
-
-    public User findUser(String userId) {
-        return userRepository.findById(userId).orElse(null);
     }
 }
