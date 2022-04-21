@@ -47,8 +47,4 @@ public class User extends TimeInfo implements Persistable<String> {
     public void changeName(String name) {
         this.name = name;
     }
-
-    public boolean isSamePassword(String password) {
-        return this.password.equals(password);
-    }
 }

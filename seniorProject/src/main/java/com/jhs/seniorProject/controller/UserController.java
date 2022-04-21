@@ -14,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.constraints.NotEmpty;
 
 import static com.jhs.seniorProject.controller.SessionConst.*;
 
@@ -36,6 +35,7 @@ public class UserController {
         log.info("userController --> signUpForm: {}", signUpForm);
 
         checkPasswordEquals(bindingResult, signUpForm.getPassword(), signUpForm.getPasswordCheck());
+
         if (bindingResult.hasErrors()) {
             log.info("bindResult = {}", bindingResult);
             return "users/signUpForm";
@@ -46,6 +46,7 @@ public class UserController {
         try {
             userId = userService.join(signUpUser);
         } catch (DuplicatedUserException e) {
+            log.error("userController.signUp error ", e);
             return "users/signUpForm";
         }
 
@@ -53,17 +54,17 @@ public class UserController {
         return "redirect:/";
     }
 
-    @PostMapping("/withDrawl")
-    public String withDrawl(String userId, @SessionAttribute(name = LOGIN_USER, required = false) User user) {
-        if (user != null) {
+    @PostMapping("/withdrawal")
+    public String withdrawal(@SessionAttribute(name = LOGIN_USER, required = false) User user, HttpSession session) {
+        if (isLoginStatus(user)) {
             try {
-                userService.withdrawal(userId);
+                userService.withdrawal(user.getId());
+                session.invalidate();
             } catch (NoSuchUserException e) {
-                log.error("UserController.withDrawl error", e);
+                log.error("UserController.withdrawal error", e);
                 return "redirect:/";
             }
         }
-
         return "redirect:/";
     }
 
@@ -82,15 +83,16 @@ public class UserController {
         }
 
         User loginUser = new User(loginForm.getUserId(), loginForm.getPassword(), null);
+        User findLoginUser;
         try {
-            userService.login(loginUser);
+            findLoginUser = userService.login(loginUser);
         } catch (NoSuchUserException e) {
             log.error("UserController.login error", e);
             return "users/loginForm";
         }
 
-        log.info("loginUser = {}", loginUser);
-        session.setAttribute(LOGIN_USER, loginUser);
+        log.info("loginUser = {}", findLoginUser);
+        session.setAttribute(LOGIN_USER, findLoginUser);
         return "redirect:/";
     }
 
@@ -107,5 +109,9 @@ public class UserController {
         if (!password.equals(passwordCheck)) {
             bindingResult.rejectValue("NotCorrectPassword", "비밀번호가 일치하지 않습니다");
         }
+    }
+
+    private boolean isLoginStatus(User user) {
+        return user != null;
     }
 }
