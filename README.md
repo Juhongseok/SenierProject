@@ -5,24 +5,24 @@
 
 # Directory 구조
 ```bash
-   -- src
+   `-- src
        |-- main
        |   |-- generated
        |   |-- java
-       |   |   |-- com
-       |   |       |-- jhs
-       |   |           |-- seniorProject
+       |   |   `-- com
+       |   |       `-- jhs
+       |   |           `-- seniorProject
        |   |               |-- SeniorProjectApplication.java
        |   |               |-- TestDataInit.java
        |   |               |-- configuration
-       |   |               |   |-- WebConfig.java
+       |   |               |   `-- WebConfig.java
        |   |               |-- controller
        |   |               |   |-- HomeController.java
        |   |               |   |-- SessionConst.java
        |   |               |   |-- UserController.java
-       |   |               |   |-- form
+       |   |               |   `-- form
        |   |               |       |-- LoginForm.java
-       |   |               |       |-- SignUpForm.java
+       |   |               |       `-- SignUpForm.java
        |   |               |-- domain
        |   |               |   |-- Friend.java
        |   |               |   |-- Location.java
@@ -32,40 +32,40 @@
        |   |               |   |-- UserMap.java
        |   |               |   |-- baseentity
        |   |               |   |   |-- TimeAndPersonInfo.java
-       |   |               |   |   |-- TimeInfo.java
+       |   |               |   |   `-- TimeInfo.java
        |   |               |   |-- compositid
        |   |               |   |   |-- SmallSubjectId.java
        |   |               |   |   |-- UserMapId.java
-       |   |               |   |   |-- friendId.java
+       |   |               |   |   `-- friendId.java
        |   |               |   |-- enumeration
        |   |               |   |   |-- BigSubject.java
-       |   |               |   |   |-- Visibility.java
-       |   |               |   |-- exception
+       |   |               |   |   `-- Visibility.java
+       |   |               |   `-- exception
        |   |               |       |-- DuplicatedUserException.java
-       |   |               |       |-- NoSuchUserException.java
+       |   |               |       `-- NoSuchUserException.java
        |   |               |-- interceptor
-       |   |               |   |-- LoginInterceptor.java
+       |   |               |   `-- LoginInterceptor.java
        |   |               |-- repository
-       |   |               |   |-- UserRepository.java
-       |   |               |-- service
-       |   |                   |-- UserService.java
-       |   |-- resources
+       |   |               |   `-- UserRepository.java
+       |   |               `-- service
+       |   |                   `-- UserService.java
+       |   `-- resources
        |       |-- application.yml
        |       |-- static
-       |       |-- templates
+       |       `-- templates
        |           |-- index.html
        |           |-- loginIndex.html
-       |           |-- users
+       |           `-- users
        |               |-- loginForm.html
-       |               |-- signUpForm.html
-       |-- test
-           |-- java
-               |-- com
-                   |-- jhs
-                       |-- seniorProject
+       |               `-- signUpForm.html
+       `-- test
+           `-- java
+               `-- com
+                   `-- jhs
+                       `-- seniorProject
                            |-- SeniorProjectApplicationTests.java
                            |-- repository
-                           |   |-- UserRepositoryTest.java
-                           |-- service
-                               |-- UserServiceTest.java
+                          |   `-- UserRepositoryTest.java
+                           `-- service
+                               `-- UserServiceTest.java
 ```
