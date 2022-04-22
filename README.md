@@ -4,6 +4,7 @@
 ![ERD](https://github.com/wnghdtjr129/SenierProject/blob/main/picture/chagedERD.png)
 
 # Directory 구조
+```bash
    -- src
        |-- main
        |   |-- generated
@@ -67,4 +68,4 @@
                            |   |-- UserRepositoryTest.java
                            |-- service
                                |-- UserServiceTest.java
-
+```
