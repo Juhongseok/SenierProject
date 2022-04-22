@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -31,6 +32,7 @@ public class Location extends TimeAndPersonInfo {
     @Column(name = "NAME")
     private String name;
 
+    @Enumerated(STRING)
     @Column(name = "BIG_SUBJECT")
     private BigSubject bigSubject;
 

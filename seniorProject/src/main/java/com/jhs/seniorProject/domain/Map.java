@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static javax.persistence.EnumType.STRING;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -23,6 +25,7 @@ public class Map extends TimeAndPersonInfo {
     @Column(name = "NAME")
     private String name;
 
+    @Enumerated(STRING)
     @Column(name = "VISIBILITY")
     private Visibility visibility;
 }
