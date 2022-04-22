@@ -74,7 +74,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@Validated @ModelAttribute LoginForm loginForm, BindingResult bindingResult, HttpSession session){
+    public String login(@Validated @ModelAttribute LoginForm loginForm, BindingResult bindingResult, HttpSession session,
+                        @RequestParam(defaultValue = "/") String redirectURL){
         log.info("userController --> user.id: {}, user.password: {}", loginForm.getUserId(), loginForm.getPassword());
 
         if (bindingResult.hasErrors()) {
@@ -93,7 +94,7 @@ public class UserController {
 
         log.info("loginUser = {}", findLoginUser);
         session.setAttribute(LOGIN_USER, findLoginUser);
-        return "redirect:/";
+        return "redirect:" + redirectURL;
     }
 
     @PostMapping("/logout")
