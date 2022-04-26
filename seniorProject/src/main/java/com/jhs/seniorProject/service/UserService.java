@@ -2,6 +2,7 @@ package com.jhs.seniorProject.service;
 
 import com.jhs.seniorProject.domain.User;
 import com.jhs.seniorProject.domain.exception.DuplicatedUserException;
+import com.jhs.seniorProject.domain.exception.IncorrectPasswordException;
 import com.jhs.seniorProject.domain.exception.NoSuchUserException;
 import com.jhs.seniorProject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +29,12 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User login(User user) throws NoSuchUserException {
-        return userRepository.findByIdAndPassword(user.getId(), user.getPassword())
+    public User login(User user) throws NoSuchUserException, IncorrectPasswordException {
+        User findUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new NoSuchUserException("일치하는 회원이 없습니다"));
+        if (!findUser.getPassword().equals(user.getPassword()))
+            throw new IncorrectPasswordException("비밀번호가 일치하지 않습니다.");
+        return findUser;
     }
 
     private User ifHasUser(String id) throws NoSuchUserException {

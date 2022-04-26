@@ -2,6 +2,7 @@ package com.jhs.seniorProject.service;
 
 import com.jhs.seniorProject.domain.User;
 import com.jhs.seniorProject.domain.exception.DuplicatedUserException;
+import com.jhs.seniorProject.domain.exception.IncorrectPasswordException;
 import com.jhs.seniorProject.domain.exception.NoSuchUserException;
 import com.jhs.seniorProject.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -88,7 +89,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("로그인 성공로직")
-    void loginSuccess() throws NoSuchUserException {
+    void loginSuccess() throws NoSuchUserException, IncorrectPasswordException {
         //given
         User user = new User("userA", "userA!", "userA");
 
