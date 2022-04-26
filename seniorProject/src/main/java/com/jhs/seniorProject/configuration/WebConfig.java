@@ -3,6 +3,7 @@ package com.jhs.seniorProject.configuration;
 import com.jhs.seniorProject.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -14,6 +15,12 @@ public class WebConfig implements WebMvcConfigurer {
                 .order(1)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/", "/users/login", "/users/signup", "/users/withdrawal", "/users/logout",
-                        "/css/**", "/*.ico", "/error");
+                        "/users/kakao_login", "/css/**", "/*.ico", "/error", "/image/*.png");
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/image/**")
+                .addResourceLocations("classpath:/static/image/");
     }
 }
