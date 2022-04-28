@@ -25,19 +25,18 @@ public class UserService {
     }
 
     public void withdrawal(String id) throws NoSuchUserException {
-        userRepository.delete(ifHasUser(id));
+        userRepository.delete(findUser(id));
     }
 
     @Transactional(readOnly = true)
     public User login(User user) throws NoSuchUserException, IncorrectPasswordException {
-        User findUser = userRepository.findById(user.getId())
-                .orElseThrow(() -> new NoSuchUserException("일치하는 회원이 없습니다"));
-        if (!findUser.getPassword().equals(user.getPassword()))
+        User findUser = findUser(user.getId());
+        if (!user.isSamePassword(findUser.getPassword()))
             throw new IncorrectPasswordException("비밀번호가 일치하지 않습니다.");
         return findUser;
     }
 
-    private User ifHasUser(String id) throws NoSuchUserException {
+    private User findUser(String id) throws NoSuchUserException {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchUserException("일치하는 회원이 없습니다"));
     }
