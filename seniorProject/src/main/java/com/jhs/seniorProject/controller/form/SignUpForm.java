@@ -18,4 +18,8 @@ public class SignUpForm {
 
     @NotEmpty(message = "필수 정보입니다")
     private String name;
+
+    public boolean checkPassword() {
+        return password.equals(passwordCheck);
+    }
 }
