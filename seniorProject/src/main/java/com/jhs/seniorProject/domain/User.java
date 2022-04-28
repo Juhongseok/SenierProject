@@ -1,7 +1,6 @@
 package com.jhs.seniorProject.domain;
 
 import com.jhs.seniorProject.domain.baseentity.TimeInfo;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -37,14 +36,17 @@ public class User extends TimeInfo implements Persistable<String> {
         return getCreatedAt() == null;
     }
 
-    /**
-     * 사용자 정의 함수
-     */
+    //==비지니스 로직==//
     public void changePassword(String password) {
         this.password = password;
     }
 
     public void changeName(String name) {
         this.name = name;
+    }
+
+    //==조회 로직==//
+    public boolean isSamePassword(String password){
+        return this.password.equals(password);
     }
 }
