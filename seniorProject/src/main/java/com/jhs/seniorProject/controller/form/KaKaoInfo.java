@@ -3,14 +3,14 @@ package com.jhs.seniorProject.controller.form;
 import lombok.Data;
 
 @Data
-public class KakaoInfo {
+public class KaKaoInfo {
     public Long id;
     public String connectedAt;
     public Properties properties;
-    public KakaoAccount kakaoAccount;
+    public KaKaoAccount kakaoAccount;
 
     @Data
-    public class KakaoAccount {
+    public class KaKaoAccount {
         public Boolean profileNicknameNeedsAgreement;
         public Profile profile;
         public Boolean hasEmail;
