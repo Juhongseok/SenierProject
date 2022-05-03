@@ -14,35 +14,35 @@ class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
-    private User user;
+    private User savedUser;
 
     @BeforeEach
     void saveUser() {
-        user = new User("userA", "userA@", "userAName");
-        User savedUser = userRepository.save(user);
+        User user = new User("userA", "userA@", "userAName");
+        savedUser = userRepository.save(user);
     }
 
     @Test
     @DisplayName("유저 조회")
     void findUser() {
         //given
-        String id = user.getId();
+        String id = "userA";
 
         //when
         User findUser = userRepository.findById(id).get();
 
         //then
-        assertThat(findUser).isEqualTo(user);
-        assertThat(findUser.getId()).isEqualTo(user.getId());
-        assertThat(findUser.getPassword()).isEqualTo(user.getPassword());
-        assertThat(findUser.getName()).isEqualTo(user.getName());
+        assertThat(findUser).isEqualTo(savedUser);
+        assertThat(findUser.getId()).isEqualTo(savedUser.getId());
+        assertThat(findUser.getPassword()).isEqualTo(savedUser.getPassword());
+        assertThat(findUser.getName()).isEqualTo(savedUser.getName());
     }
 
     @Test
     @DisplayName("유저 수정")
     void updateUser() {
         //given
-        String id = user.getId();
+        String id = "userA";
         User findUser = userRepository.findById(id).get();
 
         //when
@@ -60,7 +60,7 @@ class UserRepositoryTest {
     @DisplayName("유저 삭제")
     void deleteUser() {
         //given
-        String id = user.getId();
+        String id = "userA";
         User findUser = userRepository.findById(id).get();
 
         //when
