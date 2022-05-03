@@ -1,6 +1,7 @@
 package com.jhs.seniorProject.domain;
 
 import com.jhs.seniorProject.domain.baseentity.TimeInfo;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Persistable;
 import javax.persistence.*;
 
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Table(name = "USERS")
@@ -24,12 +26,6 @@ public class User extends TimeInfo implements Persistable<String> {
 
     @Column(name = "NAME")
     private String name;
-
-    public User(String id, String password, String name) {
-        this.id = id;
-        this.password = password;
-        this.name = name;
-    }
 
     @Override
     public boolean isNew() {

@@ -1,11 +1,13 @@
 package com.jhs.seniorProject.domain;
 
 import com.jhs.seniorProject.domain.compositid.UserMapId;
+import com.jhs.seniorProject.domain.enumeration.Visibility;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -26,4 +28,8 @@ public class UserMap {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "MAP_ID")
     private Map map;
+
+    @Enumerated(STRING)
+    @Column(name = "VISIBILITY")
+    private Visibility visibility;
 }

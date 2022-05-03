@@ -1,13 +1,11 @@
 package com.jhs.seniorProject.domain;
 
 import com.jhs.seniorProject.domain.baseentity.TimeAndPersonInfo;
-import com.jhs.seniorProject.domain.enumeration.Visibility;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-import static javax.persistence.EnumType.STRING;
 
 @Entity
 @Getter
@@ -24,8 +22,4 @@ public class Map extends TimeAndPersonInfo {
 
     @Column(name = "NAME")
     private String name;
-
-    @Enumerated(STRING)
-    @Column(name = "VISIBILITY")
-    private Visibility visibility;
 }
