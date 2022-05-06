@@ -1,29 +1,30 @@
 package com.jhs.seniorProject.domain;
 
-import com.jhs.seniorProject.domain.compositid.friendId;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.jhs.seniorProject.domain.compositid.FriendId;
+import lombok.*;
 
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@Getter
+@Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@ToString(of = {"userId", "friendId"})
 @Table(name = "FRIEND")
 public class Friend {
 
     @EmbeddedId
-    private friendId id;
+    private FriendId id;
 
     @MapsId("userId")
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "USER_ID")
-    private User user;
+    private User userId;
 
     @MapsId("friendId")
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "FRIEND_ID")
-    private User friend;
+    private User friendId;
 }
