@@ -79,4 +79,16 @@ class FriendRepositoryTest {
             System.out.println(findFriend.getFriendId().getName());
         }
     }
+
+    @Test
+    @DisplayName("내 아이디랑 친구아이디로 검색")
+    void findFriendWithUserIdAndFriendId(){
+        //given
+        User userA = userRepository.findById("userA").get();
+        User userB = userRepository.findById("userD").orElse(null);
+        Friend find = friendRepository.findByUserIdAndFriendId(userA, userB);
+        //when
+        System.out.println(find);
+        //then
+    }
 }
