@@ -60,6 +60,12 @@ public class FriendService {
         return userRepository.findById(friendId).orElseThrow(() -> new NoSuchUserException(friendId + "의 유저가 없습니다."));
     }
 
+    /**
+     * 자기 자신 추가 못하도록 검증
+     * @param userId
+     * @param friendId
+     * @throws DuplicateFriendException
+     */
     private void validateMyself(String userId, String friendId) throws DuplicateFriendException {
         if (userId.equals(friendId)) {
             throw new DuplicateFriendException("나자신과는 친구관계를 맺을수 없습니다.");
