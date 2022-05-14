@@ -1,7 +1,11 @@
 package com.jhs.seniorProject;
 
+import com.jhs.seniorProject.domain.Friend;
 import com.jhs.seniorProject.domain.User;
+import com.jhs.seniorProject.domain.exception.DuplicateFriendException;
 import com.jhs.seniorProject.domain.exception.DuplicatedUserException;
+import com.jhs.seniorProject.domain.exception.NoSuchUserException;
+import com.jhs.seniorProject.service.FriendService;
 import com.jhs.seniorProject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,15 +17,25 @@ import javax.annotation.PostConstruct;
 public class TestDataInit {
 
     private final UserService userService;
-
+    private final FriendService friendService;
     @PostConstruct
     public void init() {
         try {
-            userService.join(new User("userA", "userA!", "userA"));
-            userService.join(new User("userB", "userB!", "userB"));
-            userService.join(new User("userC", "userC!", "userC"));
+            User userA = new User("userA", "userA!", "userA");
+            User userB = new User("userB", "userB!", "userB");
+            User userC = new User("userC", "userC!", "userC");
+            userService.join(userA);
+            userService.join(userB);
+            userService.join(userC);
+
+            friendService.addFriend(userA, "userB");
+
         } catch (DuplicatedUserException e) {
 
+        } catch (NoSuchUserException e) {
+            e.printStackTrace();
+        } catch (DuplicateFriendException e) {
+            e.printStackTrace();
         }
     }
 }
