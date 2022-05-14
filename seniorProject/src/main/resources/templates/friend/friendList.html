@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+    <div>
+        <form th:object="${user}">
+            <div>
+                <input type="text" th:field="*{id}" placeholder="회원명"/>
+            </div>
+            <button type="button" onclick="add()">검색</button>
+        </form>
+    </div>
+    <hr>
+    <table id="friendTable">
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>친구 이름</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="friend : ${friends}">
+            <td th:text="${friendStat.index + 1}"></td>
+            <td th:text="${friend}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</body>
+<script>
+    function add(){
+        let param = {
+            id:$("#id").val()
+        };
+
+        $.ajax({
+            type:"POST",
+            url:"/friend/add",
+            data: JSON.stringify(param),
+            contentType:"application/json; charset=utf-8",
+        }).done(function(fragment){
+            $("#friendTable").replaceWith(fragment);
+        }).fail(function(request, status, error){
+            console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+        });
+    }
+</script>
+</html>
