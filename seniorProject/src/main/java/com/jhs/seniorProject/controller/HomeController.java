@@ -1,5 +1,6 @@
 package com.jhs.seniorProject.controller;
 
+import com.jhs.seniorProject.argumentresolver.Login;
 import com.jhs.seniorProject.domain.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +13,7 @@ import static com.jhs.seniorProject.controller.SessionConst.LOGIN_USER;
 public class HomeController {
 
     @GetMapping("/")
-    public String home(@SessionAttribute(name = LOGIN_USER, required = false) User loginUser, Model model){
+    public String home(@Login User loginUser, Model model){
         if(loginUser == null)
             return "index";
 

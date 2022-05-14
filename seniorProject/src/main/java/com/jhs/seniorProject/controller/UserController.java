@@ -1,5 +1,6 @@
 package com.jhs.seniorProject.controller;
 
+import com.jhs.seniorProject.argumentresolver.Login;
 import com.jhs.seniorProject.controller.form.LoginForm;
 import com.jhs.seniorProject.controller.form.SignUpForm;
 import com.jhs.seniorProject.controller.logic.KaKaoLogic;
@@ -62,7 +63,7 @@ public class UserController {
     }
 
     @PostMapping("/withdrawal")
-    public String withdrawal(@SessionAttribute(name = LOGIN_USER, required = false) User user, HttpSession session) {
+    public String withdrawal(@Login User user, HttpSession session) {
         if (isLoginStatus(user)) {
             try {
                 userService.withdrawal(user.getId());
