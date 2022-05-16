@@ -13,9 +13,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -31,30 +36,28 @@ public class FriendController {
 
     @GetMapping("/list")
     public String getFriends(@Login User user, @ModelAttribute("user") FriendForm friendForm, Model model) {
-        getFriends(user, model);
-        return "friend/friendList";
-    }
-
-    @PostMapping("/add")
-    public String addFriend(@Login User user, @RequestBody FriendForm friendForm, Model model){
-        try {
-            friendService.addFriend(user, friendForm.getId());
-            log.info("success addFriend");
-        } catch (DuplicateFriendException e) {
-            log.error("error : ", e);
-        } catch (NoSuchUserException e) {
-            log.error("error : ", e);
-        }
-
-        getFriends(user, model);
-        return "friend/friendList :: #friendTable";
-    }
-
-    private void getFriends(User user, Model model) {
         List<String> result = friendService.getFriends(user).stream()
                 .map(FriendController::apply)
                 .collect(toList());
         model.addAttribute("friends", result);
+        return "friend/friendList";
+    }
+
+    @ResponseBody
+    @PostMapping("/api/add")
+    public void addFriend1(@Valid @RequestBody FriendForm friendForm, BindingResult bindingResult, @Login User user) throws BindException {
+        log.info("add friend {}", friendForm);
+        if (bindingResult.hasErrors()) {
+            log.info("bindingResult has error, ", bindingResult);
+            throw new BindException(bindingResult);
+        }
+        try {
+            friendService.addFriend(user, friendForm.getId());
+        } catch (DuplicateFriendException e) {
+            e.printStackTrace();
+        } catch (NoSuchUserException e) {
+            e.printStackTrace();
+        }
     }
 
     private static String apply(Friend friend) {
@@ -64,8 +67,8 @@ public class FriendController {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    static class FriendForm{
-        @NotNull
+    static class FriendForm {
+        @NotBlank(message = "아이디를 입력하세요")
         String id;
     }
 }

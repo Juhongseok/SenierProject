@@ -7,7 +7,7 @@
 </head>
 <body>
     <div>
-        <form th:object="${user}">
+        <form id="form" th:object="${user}">
             <div>
                 <input type="text" th:field="*{id}" placeholder="회원명"/>
             </div>
@@ -39,14 +39,30 @@
 
         $.ajax({
             type:"POST",
-            url:"/friend/add",
+            url:"/friend/api/add",
             data: JSON.stringify(param),
             contentType:"application/json; charset=utf-8",
-        }).done(function(fragment){
-            $("#friendTable").replaceWith(fragment);
-        }).fail(function(request, status, error){
-            console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+        }).done(function(){
+            alert("친구추가 성공");
+            location.reload();
+        }).fail(function(response){
+            makingErrorField(response);
         });
     }
+
+    const makingErrorField = function(response){
+        const errorFields = response.responseJSON.errors;
+
+        let $field, error;
+        for(let i=0, length = errorFields.length; i<length;i++){
+            error = errorFields[i];
+            $field = $('#'+error['field']);
+
+            if($field && $field.length > 0){
+                $field.siblings('.error-message').remove();
+                $field.after('<br><span class="error-message">'+error.defaultMessage+'</span>');
+            }
+        }
+    };
 </script>
 </html>
