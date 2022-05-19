@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>create map</title>
+</head>
+<body>
+<h2>create map</h2>
+
+    <form action="/map/create" th:object="${mapForm}" method="post">
+        <div>
+            <label for="name">지도 이름</label>
+            <input type="text" id="name" th:field="*{name}">
+        </div>
+        <br>
+        <button type="submit">새 지도 생성</button>
+    </form>
+    <a href="/map/add"><button type="button">기존 지도 추가</button></a>
+</body>
+</html>
