@@ -1,6 +1,7 @@
 package com.jhs.seniorProject.controller;
 
 import com.jhs.seniorProject.argumentresolver.Login;
+import com.jhs.seniorProject.controller.form.FriendForm;
 import com.jhs.seniorProject.domain.Friend;
 import com.jhs.seniorProject.domain.User;
 import com.jhs.seniorProject.domain.exception.DuplicateFriendException;
@@ -62,13 +63,5 @@ public class FriendController {
 
     private static String apply(Friend friend) {
         return friend.getFriendId().getName();
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    static class FriendForm {
-        @NotBlank(message = "아이디를 입력하세요")
-        String id;
     }
 }
