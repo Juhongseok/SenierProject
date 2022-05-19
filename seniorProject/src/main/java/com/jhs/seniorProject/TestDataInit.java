@@ -6,6 +6,7 @@ import com.jhs.seniorProject.domain.exception.DuplicateFriendException;
 import com.jhs.seniorProject.domain.exception.DuplicatedUserException;
 import com.jhs.seniorProject.domain.exception.NoSuchUserException;
 import com.jhs.seniorProject.service.FriendService;
+import com.jhs.seniorProject.service.MapService;
 import com.jhs.seniorProject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,8 @@ public class TestDataInit {
 
     private final UserService userService;
     private final FriendService friendService;
+    private final MapService mapService;
+
     @PostConstruct
     public void init() {
         try {
@@ -29,6 +32,7 @@ public class TestDataInit {
             userService.join(userC);
 
             friendService.addFriend(userA, "userB");
+            mapService.createMap(userA.getName(), userA);
 
         } catch (DuplicatedUserException e) {
 
