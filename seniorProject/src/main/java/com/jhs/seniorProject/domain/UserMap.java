@@ -47,4 +47,8 @@ public class UserMap {
     public void canNotVisibility() {
         visibility = CLOSE;
     }
+
+    public void canVisibility() {
+        visibility = OPEN;
+    }
 }
