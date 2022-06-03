@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>update location</title>
+</head>
+<body>
+<h2>update location</h2>
+
+    <form th:action="|/location/${locationId}/update|" th:object="${updateLocation}" method="post">
+        <div>
+            <label for="name">이름</label>
+            <input type="text" id="name" th:field="*{name}">
+        </div>
+
+        <div>
+            <label for="memo">메모</label>
+            <input type="text" id="memo" th:field="*{memo}">
+        </div>
+
+        <div>
+            <label for="bigSubject">대주제</label>
+            <select id="bigSubject" th:field="*{bigSubject}">
+                <option value="">==대 주제 선택==</option>
+                <option th:each="big : ${bigSubjects}" th:value="${big}"
+                        th:text="${big}">카페</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="smallSubject">소주제</label>
+            <select id="smallSubject" th:field="*{smallSubject}">
+                <option value="">==소 주제 선택==</option>
+                <option th:each="small : ${smallSubjects}" th:value="${small.id}"
+                        th:text="${small.subjectName}">카페</option>
+            </select>
+        </div>
+        <br>
+        <button type="submit">위치수정</button>
+    </form>
+</body>
+</html>
