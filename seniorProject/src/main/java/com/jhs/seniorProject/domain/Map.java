@@ -32,6 +32,9 @@ public class Map extends TimeAndPersonInfo {
     @OneToMany(mappedBy = "map", cascade = ALL)
     private List<UserMap> userMaps = new ArrayList<>();
 
+    @OneToMany(mappedBy = "map", cascade = ALL)
+    private List<SmallSubject> smallSubjects = new ArrayList<>();
+
     public Map(String name, String createdBy) {
         super(createdBy);
         this.password = UUID.randomUUID().toString().substring(0, 8);

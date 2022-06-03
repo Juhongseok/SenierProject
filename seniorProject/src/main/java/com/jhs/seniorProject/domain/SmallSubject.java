@@ -24,4 +24,10 @@ public class SmallSubject extends TimeAndPersonInfo {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "MAP_ID")
     private Map map;
+
+    public SmallSubject(String subjectName, Map map, String createdBy) {
+        super(createdBy);
+        this.subjectName = subjectName;
+        this.map = map;
+    }
 }
