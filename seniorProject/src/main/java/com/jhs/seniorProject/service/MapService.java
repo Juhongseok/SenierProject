@@ -1,11 +1,13 @@
 package com.jhs.seniorProject.service;
 
 import com.jhs.seniorProject.domain.Map;
+import com.jhs.seniorProject.domain.SmallSubject;
 import com.jhs.seniorProject.domain.User;
 import com.jhs.seniorProject.domain.UserMap;
 import com.jhs.seniorProject.domain.compositid.UserMapId;
 import com.jhs.seniorProject.domain.exception.NoSuchMapException;
 import com.jhs.seniorProject.repository.MapRepository;
+import com.jhs.seniorProject.repository.SmallSubjectRepository;
 import com.jhs.seniorProject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,25 +26,6 @@ public class MapService {
     private final UserRepository userRepository;
 
     /**
-     * 지도 정보 확인 시 사용
-     * @param mapId 아이디 가지고 지도 검색
-     * @param userId 최초 만든 사용자인지 확인 --> 해당 지도 추가한 사용자 목록 검색
-     * @return
-     * @throws NoSuchMapException
-     */
-    @Transactional(readOnly = true)
-    public Map getMap(Long mapId, String userId) throws NoSuchMapException {
-        Map findMap = mapRepository.findById(mapId)
-                .orElseThrow(() -> new NoSuchMapException("지도를 찾을 수 없습니다."));
-        if (findMap.getCreatedBy().equals(userId)) {
-            for (UserMap userMap : findMap.getUserMaps()) {
-                userMap.getMap();
-            }
-        }
-        return findMap;
-    }
-
-    /**
      * 새로운 지도 생성
      * @param name
      * @param user
@@ -52,7 +35,13 @@ public class MapService {
         Map map = new Map(name, user.getId());
         User findUser = userRepository.findById(user.getId()).get();
         UserMap userMap = new UserMap(new UserMapId(findUser.getId(), map.getId()), findUser, map);
+        SmallSubject subject1 = new SmallSubject("카페", map, findUser.getName());
+        SmallSubject subject2 = new SmallSubject("식당", map, findUser.getName());
+
         map.getUserMaps().add(userMap);
+        map.getSmallSubjects().add(subject1);
+        map.getSmallSubjects().add(subject2);
+
         return mapRepository.save(map);
     }
 
@@ -93,9 +82,29 @@ public class MapService {
     }
 
     /**
+     * 지도 정보 확인 시 사용
+     * @param mapId 아이디 가지고 지도 검색
+     * @param userId 최초 만든 사용자인지 확인 --> 해당 지도 추가한 사용자 목록 검색
+     * @return
+     * @throws NoSuchMapException
+     */
+    @Transactional(readOnly = true)
+    public Map getMap(Long mapId, String userId) throws NoSuchMapException {
+        Map findMap = mapRepository.findById(mapId)
+                .orElseThrow(() -> new NoSuchMapException("지도를 찾을 수 없습니다."));
+        if (findMap.getCreatedBy().equals(userId)) {
+            for (UserMap userMap : findMap.getUserMaps()) {
+                userMap.getMap();
+            }
+        }
+        return findMap;
+    }
+
+    /**
      * @param user
      * @return 사용자가 가진 지도 리스트
      */
+    @Transactional(readOnly = true)
     public List<Map> getMaps(User user) {
         return mapRepository.findAll(user.getId());
     }

@@ -52,14 +52,9 @@ class MapServiceTest {
         Map savedMap1 = mapService.createMap(mapName1, userA);
         Map savedMap2 = mapService.createMap(mapName2, userA);
 
-        List<Map> maps = mapRepository.findByModifiedBy(userA.getName());
         //then
         assertThat(savedMap.getName()).isEqualTo(mapName);
         assertThat(savedMap.getCreatedBy()).isEqualTo(userA.getName());
-        assertThat(maps.size()).isEqualTo(3);
-        for (Map map : maps) {
-            log.info("map : " +  map);
-        }
     }
 
     @Test

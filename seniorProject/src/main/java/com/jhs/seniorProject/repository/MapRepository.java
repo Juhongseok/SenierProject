@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MapRepository extends JpaRepository<Map, Long> {
-    List<Map> findByModifiedBy(String modifiedBy);
     Optional<Map> findByCreatedByAndPassword(String createBy, String password);
 
     @Query("select m from Map m join fetch m.userMaps um where um.user.id = :userId")
