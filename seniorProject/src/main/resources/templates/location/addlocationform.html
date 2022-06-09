@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>save location</title>
+</head>
+<body>
+<h2>save location</h2>
+
+    <form th:action="|/location/${mapId}/add|" th:object="${saveLocationForm}" method="post">
+        <div style="visibility: hidden">
+            <label for="latitude">위도</label>
+            <input type="text" id="latitude" th:field="*{latitude}">
+        </div>
+        <div style="visibility: hidden">
+            <label for="longitude">경도</label>
+            <input type="text" id="longitude" th:field="*{longitude}">
+        </div>
+        <div style="visibility: hidden">
+            <label for="mapId">지도아이디</label>
+            <input type="text" id="mapId" th:field="*{mapId}">
+        </div>
+        <div>
+            <label for="name">이름</label>
+            <input type="text" id="name" th:field="*{name}" disabled>
+        </div>
+
+        <div>
+            <label for="memo">메모</label>
+            <input type="text" id="memo" th:field="*{memo}">
+        </div>
+
+        <div>
+            <label for="bigSubject">대주제</label>
+            <select id="bigSubject" th:field="*{bigSubject}">
+                <option value="">==대 주제 선택==</option>
+                <option th:each="big : ${bigSubjects}" th:value="${big}"
+                        th:text="${big}">카페</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="smallSubject">소주제</label>
+            <select id="smallSubject" th:field="*{smallSubject}">
+                <option value="">==소 주제 선택==</option>
+                <option th:each="small : ${smallSubjects}" th:value="${small.id}"
+                        th:text="${small.subjectName}">카페</option>
+            </select>
+        </div>
+        <br>
+        <button type="submit">저장</button>
+    </form>
+</body>
+</html>
