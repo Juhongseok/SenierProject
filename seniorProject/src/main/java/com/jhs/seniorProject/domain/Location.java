@@ -1,5 +1,6 @@
 package com.jhs.seniorProject.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jhs.seniorProject.controller.form.UpdateLocationForm;
 import com.jhs.seniorProject.domain.baseentity.TimeAndPersonInfo;
 import com.jhs.seniorProject.domain.enumeration.BigSubject;
@@ -46,6 +47,7 @@ public class Location extends TimeAndPersonInfo {
     @JoinColumn(name = "MAP_ID")
     private Map map;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "SMALL_SUBJECT_ID")
     private SmallSubject smallSubject;

@@ -1,5 +1,6 @@
 package com.jhs.seniorProject.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jhs.seniorProject.domain.baseentity.TimeAndPersonInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -29,9 +32,11 @@ public class Map extends TimeAndPersonInfo {
     @Column(name = "NAME")
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "map", cascade = ALL)
     private List<UserMap> userMaps = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "map", cascade = ALL)
     private List<SmallSubject> smallSubjects = new ArrayList<>();
 
