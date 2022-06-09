@@ -1,7 +1,6 @@
 package com.jhs.seniorProject;
 
 import com.jhs.seniorProject.controller.form.SaveLocationForm;
-import com.jhs.seniorProject.domain.Friend;
 import com.jhs.seniorProject.domain.Map;
 import com.jhs.seniorProject.domain.SmallSubject;
 import com.jhs.seniorProject.domain.User;
@@ -42,8 +41,20 @@ public class TestDataInit {
             Map map = mapService.createMap(userA.getName(), userA);
             List<SmallSubject> smallSubjects = map.getSmallSubjects();
             locationService.saveLocation(
-                    new SaveLocationForm(1.2, 1.2, "save location1", "location1"
-                            , BigSubject.TOGO, smallSubjects.get(0), map)
+                    new SaveLocationForm(37.566826, 126.9786567, "save location1", "location1"
+                            , BigSubject.TOGO, smallSubjects.get(0), map.getId())
+                    ,userA.getId()
+            );
+
+            locationService.saveLocation(
+                    new SaveLocationForm( 37.65358170124324, 127.04783326913316, "save location1", "location1"
+                            , BigSubject.TOGO, smallSubjects.get(0), map.getId())
+                    ,userA.getId()
+            );
+
+            locationService.saveLocation(
+                    new SaveLocationForm( 37.615355069395335, 127.01335100479028 , "save location1", "location1"
+                            , BigSubject.TOGO, smallSubjects.get(0), map.getId())
                     ,userA.getId()
             );
         } catch (DuplicatedUserException e) {
