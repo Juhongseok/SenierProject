@@ -3,19 +3,25 @@ package com.jhs.seniorProject.controller;
 import com.jhs.seniorProject.argumentresolver.Login;
 import com.jhs.seniorProject.controller.form.SaveLocationForm;
 import com.jhs.seniorProject.controller.form.UpdateLocationForm;
-import com.jhs.seniorProject.controller.form.UpdateLocationSmallSubject;
 import com.jhs.seniorProject.domain.Location;
+import com.jhs.seniorProject.domain.Map;
 import com.jhs.seniorProject.domain.User;
+import com.jhs.seniorProject.domain.enumeration.BigSubject;
+import com.jhs.seniorProject.domain.exception.NoSuchMapException;
 import com.jhs.seniorProject.service.LocationService;
+import com.jhs.seniorProject.service.MapService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.jhs.seniorProject.domain.enumeration.BigSubject.TOGO;
@@ -28,36 +34,65 @@ import static com.jhs.seniorProject.domain.enumeration.BigSubject.WENT;
 public class LocationController {
 
     private final LocationService locationService;
+    private final MapService mapService;
+    private static List<BigSubject> togo;
 
-    /**
-     * kakao map 연동 시 사용할 위치 리스트 반환
-     * 추후 api 통신을 할 경우 변경
-     *
-     * @param mapId
-     * @param model
-     * @return
-     */
-    @GetMapping("/view")
-    public String Locations(/*@RequestParam("mapId") Long mapId, Model model*/) {
-//        model.addAttribute("locations", locationService.locations(mapId));
+    static{
+        togo = List.of(TOGO, WENT);
+    }
+
+    @GetMapping("/{mapId}/view")
+    public String Locations(@PathVariable("mapId") Long mapId) {
         return "location/locationviewmap";
     }
 
     @ResponseBody
-    @PostMapping("/add")
-    public void addLocation(@Login User user, @Validated @RequestBody SaveLocationForm locationForm, BindingResult bindingResult) {
+    @GetMapping("/list")
+    public ResponseEntity<List<Location>> getLocationList(@RequestParam Long mapId, @Login User user) {
+        log.info("mapId = {}", mapId);
+        return new ResponseEntity<>(locationService.getLocations(mapId, user.getId()), HttpStatus.OK);
+    }
+
+    @GetMapping("/{mapId}/add")
+    public String addLocationForm(@Login User user, @ModelAttribute(name = "saveLocationForm") SaveLocationForm saveLocationForm
+            , @PathVariable Long mapId, @RequestParam Double lat, @RequestParam Double lng, @RequestParam String placeName
+            , Model model) {
+        log.info("lat = {}, lng = {}", lat, lng);
+        try {
+            Map map = mapService.getMap(mapId, user.getId());
+
+            saveLocationForm.setLongitude(lng);
+            saveLocationForm.setLatitude(lat);
+            saveLocationForm.setName(placeName);
+
+            model.addAttribute("mapId", mapId)
+                    .addAttribute("bigSubjects", togo)
+                    .addAttribute("smallSubjects", locationService.getSmallSubjectList(map));
+        } catch (NoSuchMapException e) {
+            e.printStackTrace();
+        }
+        return "location/addlocationform";
+    }
+
+    @PostMapping("/{mapId}/add")
+    public String addLocation(@Login User user, @PathVariable Long mapId, @Validated @ModelAttribute SaveLocationForm locationForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            //에러던짐
-            throw new RuntimeException();
+            return "location/addlocationform";
         }
 
+        log.info("saveLocationFor = {}", locationForm);
         locationService.saveLocation(locationForm, user.getId());
+
+
+        redirectAttributes.addAttribute("mapId", mapId);
+        return "redirect:/location/{mapId}/view";
     }
 
     /**
      * if 사용자가 임의의 아이디를 고의적으로 넘길경우
      * findLocation --> throw IllegalArgumentException
      * ControllerAdvice 에러 처리
+     *
      * @param locationId
      * @param model
      * @return
@@ -70,6 +105,7 @@ public class LocationController {
 
     /**
      * location 변경사항 update
+     *
      * @param locationId
      * @param updateLocationForm
      * @param bindingResult
@@ -90,9 +126,9 @@ public class LocationController {
         Location findLocation = locationService.findLocation(locationId);
 
         model.addAttribute("locationId", locationId)
-            .addAttribute("updateLocation", getUpdateLocationForm(findLocation))
-            .addAttribute("smallSubjects", locationService.getSmallSubjectList(findLocation.getMap()))
-            .addAttribute("bigSubjects", List.of(TOGO, WENT));
+                .addAttribute("updateLocation", getUpdateLocationForm(findLocation))
+                .addAttribute("smallSubjects", locationService.getSmallSubjectList(findLocation.getMap()))
+                .addAttribute("bigSubjects", togo);
     }
 
     private UpdateLocationForm getUpdateLocationForm(Location findLocation) {

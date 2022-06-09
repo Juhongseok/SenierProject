@@ -5,6 +5,8 @@ import com.jhs.seniorProject.controller.form.UpdateLocationForm;
 import com.jhs.seniorProject.controller.form.UpdateLocationSmallSubject;
 import com.jhs.seniorProject.domain.Location;
 import com.jhs.seniorProject.domain.Map;
+import com.jhs.seniorProject.domain.UserMap;
+import com.jhs.seniorProject.domain.enumeration.Visibility;
 import com.jhs.seniorProject.repository.LocationRepository;
 import com.jhs.seniorProject.repository.MapRepository;
 import com.jhs.seniorProject.repository.SmallSubjectRepository;
@@ -13,8 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -28,10 +30,15 @@ public class LocationService {
     private final LocationRepository locationRepository;
     private final SmallSubjectRepository smallSubjectRepository;
 
-    public List<Location> locations(Long mapId) {
+    public List<Location> getLocations(Long mapId, String userId) {
+        Map byIdWithUserMap = mapRepository.findByIdWithUserMap(mapId, userId);
+        if (byIdWithUserMap.getUserMaps().get(0).getVisibility().equals(Visibility.CLOSE)) {
+            return Collections.emptyList();
+        }
         return locationRepository.findByMapId(mapRepository.findById(mapId)
                         .orElseThrow(IllegalArgumentException::new));
     }
+
     public Location findLocation(Long locationId) {
         Location findLocation = locationRepository.findById(locationId)
                 .orElseThrow(IllegalArgumentException::new);
@@ -52,7 +59,7 @@ public class LocationService {
                 .name(locationForm.getName())
                 .bigSubject(locationForm.getBigSubject())
                 .smallSubject(locationForm.getSmallSubject())
-                .map(locationForm.getMap())
+                .map(mapRepository.findById(locationForm.getMapId()).get())
                 .userId(userId)
                 .build();
 
