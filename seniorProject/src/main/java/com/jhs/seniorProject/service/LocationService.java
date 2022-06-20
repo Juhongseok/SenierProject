@@ -35,8 +35,7 @@ public class LocationService {
         if (byIdWithUserMap.getUserMaps().get(0).getVisibility().equals(Visibility.CLOSE)) {
             return Collections.emptyList();
         }
-        return locationRepository.findByMapId(mapRepository.findById(mapId)
-                        .orElseThrow(IllegalArgumentException::new));
+        return locationRepository.findByMapId(byIdWithUserMap);
     }
 
     public Location findLocation(Long locationId) {
