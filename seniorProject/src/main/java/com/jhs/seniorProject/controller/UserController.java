@@ -116,23 +116,26 @@ public class UserController {
     @RequestMapping("/logout")
     public String logout(HttpSession session) {
         log.info("logout execute");
-        if (session.getAttribute(KAKAO_TOKEN) == null) {
+        if (isKaKaoLoginUser(session)) {
+            kakaoLogic.logout(session);
+        } else {
             if (session != null) {
                 session.invalidate();
             }
-        } else {
-            log.info("this is KaKao login user");
-            kakaoLogic.logout(session);
         }
         return "redirect:/";
+    }
+
+    private boolean isKaKaoLoginUser(HttpSession session) {
+        return session.getAttribute(KAKAO_TOKEN) != null;
     }
 
     private boolean isLoginStatus(User user) {
         return user != null;
     }
 
-    private void setLoginUser(HttpSession session, User kaKaoUser) {
-        log.info("loginUser = {}", kaKaoUser);
-        session.setAttribute(LOGIN_USER, kaKaoUser);
+    private void setLoginUser(HttpSession session, User user) {
+        log.info("loginUser = {}", user);
+        session.setAttribute(LOGIN_USER, user);
     }
 }

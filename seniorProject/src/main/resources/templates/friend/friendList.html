@@ -46,6 +46,8 @@
             alert("친구추가 성공");
             location.reload();
         }).fail(function(response){
+            //실패로직을 fail 아닌 done 에서 관리 할 수 있도록 변경
+            //fail 에서는 서버에서 처리 불가능한 에러만 관리 할 수 있도록 변경
             makingErrorField(response);
         });
     }

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
+    //TODO 컨트롤러에 user entity 보다는 loginUser 새로 만들어서 반환
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(Login.class)

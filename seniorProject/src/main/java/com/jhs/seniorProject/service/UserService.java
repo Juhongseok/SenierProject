@@ -30,6 +30,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User login(User user) throws NoSuchUserException, IncorrectPasswordException {
+        //TODO Entity -> DTO 변경
         User findUser = findUser(user.getId());
         if (!user.isSamePassword(findUser.getPassword()))
             throw new IncorrectPasswordException("비밀번호가 일치하지 않습니다.");

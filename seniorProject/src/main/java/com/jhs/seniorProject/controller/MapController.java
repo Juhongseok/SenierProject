@@ -48,6 +48,7 @@ public class MapController {
     @PostMapping("/create")
     public String createMap(@ModelAttribute("mapForm") @Validated MapForm mapForm, BindingResult bindingResult, @Login User user){
         if (!bindingResult.hasErrors()) {
+            //TODO DTO 하나로 통합
             mapService.createMap(mapForm.getName(), user);
             return "redirect:/";
         }

@@ -47,6 +47,7 @@ public class FriendService {
      */
     @Transactional(readOnly = true)
     public List<Friend> getFriends(User user){
+        //TODO Entity -> DTO 변경
         return friendRepository.findByUserId(user);
     }
 
@@ -57,6 +58,7 @@ public class FriendService {
      * @throws NoSuchUserException
      */
     private User findFriend(String friendId) throws NoSuchUserException {
+        //TODO Entity -> DTO 변경
         return userRepository.findById(friendId).orElseThrow(() -> new NoSuchUserException(friendId + "의 유저가 없습니다."));
     }
 

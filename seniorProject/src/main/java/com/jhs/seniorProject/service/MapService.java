@@ -32,6 +32,7 @@ public class MapService {
      * @return
      */
     public Map createMap(String name, User user) {
+        //TODO Entity -> DTO 변경
         Map map = new Map(name, user.getId());
         User findUser = userRepository.findById(user.getId()).get();
         UserMap userMap = new UserMap(new UserMapId(findUser.getId(), map.getId()), findUser, map);
@@ -54,6 +55,7 @@ public class MapService {
      * @throws NoSuchMapException
      */
     public Map addMap(String userId, String password, User user) throws NoSuchMapException {
+        //TODO Entity -> DTO 변경
         Map findMap = mapRepository.findByCreatedByAndPassword(userId, password)
                 .orElseThrow(() -> new NoSuchMapException("만든사람 혹은 비밀번호가 잘못 되었습니다."));
         User findUser = userRepository.findById(user.getId()).get();
@@ -90,6 +92,7 @@ public class MapService {
      */
     @Transactional(readOnly = true)
     public Map getMap(Long mapId, String userId) throws NoSuchMapException {
+        //TODO Entity -> DTO 변경
         Map findMap = mapRepository.findById(mapId)
                 .orElseThrow(() -> new NoSuchMapException("지도를 찾을 수 없습니다."));
         if (findMap.getCreatedBy().equals(userId)) {
@@ -106,6 +109,7 @@ public class MapService {
      */
     @Transactional(readOnly = true)
     public List<Map> getMaps(User user) {
+        //TODO Entity -> DTO 변경
         return mapRepository.findAll(user.getId());
     }
 }

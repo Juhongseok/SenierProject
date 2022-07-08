@@ -31,6 +31,7 @@ public class LocationService {
     private final SmallSubjectRepository smallSubjectRepository;
 
     public List<Location> getLocations(Long mapId, String userId) {
+        //TODO Entity -> DTO 변경
         Map byIdWithUserMap = mapRepository.findByIdWithUserMap(mapId, userId);
         if (byIdWithUserMap.getUserMaps().get(0).getVisibility().equals(Visibility.CLOSE)) {
             return Collections.emptyList();
@@ -39,6 +40,7 @@ public class LocationService {
     }
 
     public Location findLocation(Long locationId) {
+        //TODO Entity -> DTO 변경
         Location findLocation = locationRepository.findById(locationId)
                 .orElseThrow(IllegalArgumentException::new);
         return findLocation;

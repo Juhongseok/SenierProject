@@ -49,6 +49,7 @@ public class LocationController {
     @ResponseBody
     @GetMapping("/list")
     public ResponseEntity<List<Location>> getLocationList(@RequestParam Long mapId, @Login User user) {
+        //TODO Entity -> DTO 변경
         log.info("mapId = {}", mapId);
         return new ResponseEntity<>(locationService.getLocations(mapId, user.getId()), HttpStatus.OK);
     }
@@ -59,6 +60,7 @@ public class LocationController {
             , Model model) {
         log.info("lat = {}, lng = {}", lat, lng);
         try {
+            //TODO DTO 하나로 통합
             Map map = mapService.getMap(mapId, user.getId());
 
             saveLocationForm.setLongitude(lng);
@@ -81,6 +83,7 @@ public class LocationController {
         }
 
         log.info("saveLocationFor = {}", locationForm);
+        //TODO DTO 하나로 통합
         locationService.saveLocation(locationForm, user.getId());
 
 
