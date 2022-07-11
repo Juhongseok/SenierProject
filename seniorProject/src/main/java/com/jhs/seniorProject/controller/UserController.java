@@ -1,10 +1,10 @@
 package com.jhs.seniorProject.controller;
 
 import com.jhs.seniorProject.argumentresolver.Login;
-import com.jhs.seniorProject.controller.form.LoginForm;
-import com.jhs.seniorProject.controller.form.SignUpForm;
+import com.jhs.seniorProject.argumentresolver.LoginUser;
+import com.jhs.seniorProject.service.requestform.LoginForm;
+import com.jhs.seniorProject.service.requestform.SignUpForm;
 import com.jhs.seniorProject.controller.logic.KaKaoLogic;
-import com.jhs.seniorProject.domain.User;
 import com.jhs.seniorProject.domain.exception.DuplicatedUserException;
 import com.jhs.seniorProject.domain.exception.IncorrectPasswordException;
 import com.jhs.seniorProject.domain.exception.NoSuchUserException;
@@ -48,29 +48,26 @@ public class UserController {
             return "users/signUpForm";
         }
 
-        User signUpUser = new User(signUpForm.getUserId(), signUpForm.getPassword(), signUpForm.getName());
-        String userId;
         try {
-            userId = userService.join(signUpUser);
+            userService.join(signUpForm);
         } catch (DuplicatedUserException e) {
             log.error("userController.signUp error ", e);
             bindingResult.reject("duplicateUser", "중복된 회원입니다.");
             return "users/signUpForm";
         }
 
-        log.info("signUpUserId: {}", userId);
         return "redirect:/";
     }
 
     @PostMapping("/withdrawal")
-    public String withdrawal(@Login User user, HttpSession session) {
-        if (isLoginStatus(user)) {
+    public String withdrawal(@Login LoginUser loginUser, HttpSession session) {
+        if (isLoginStatus(loginUser)) {
             try {
-                userService.withdrawal(user.getId());
+                userService.withdrawal(loginUser.getId());
                 session.invalidate();
             } catch (NoSuchUserException e) {
                 log.error("UserController.withdrawal error", e);
-                //마이페이지로 이동
+                //TODO return to MyPage
             }
         }
         return "redirect:/";
@@ -82,7 +79,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@Validated @ModelAttribute LoginForm loginForm, BindingResult bindingResult, HttpSession session,
+    public String login(@Validated @ModelAttribute LoginForm loginForm,
+                        BindingResult bindingResult,
+                        HttpSession session,
                         @RequestParam(defaultValue = "/") String redirectURL) {
         log.info("userController --> user.id: {}, user.password: {}", loginForm.getUserId(), loginForm.getPassword());
         if (bindingResult.hasErrors()) {
@@ -90,17 +89,15 @@ public class UserController {
             return "users/loginForm";
         }
 
-        User loginUser = new User(loginForm.getUserId(), loginForm.getPassword(), null);
-        User findLoginUser;
         try {
-            findLoginUser = userService.login(loginUser);
+            userService.login(loginForm);
         } catch (NoSuchUserException | IncorrectPasswordException e) {
             log.error("UserController.login error", e);
             bindingResult.reject("checkIdAndPassword", "아이디와 비밀번호를 확인해 주세요");
             return "users/loginForm";
         }
 
-        setLoginUser(session, findLoginUser);
+        setLoginUser(session, new LoginUser(loginForm.getUserId()));
         return "redirect:" + redirectURL;
     }
 
@@ -108,8 +105,8 @@ public class UserController {
     public String kaKaoLogin(String code, HttpSession session) {
         log.info("KaKao login execute");
         kakaoLogic.getKaKaoToken(code);
-        User kaKaoUser = kakaoLogic.logIn(session);
-        setLoginUser(session, kaKaoUser);
+        String userId = kakaoLogic.logIn(session);
+        setLoginUser(session, new LoginUser(userId));
         return "redirect:/";
     }
 
@@ -130,11 +127,11 @@ public class UserController {
         return session.getAttribute(KAKAO_TOKEN) != null;
     }
 
-    private boolean isLoginStatus(User user) {
+    private boolean isLoginStatus(LoginUser user) {
         return user != null;
     }
 
-    private void setLoginUser(HttpSession session, User user) {
+    private void setLoginUser(HttpSession session, LoginUser user) {
         log.info("loginUser = {}", user);
         session.setAttribute(LOGIN_USER, user);
     }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.jhs.seniorProject.controller.form.KaKaoInfo;
 import com.jhs.seniorProject.controller.form.KaKaoToken;
+import com.jhs.seniorProject.service.requestform.SignUpForm;
 import com.jhs.seniorProject.domain.User;
 import com.jhs.seniorProject.domain.exception.DuplicatedUserException;
 import com.jhs.seniorProject.service.UserService;
@@ -39,17 +40,18 @@ public class KaKaoLogic {
         token = transferJsonDataToDTO(response, KaKaoToken.class).getAccessToken();
     }
 
-    public User logIn(HttpSession session) {
+    public String logIn(HttpSession session) {
         KaKaoInfo info = getKaKaoInfo();
         String password = UUID.randomUUID().toString().substring(0, 8);
         User kaKaoUser = null;
         try {
             kaKaoUser = new User(String.valueOf(info.getId()), password, info.getProperties().getNickname());
-            userService.join(kaKaoUser);
+            userService.join(new SignUpForm(kaKaoUser.getId(), kaKaoUser.getPassword(), kaKaoUser.getPassword(), kaKaoUser.getName()));
         } catch (DuplicatedUserException e) {
+            //회원가입 안시키고 바로 로그인 상태로 변경 시키면 됨
         }
         session.setAttribute(KAKAO_TOKEN, token);
-        return kaKaoUser;
+        return kaKaoUser.getId();
     }
 
     public void logout(HttpSession session) {
