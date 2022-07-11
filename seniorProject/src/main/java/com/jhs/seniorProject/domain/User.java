@@ -40,9 +40,4 @@ public class User extends TimeInfo implements Persistable<String> {
     public void changeName(String name) {
         this.name = name;
     }
-
-    //==조회 로직==//
-    public boolean isSamePassword(String password){
-        return this.password.equals(password);
-    }
 }
