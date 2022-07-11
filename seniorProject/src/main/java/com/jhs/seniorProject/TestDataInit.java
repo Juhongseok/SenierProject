@@ -12,6 +12,7 @@ import com.jhs.seniorProject.service.FriendService;
 import com.jhs.seniorProject.service.LocationService;
 import com.jhs.seniorProject.service.MapService;
 import com.jhs.seniorProject.service.UserService;
+import com.jhs.seniorProject.service.requestform.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -30,12 +31,15 @@ public class TestDataInit {
     @PostConstruct
     public void init() {
         try {
+            SignUpForm userA_ = new SignUpForm("userA", "userA!", "userA","userA");
             User userA = new User("userA", "userA!", "userA");
+            SignUpForm userB_ = new SignUpForm("userB", "userB!", "userB","userB");
             User userB = new User("userB", "userB!", "userB");
+            SignUpForm userC_ = new SignUpForm("userC", "userC!", "userC","userC");
             User userC = new User("userC", "userC!", "userC");
-            userService.join(userA);
-            userService.join(userB);
-            userService.join(userC);
+            userService.join(userA_);
+            userService.join(userB_);
+            userService.join(userC_);
 
             friendService.addFriend(userA, "userB");
             Map map = mapService.createMap(userA.getName(), userA);

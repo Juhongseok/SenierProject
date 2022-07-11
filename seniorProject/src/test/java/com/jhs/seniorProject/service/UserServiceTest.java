@@ -5,6 +5,8 @@ import com.jhs.seniorProject.domain.exception.DuplicatedUserException;
 import com.jhs.seniorProject.domain.exception.IncorrectPasswordException;
 import com.jhs.seniorProject.domain.exception.NoSuchUserException;
 import com.jhs.seniorProject.repository.UserRepository;
+import com.jhs.seniorProject.service.requestform.LoginForm;
+import com.jhs.seniorProject.service.requestform.SignUpForm;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,21 +30,21 @@ class UserServiceTest {
     @DisplayName("회원가입 성공로직")
     void joinSuccess() throws DuplicatedUserException {
         //given
-        User newUser = new User("userD", "userD!", "userD");
+        SignUpForm newUser = new SignUpForm("userD", "userD!", "userD","userD");
 
         //when
-        String userId = userService.join(newUser);
-        User findUser = userRepository.findById(newUser.getId()).get();
+        userService.join(newUser);
+        User findUser = userRepository.findById(newUser.getUserId()).get();
 
         //then
-        assertThat(findUser.getId()).isEqualTo(userId);
+        assertThat(findUser.getId()).isEqualTo(newUser.getUserId());
     }
 
     @Test
     @DisplayName("회원중복으로 인한 회원가입 실패")
     void joinFailByDuplicated(){
         //given
-        User newUser = new User("userA", "userA!", "userA");
+        SignUpForm newUser = new SignUpForm("userA", "userA!", "userA!","userA");
 
         //when
         //then
@@ -91,36 +93,34 @@ class UserServiceTest {
     @DisplayName("로그인 성공로직")
     void loginSuccess() throws NoSuchUserException, IncorrectPasswordException {
         //given
-        User user = new User("userA", "userA!", "userA");
+        LoginForm newUser = new LoginForm("userA", "userA!");
 
         //when
-        User loginUser = userService.login(user);
-        User findUser = userRepository.findById(loginUser.getId()).get();
+        userService.login(newUser);
+        User findUser = userRepository.findById(newUser.getUserId()).get();
 
         //then
-        assertThat(loginUser).isEqualTo(findUser);
-        assertThat(loginUser.getId()).isEqualTo(findUser.getId());
-        assertThat(loginUser.getPassword()).isEqualTo(findUser.getPassword());
-        assertThat(loginUser.getName()).isEqualTo(findUser.getName());
+        assertThat(newUser.getUserId()).isEqualTo(findUser.getId());
+        assertThat(newUser.getPassword()).isEqualTo(findUser.getPassword());
     }
 
     @Test
     @DisplayName("비밀번호 오류로 인한 로그인 실패로직")
     void loginFailByWrongPassword(){
         //given
-        User user = new User("userA", "userA", "userA");
+        LoginForm user = new LoginForm("userA", "userA");
 
         //when
         //then
         assertThatThrownBy(() -> userService.login(user))
-                .isInstanceOf(NoSuchUserException.class);
+                .isInstanceOf(IncorrectPasswordException.class);
     }
 
     @Test
     @DisplayName("아이디 오류로 인한 로그인 실패로직")
     void loginFailByWrongId(){
         //given
-        User user = new User("userAbcd", "userA!", "userA");
+        LoginForm user = new LoginForm("userAbcd", "userA!");
 
         //when
         //then
