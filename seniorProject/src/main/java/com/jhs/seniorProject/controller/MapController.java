@@ -3,7 +3,6 @@ package com.jhs.seniorProject.controller;
 import com.jhs.seniorProject.argumentresolver.Login;
 import com.jhs.seniorProject.argumentresolver.LoginUser;
 import com.jhs.seniorProject.controller.form.AddMapForm;
-import com.jhs.seniorProject.service.requestform.FriendList;
 import com.jhs.seniorProject.controller.form.MapForm;
 import com.jhs.seniorProject.controller.form.MapInfo;
 import com.jhs.seniorProject.domain.User;
@@ -17,10 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Controller
@@ -54,13 +49,8 @@ public class MapController {
     }
 
     @GetMapping("/add")
-    public String addMapForm(@ModelAttribute("addMapForm") AddMapForm addMapForm, @Login LoginUser user, Model model){
-        log.info("add map");
-        List<FriendList> friends = friendService.getFriends(user).stream()
-                .map(FriendList::new)
-                .collect(toList());
-
-        model.addAttribute("friends", friends);
+    public String addMapForm(@ModelAttribute("addMapForm") AddMapForm addMapForm, @Login LoginUser loginUser, Model model){
+        model.addAttribute("friends", friendService.getFriends(loginUser));
         return "map/addmapform";
     }
 
