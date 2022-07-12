@@ -1,6 +1,7 @@
 package com.jhs.seniorProject.controller;
 
 import com.jhs.seniorProject.argumentresolver.Login;
+import com.jhs.seniorProject.argumentresolver.LoginUser;
 import com.jhs.seniorProject.controller.form.AddMapForm;
 import com.jhs.seniorProject.controller.form.FriendList;
 import com.jhs.seniorProject.controller.form.MapForm;
@@ -56,7 +57,7 @@ public class MapController {
     }
 
     @GetMapping("/add")
-    public String addMapForm(@ModelAttribute("addMapForm") AddMapForm addMapForm, @Login User user, Model model){
+    public String addMapForm(@ModelAttribute("addMapForm") AddMapForm addMapForm, @Login LoginUser user, Model model){
         log.info("add map");
         List<FriendList> friends = friendService.getFriends(user).stream()
                 .map(FriendList::new)

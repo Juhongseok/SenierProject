@@ -1,5 +1,6 @@
 package com.jhs.seniorProject;
 
+import com.jhs.seniorProject.argumentresolver.LoginUser;
 import com.jhs.seniorProject.controller.form.SaveLocationForm;
 import com.jhs.seniorProject.domain.Map;
 import com.jhs.seniorProject.domain.SmallSubject;
@@ -34,14 +35,12 @@ public class TestDataInit {
             SignUpForm userA_ = new SignUpForm("userA", "userA!", "userA","userA");
             User userA = new User("userA", "userA!", "userA");
             SignUpForm userB_ = new SignUpForm("userB", "userB!", "userB","userB");
-            User userB = new User("userB", "userB!", "userB");
             SignUpForm userC_ = new SignUpForm("userC", "userC!", "userC","userC");
-            User userC = new User("userC", "userC!", "userC");
             userService.join(userA_);
             userService.join(userB_);
             userService.join(userC_);
 
-            friendService.addFriend(userA, "userB");
+            friendService.addFriend(new LoginUser(userA.getId(), userA.getName()), "userB");
             Map map = mapService.createMap(userA.getName(), userA);
             List<SmallSubject> smallSubjects = map.getSmallSubjects();
             locationService.saveLocation(

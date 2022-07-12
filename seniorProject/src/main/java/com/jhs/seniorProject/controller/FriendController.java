@@ -1,6 +1,7 @@
 package com.jhs.seniorProject.controller;
 
 import com.jhs.seniorProject.argumentresolver.Login;
+import com.jhs.seniorProject.argumentresolver.LoginUser;
 import com.jhs.seniorProject.controller.form.FriendForm;
 import com.jhs.seniorProject.domain.Friend;
 import com.jhs.seniorProject.domain.User;
@@ -30,10 +31,9 @@ public class FriendController {
     private final FriendService friendService;
 
     @GetMapping("/list")
-    public String getFriends(@Login User user, @ModelAttribute("user") FriendForm friendForm, Model model) {
-        //TODO Entity -> DTO 변경
-        List<String> result = friendService.getFriends(user).stream()
-                .map(FriendController::apply)
+    public String getFriends(@Login LoginUser loginUser, @ModelAttribute("friend") FriendForm friendForm, Model model) {
+        List<String> result = friendService.getFriends(loginUser).stream()
+                .map(FriendController::getFriendName)
                 .collect(toList());
         model.addAttribute("friends", result);
         return "friend/friendList";
@@ -41,7 +41,7 @@ public class FriendController {
 
     @ResponseBody
     @PostMapping("/api/add")
-    public void addFriend(@Valid @RequestBody FriendForm friendForm, BindingResult bindingResult, @Login User user) throws BindException {
+    public void addFriend(@Valid @RequestBody FriendForm friendForm, BindingResult bindingResult, @Login LoginUser loginUser) throws BindException {
         log.info("add friend {}", friendForm);
         if (bindingResult.hasErrors()) {
             log.info("bindingResult has error, ", bindingResult);
@@ -51,7 +51,7 @@ public class FriendController {
         //TODO 예외처리 로직 기능 추가
         //TODO Entity -> DTO 변경
         try {
-            friendService.addFriend(user, friendForm.getId());
+            friendService.addFriend(loginUser, friendForm.getId());
         } catch (DuplicateFriendException e) {
             e.printStackTrace();
         } catch (NoSuchUserException e) {
@@ -59,7 +59,7 @@ public class FriendController {
         }
     }
 
-    private static String apply(Friend friend) {
+    private static String getFriendName(Friend friend) {
         return friend.getFriendId().getName();
     }
 }
