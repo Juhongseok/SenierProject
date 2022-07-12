@@ -8,12 +8,15 @@ import com.jhs.seniorProject.domain.exception.DuplicateFriendException;
 import com.jhs.seniorProject.domain.exception.NoSuchUserException;
 import com.jhs.seniorProject.repository.FriendRepository;
 import com.jhs.seniorProject.repository.UserRepository;
+import com.jhs.seniorProject.service.responseform.FriendList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service
@@ -46,9 +49,10 @@ public class FriendService {
      * @return 사용자와 친구 관계를 가진 유저 리스트 (list.size() >= 0)
      */
     @Transactional(readOnly = true)
-    public List<Friend> getFriends(LoginUser user){
-        //TODO Entity -> DTO 변경
-        return friendRepository.findByIdUserId(user.getId());
+    public List<FriendList> getFriends(LoginUser user){
+        return friendRepository.findByIdUserId(user.getId()).stream()
+                .map(FriendList::new)
+                .collect(toList());
     }
 
     /**
