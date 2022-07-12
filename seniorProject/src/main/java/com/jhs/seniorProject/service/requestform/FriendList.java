@@ -1,4 +1,4 @@
-package com.jhs.seniorProject.controller.form;
+package com.jhs.seniorProject.service.requestform;
 
 import com.jhs.seniorProject.domain.Friend;
 import lombok.Data;

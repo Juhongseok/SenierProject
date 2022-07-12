@@ -2,9 +2,8 @@ package com.jhs.seniorProject.controller;
 
 import com.jhs.seniorProject.argumentresolver.Login;
 import com.jhs.seniorProject.argumentresolver.LoginUser;
-import com.jhs.seniorProject.controller.form.FriendForm;
+import com.jhs.seniorProject.service.requestform.FriendForm;
 import com.jhs.seniorProject.domain.Friend;
-import com.jhs.seniorProject.domain.User;
 import com.jhs.seniorProject.domain.exception.DuplicateFriendException;
 import com.jhs.seniorProject.domain.exception.NoSuchUserException;
 import com.jhs.seniorProject.service.FriendService;
