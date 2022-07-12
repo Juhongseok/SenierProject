@@ -1,5 +1,6 @@
 package com.jhs.seniorProject.service;
 
+import com.jhs.seniorProject.argumentresolver.LoginUser;
 import com.jhs.seniorProject.service.requestform.LoginForm;
 import com.jhs.seniorProject.service.requestform.SignUpForm;
 import com.jhs.seniorProject.domain.User;
@@ -31,10 +32,12 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public void login(LoginForm loginForm) throws NoSuchUserException, IncorrectPasswordException {
+    public LoginUser login(LoginForm loginForm) throws NoSuchUserException, IncorrectPasswordException {
         User findUser = findUser(loginForm.getUserId());
         if (!loginForm.isSamePassword(findUser.getPassword()))
             throw new IncorrectPasswordException("비밀번호가 일치하지 않습니다.");
+
+        return new LoginUser(findUser.getId(), findUser.getName());
     }
 
     private User findUser(String id) throws NoSuchUserException {

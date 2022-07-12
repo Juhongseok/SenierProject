@@ -3,6 +3,7 @@ package com.jhs.seniorProject.controller.logic;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.jhs.seniorProject.argumentresolver.LoginUser;
 import com.jhs.seniorProject.controller.form.KaKaoInfo;
 import com.jhs.seniorProject.controller.form.KaKaoToken;
 import com.jhs.seniorProject.service.requestform.SignUpForm;
@@ -40,7 +41,7 @@ public class KaKaoLogic {
         token = transferJsonDataToDTO(response, KaKaoToken.class).getAccessToken();
     }
 
-    public String logIn(HttpSession session) {
+    public LoginUser logIn(HttpSession session) {
         KaKaoInfo info = getKaKaoInfo();
         String password = UUID.randomUUID().toString().substring(0, 8);
         User kaKaoUser = null;
@@ -51,7 +52,7 @@ public class KaKaoLogic {
             //회원가입 안시키고 바로 로그인 상태로 변경 시키면 됨
         }
         session.setAttribute(KAKAO_TOKEN, token);
-        return kaKaoUser.getId();
+        return new LoginUser(kaKaoUser.getId(),kaKaoUser.getName());
     }
 
     public void logout(HttpSession session) {
