@@ -90,14 +90,14 @@ public class UserController {
         }
 
         try {
-            userService.login(loginForm);
+            LoginUser loginUser = userService.login(loginForm);
+            setLoginUser(session, loginUser);
         } catch (NoSuchUserException | IncorrectPasswordException e) {
             log.error("UserController.login error", e);
             bindingResult.reject("checkIdAndPassword", "아이디와 비밀번호를 확인해 주세요");
             return "users/loginForm";
         }
 
-        setLoginUser(session, new LoginUser(loginForm.getUserId()));
         return "redirect:" + redirectURL;
     }
 
@@ -105,8 +105,8 @@ public class UserController {
     public String kaKaoLogin(String code, HttpSession session) {
         log.info("KaKao login execute");
         kakaoLogic.getKaKaoToken(code);
-        String userId = kakaoLogic.logIn(session);
-        setLoginUser(session, new LoginUser(userId));
+        LoginUser loginUser = kakaoLogic.logIn(session);
+        setLoginUser(session, loginUser);
         return "redirect:/";
     }
 
