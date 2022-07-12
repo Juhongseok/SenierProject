@@ -7,4 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class LoginUser {
     private String id;
+    private String username;
 }
