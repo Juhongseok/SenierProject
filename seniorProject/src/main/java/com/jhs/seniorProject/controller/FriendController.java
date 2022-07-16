@@ -3,10 +3,10 @@ package com.jhs.seniorProject.controller;
 import com.jhs.seniorProject.argumentresolver.Login;
 import com.jhs.seniorProject.argumentresolver.LoginUser;
 import com.jhs.seniorProject.service.requestform.FriendForm;
-import com.jhs.seniorProject.domain.Friend;
 import com.jhs.seniorProject.domain.exception.DuplicateFriendException;
 import com.jhs.seniorProject.domain.exception.NoSuchUserException;
 import com.jhs.seniorProject.service.FriendService;
+import com.jhs.seniorProject.service.responseform.FriendList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -58,7 +58,7 @@ public class FriendController {
         }
     }
 
-    private static String getFriendName(Friend friend) {
-        return friend.getFriendId().getName();
+    private static String getFriendName(FriendList friend) {
+        return friend.getName();
     }
 }
