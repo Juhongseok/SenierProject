@@ -13,6 +13,7 @@ import com.jhs.seniorProject.service.FriendService;
 import com.jhs.seniorProject.service.LocationService;
 import com.jhs.seniorProject.service.MapService;
 import com.jhs.seniorProject.service.UserService;
+import com.jhs.seniorProject.service.requestform.CreateMapDto;
 import com.jhs.seniorProject.service.requestform.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -41,8 +42,8 @@ public class TestDataInit {
             userService.join(userC_);
 
             friendService.addFriend(new LoginUser(userA.getId(), userA.getName()), "userB");
-            Map map = mapService.createMap(userA.getName(), userA);
-            List<SmallSubject> smallSubjects = map.getSmallSubjects();
+            String mapName = mapService.createMap(new CreateMapDto(userA.getName(), userA.getId()));
+            /*List<SmallSubject> smallSubjects = map.getSmallSubjects();
             locationService.saveLocation(
                     new SaveLocationForm(37.566826, 126.9786567, "save location1", "location1"
                             , BigSubject.TOGO, smallSubjects.get(0), map.getId())
@@ -59,7 +60,7 @@ public class TestDataInit {
                     new SaveLocationForm( 37.615355069395335, 127.01335100479028 , "save location1", "location1"
                             , BigSubject.TOGO, smallSubjects.get(0), map.getId())
                     ,userA.getId()
-            );
+            );*/
         } catch (DuplicatedUserException e) {
 
         } catch (NoSuchUserException e) {
