@@ -9,6 +9,8 @@ import com.jhs.seniorProject.domain.User;
 import com.jhs.seniorProject.domain.exception.NoSuchMapException;
 import com.jhs.seniorProject.service.FriendService;
 import com.jhs.seniorProject.service.MapService;
+import com.jhs.seniorProject.service.requestform.AddMapDto;
+import com.jhs.seniorProject.service.requestform.CreateMapDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -39,13 +41,12 @@ public class MapController {
      * @return
      */
     @PostMapping("/create")
-    public String createMap(@ModelAttribute("mapForm") @Validated MapForm mapForm, BindingResult bindingResult, @Login User user){
-        if (!bindingResult.hasErrors()) {
-            //TODO DTO 하나로 통합
-            mapService.createMap(mapForm.getName(), user);
-            return "redirect:/";
+    public String createMap(@ModelAttribute("mapForm") @Validated MapForm mapForm, BindingResult bindingResult, @Login LoginUser user){
+        if (bindingResult.hasErrors()) {
+            return "map/createmapform";
         }
-        return "map/createmapform";
+        String createMapName = mapService.createMap(new CreateMapDto(mapForm.getName(), user.getId()));
+        return "redirect:/";
     }
 
     @GetMapping("/add")
@@ -62,14 +63,20 @@ public class MapController {
      * @return
      */
     @PostMapping("/add")
-    public String addMap(@ModelAttribute("addMapForm") @Validated AddMapForm addMapForm, BindingResult bindingResult, @Login User user){
+    public String addMap(@ModelAttribute("addMapForm") @Validated AddMapForm addMapForm, BindingResult bindingResult, @Login LoginUser user){
         log.info("add map");
         if (bindingResult.hasErrors()) {
             return "map/addmapform";
         }
         try {
             log.info("addForm = {}", addMapForm);
-            mapService.addMap(addMapForm.getId(), addMapForm.getPassword(), user);
+            AddMapDto addMapDto = AddMapDto.builder()
+                    .createUserId(addMapForm.getId())
+                    .password(addMapForm.getPassword())
+                    .addUserId(user.getId())
+                    .build();
+
+            String addMapName = mapService.addMap(addMapDto);
         } catch (NoSuchMapException e) {
             bindingResult.reject("noUser","해당 사용자가 없습니다.");
         }
@@ -83,7 +90,7 @@ public class MapController {
      * @return
      */
     @GetMapping("/list")
-    public String getMapList(@Login User user, Model model) {
+    public String getMapList(@Login LoginUser user, Model model) {
         model.addAttribute("mapList", mapService.getMaps(user));
         return "map/mymaps";
     }
