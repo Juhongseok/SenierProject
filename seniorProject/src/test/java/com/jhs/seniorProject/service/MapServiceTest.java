@@ -1,10 +1,10 @@
 package com.jhs.seniorProject.service;
 
-import com.jhs.seniorProject.domain.Map;
 import com.jhs.seniorProject.domain.User;
 import com.jhs.seniorProject.domain.exception.NoSuchMapException;
-import com.jhs.seniorProject.repository.MapRepository;
 import com.jhs.seniorProject.repository.UserRepository;
+import com.jhs.seniorProject.service.requestform.AddMapDto;
+import com.jhs.seniorProject.service.requestform.CreateMapDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -28,15 +26,12 @@ class MapServiceTest {
     private MapService mapService;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private MapRepository mapRepository;
-    private Map savedMap;
     private User userA;
     private User userB;
 
     @BeforeEach
     void before() {
-        savedMap = mapService.createMap("mapA", userRepository.findById("userA").get());
+        mapService.createMap(new CreateMapDto("mapA", userRepository.findById("userA").get().getId()));
         userA = userRepository.findById("userA").get();
         userB = userRepository.findById("userB").get();
     }
@@ -49,8 +44,8 @@ class MapServiceTest {
         String mapName2 = "mapB";
 
         //when
-        Map savedMap1 = mapService.createMap(mapName1, userA);
-        Map savedMap2 = mapService.createMap(mapName2, userA);
+        mapService.createMap(new CreateMapDto(mapName1, userA.getId()));
+        mapService.createMap(new CreateMapDto(mapName2, userA.getId()));
 
         //then
         assertThat(savedMap.getName()).isEqualTo(mapName);
@@ -60,7 +55,7 @@ class MapServiceTest {
     @Test
     @DisplayName("지도 추가")
     void addMap() throws NoSuchMapException {
-        Map map = mapService.addMap("userA", savedMap.getPassword(), userB);
+        mapService.addMap(new AddMapDto("userA", savedMap.getPassword(), userB.getId()));
 
     }
 }
