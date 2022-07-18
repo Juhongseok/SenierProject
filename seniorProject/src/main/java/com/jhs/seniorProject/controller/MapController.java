@@ -4,8 +4,6 @@ import com.jhs.seniorProject.argumentresolver.Login;
 import com.jhs.seniorProject.argumentresolver.LoginUser;
 import com.jhs.seniorProject.controller.form.AddMapForm;
 import com.jhs.seniorProject.controller.form.MapForm;
-import com.jhs.seniorProject.controller.form.MapInfo;
-import com.jhs.seniorProject.domain.User;
 import com.jhs.seniorProject.domain.exception.NoSuchMapException;
 import com.jhs.seniorProject.service.FriendService;
 import com.jhs.seniorProject.service.MapService;
@@ -103,10 +101,10 @@ public class MapController {
      * @return
      */
     @GetMapping("/list/{mapId}")
-    public String getMapInfoPage(@PathVariable Long mapId, @Login User user, Model model) {
+    public String getMapInfoPage(@PathVariable Long mapId, @Login LoginUser user, Model model) {
         log.info("mapId = {}", mapId);
         try {
-            model.addAttribute("info", new MapInfo(mapService.getMap(mapId, user.getId())));
+            model.addAttribute("info", mapService.getMap(mapId, user.getId()));
         } catch (NoSuchMapException e) {
             e.printStackTrace();
         }
@@ -126,6 +124,6 @@ public class MapController {
         } catch (NoSuchMapException e) {
             e.printStackTrace();
         }
-        return null;
+        return "map/mapinfo";
     }
 }

@@ -11,6 +11,9 @@ import com.jhs.seniorProject.repository.MapRepository;
 import com.jhs.seniorProject.repository.UserRepository;
 import com.jhs.seniorProject.service.requestform.AddMapDto;
 import com.jhs.seniorProject.service.requestform.CreateMapDto;
+import com.jhs.seniorProject.service.responseform.MapInfoAdmin;
+import com.jhs.seniorProject.service.responseform.MapInfoResponse;
+import com.jhs.seniorProject.service.responseform.MapInfoUser;
 import com.jhs.seniorProject.service.responseform.MapList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -89,16 +92,24 @@ public class MapService {
      * @throws NoSuchMapException
      */
     @Transactional(readOnly = true)
-    public Map getMap(Long mapId, String userId) throws NoSuchMapException {
-        //TODO Entity -> DTO 변경
+    public MapInfoResponse getMap(Long mapId, String userId) throws NoSuchMapException {
         Map findMap = mapRepository.findById(mapId)
                 .orElseThrow(() -> new NoSuchMapException("지도를 찾을 수 없습니다."));
+
         if (findMap.getCreatedBy().equals(userId)) {
+            MapInfoAdmin mapInfo = MapInfoAdmin.builder()
+                    .mapName(findMap.getName())
+                    .password(findMap.getPassword())
+                    .build();
             for (UserMap userMap : findMap.getUserMaps()) {
-                userMap.getMap();
+                mapInfo.addUserInfo(userMap);
             }
+            return mapInfo;
         }
-        return findMap;
+        return MapInfoUser.builder()
+                .mapName(findMap.getName())
+                .password(findMap.getPassword())
+                .build();
     }
 
     /**
