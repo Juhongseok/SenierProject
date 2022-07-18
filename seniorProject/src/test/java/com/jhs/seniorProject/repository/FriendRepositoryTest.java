@@ -72,7 +72,7 @@ class FriendRepositoryTest {
         //given
         User userA = userRepository.findById("userA").get();
         //when
-        List<Friend> findFriends = friendRepository.findByUserId(userA);
+        List<Friend> findFriends = friendRepository.findByIdUserId(userA.getId());
 
         //then
         for (Friend findFriend : findFriends) {
@@ -86,7 +86,7 @@ class FriendRepositoryTest {
         //given
         User userA = userRepository.findById("userA").get();
         User userB = userRepository.findById("userD").orElse(null);
-        Friend find = friendRepository.findByUserIdAndFriendId(userA, userB);
+        Friend find = friendRepository.findByIdUserIdAndIdFriendId(userA.getId(), userB.getId());
         //when
         System.out.println(find);
         //then
