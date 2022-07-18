@@ -11,5 +11,5 @@ import java.util.List;
 public interface LocationRepository extends JpaRepository<Location, Long> {
 
     @Query("select l from Location l where l.map = :mapId")
-    List<Location> findByMapId(@Param("mapId") Map mapId);
+    List<Location> findLocationsByMapId(@Param("mapId") Map mapId);
 }
