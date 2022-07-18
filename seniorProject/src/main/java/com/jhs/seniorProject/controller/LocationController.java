@@ -1,15 +1,17 @@
 package com.jhs.seniorProject.controller;
 
 import com.jhs.seniorProject.argumentresolver.Login;
+import com.jhs.seniorProject.argumentresolver.LoginUser;
 import com.jhs.seniorProject.controller.form.SaveLocationForm;
 import com.jhs.seniorProject.controller.form.UpdateLocationForm;
 import com.jhs.seniorProject.domain.Location;
-import com.jhs.seniorProject.domain.Map;
 import com.jhs.seniorProject.domain.User;
 import com.jhs.seniorProject.domain.enumeration.BigSubject;
 import com.jhs.seniorProject.domain.exception.NoSuchMapException;
 import com.jhs.seniorProject.service.LocationService;
 import com.jhs.seniorProject.service.MapService;
+import com.jhs.seniorProject.service.responseform.LocationList;
+import com.jhs.seniorProject.service.responseform.MapInfoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,7 +23,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashMap;
 import java.util.List;
 
 import static com.jhs.seniorProject.domain.enumeration.BigSubject.TOGO;
@@ -48,9 +49,7 @@ public class LocationController {
 
     @ResponseBody
     @GetMapping("/list")
-    public ResponseEntity<List<Location>> getLocationList(@RequestParam Long mapId, @Login User user) {
-        //TODO Entity -> DTO 변경
-        log.info("mapId = {}", mapId);
+    public ResponseEntity<List<LocationList>> getLocationList(@RequestParam Long mapId, @Login LoginUser user) {
         return new ResponseEntity<>(locationService.getLocations(mapId, user.getId()), HttpStatus.OK);
     }
 
@@ -60,8 +59,7 @@ public class LocationController {
             , Model model) {
         log.info("lat = {}, lng = {}", lat, lng);
         try {
-            //TODO DTO 하나로 통합
-            Map map = mapService.getMap(mapId, user.getId());
+            MapInfoResponse findMapInfo = mapService.getMap(mapId, user.getId());
 
             saveLocationForm.setLongitude(lng);
             saveLocationForm.setLatitude(lat);
@@ -69,7 +67,7 @@ public class LocationController {
 
             model.addAttribute("mapId", mapId)
                     .addAttribute("bigSubjects", togo)
-                    .addAttribute("smallSubjects", locationService.getSmallSubjectList(map));
+                    .addAttribute("smallSubjects", locationService.getSmallSubjectList(mapId));
         } catch (NoSuchMapException e) {
             e.printStackTrace();
         }
@@ -83,7 +81,6 @@ public class LocationController {
         }
 
         log.info("saveLocationFor = {}", locationForm);
-        //TODO DTO 하나로 통합
         locationService.saveLocation(locationForm, user.getId());
 
 
@@ -130,7 +127,7 @@ public class LocationController {
 
         model.addAttribute("locationId", locationId)
                 .addAttribute("updateLocation", getUpdateLocationForm(findLocation))
-                .addAttribute("smallSubjects", locationService.getSmallSubjectList(findLocation.getMap()))
+                .addAttribute("smallSubjects", locationService.getSmallSubjectList(findLocation.getMap().getId()))
                 .addAttribute("bigSubjects", togo);
     }
 

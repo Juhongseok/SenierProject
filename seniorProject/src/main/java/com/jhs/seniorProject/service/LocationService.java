@@ -5,11 +5,11 @@ import com.jhs.seniorProject.controller.form.UpdateLocationForm;
 import com.jhs.seniorProject.controller.form.UpdateLocationSmallSubject;
 import com.jhs.seniorProject.domain.Location;
 import com.jhs.seniorProject.domain.Map;
-import com.jhs.seniorProject.domain.UserMap;
 import com.jhs.seniorProject.domain.enumeration.Visibility;
 import com.jhs.seniorProject.repository.LocationRepository;
 import com.jhs.seniorProject.repository.MapRepository;
 import com.jhs.seniorProject.repository.SmallSubjectRepository;
+import com.jhs.seniorProject.service.responseform.LocationList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,13 +30,18 @@ public class LocationService {
     private final LocationRepository locationRepository;
     private final SmallSubjectRepository smallSubjectRepository;
 
-    public List<Location> getLocations(Long mapId, String userId) {
-        //TODO Entity -> DTO 변경
-        Map byIdWithUserMap = mapRepository.findByIdWithUserMap(mapId, userId);
-        if (byIdWithUserMap.getUserMaps().get(0).getVisibility().equals(Visibility.CLOSE)) {
+    public List<LocationList> getLocations(Long mapId, String userId) {
+        Map findMap = mapRepository.findByIdWithUserMap(mapId, userId);
+        if (findMap.getUserMaps().get(0).getVisibility().equals(Visibility.CLOSE)) {
             return Collections.emptyList();
         }
-        return locationRepository.findByMapId(byIdWithUserMap);
+        return locationRepository.findLocationsByMapId(findMap).stream()
+                .map(location -> LocationList.builder()
+                        .latitude(location.getLatitude())
+                        .longitude(location.getLongitude())
+                        .name(location.getName())
+                        .build())
+                .collect(toList());
     }
 
     public Location findLocation(Long locationId) {
@@ -46,8 +51,8 @@ public class LocationService {
         return findLocation;
     }
 
-    public List<UpdateLocationSmallSubject> getSmallSubjectList(Map map) {
-        return smallSubjectRepository.findByMap(map).stream()
+    public List<UpdateLocationSmallSubject> getSmallSubjectList(Long mapId) {
+        return smallSubjectRepository.findByMapId(mapId).stream()
                 .map(UpdateLocationSmallSubject::new)
                 .collect(toList());
     }
