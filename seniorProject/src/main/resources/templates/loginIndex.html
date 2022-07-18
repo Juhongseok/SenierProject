@@ -2,23 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <th:block th:replace="fragments/config::config"/>
     <title>로그인 후 홈 화면</title>
 </head>
 <body>
-    <h2>로그인 후 홈 화면</h2>
-
-    <button type="button"
-        th:onclick="|location.href='@{/users/myPage}'|">마이페이지</button>
-
-    <form action="/users/logout" method="post">
-        <button type="submit"
-                th:onclick="|location.href='@{/users/logout}'|">로그아웃</button>
-    </form>
-
-    <button type="button"
-            th:onclick="|location.href='@{/friend/list}'|">친구추가</button>
-
-    <button type="button"
-            th:onclick="|location.href='@{/map/create}'|">지도추가</button>
+    <header th:replace="fragments/header::afterHeader"></header>
 </body>
 </html>
