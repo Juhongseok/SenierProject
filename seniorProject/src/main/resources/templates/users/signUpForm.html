@@ -2,30 +2,35 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <th:block th:replace="fragments/config::config"/>
     <title>회원가입</title>
 </head>
 <body>
-    <h2>회원가입</h2>
-
-    <form action="/users/signup" th:object="${signUpForm}" method="post">
-        <div>
-            <label for="id">ID</label>
-            <input type="text" id="id" th:field="*{userId}">
-        </div>
-        <div>
-            <label for="name">name</label>
-            <input type="text" id="name" th:field="*{name}">
-        </div>
-        <div>
-            <label for="password">Password</label>
-            <input type="password" id="password" th:field="*{password}">
-        </div>
-        <div>
-            <label for="passwordCheck">PasswordCheck</label>
-            <input type="password" id="passwordCheck" th:field="*{passwordCheck}">
-        </div>
-        <br>
-        <button type="submit">login</button>
-</form>
+    <header th:replace="fragments/header::header"></header>
+    <div class="container">
+        <form action="/users/signup" th:object="${signUpForm}" method="post">
+            <div class="form-group">
+                <label for="id">ID</label>
+                <input type="text" class="form-control" id="id" th:field="*{userId}" placeholder="Enter Id">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="name">name</label>
+                <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Name">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" th:field="*{password}" class="form-control" placeholder="Password">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="passwordCheck">PasswordCheck</label>
+                <input type="password" id="passwordCheck" th:field="*{passwordCheck}" class="form-control" placeholder="Password check">
+            </div>
+            <hr>
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+        </form>
+    </div>
 </body>
 </html>
