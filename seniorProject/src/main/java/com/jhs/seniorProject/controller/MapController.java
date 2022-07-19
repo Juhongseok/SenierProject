@@ -82,18 +82,6 @@ public class MapController {
     }
 
     /**
-     * 내 지도 리스트 확인
-     * @param user
-     * @param model
-     * @return
-     */
-    @GetMapping("/list")
-    public String getMapList(@Login LoginUser user, Model model) {
-        model.addAttribute("mapList", mapService.getMaps(user));
-        return "map/mymaps";
-    }
-
-    /**
      * 지도 정보 보기
      * @param mapId
      * @param user
@@ -104,7 +92,7 @@ public class MapController {
     public String getMapInfoPage(@PathVariable Long mapId, @Login LoginUser user, Model model) {
         log.info("mapId = {}", mapId);
         try {
-            model.addAttribute("info", mapService.getMap(mapId, user.getId()));
+            model.addAttribute("info", mapService.getMapInfo(mapId, user.getId()));
         } catch (NoSuchMapException e) {
             e.printStackTrace();
         }
