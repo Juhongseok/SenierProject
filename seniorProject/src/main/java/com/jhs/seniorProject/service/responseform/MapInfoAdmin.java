@@ -12,7 +12,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class MapInfoAdmin implements MapInfoResponse{
+public class MapInfoAdmin extends MapInfoResponse{
     private Long mapId;
     private String mapName;
     private String password;
@@ -29,6 +29,7 @@ public class MapInfoAdmin implements MapInfoResponse{
         userInfos.add(new UserInfo(userMap.getId().getUserId(), userMap.getVisibility()));
     }
 
+    @Data
     @AllArgsConstructor
     private static class UserInfo{
         private String userId;

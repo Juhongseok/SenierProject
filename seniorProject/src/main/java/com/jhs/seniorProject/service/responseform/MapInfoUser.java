@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class MapInfoUser implements MapInfoResponse{
+public class MapInfoUser extends MapInfoResponse{
     private Long mapId;
     private String mapName;
     private String password;
