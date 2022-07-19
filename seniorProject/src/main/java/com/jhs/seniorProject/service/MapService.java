@@ -1,6 +1,5 @@
 package com.jhs.seniorProject.service;
 
-import com.jhs.seniorProject.argumentresolver.LoginUser;
 import com.jhs.seniorProject.domain.Map;
 import com.jhs.seniorProject.domain.SmallSubject;
 import com.jhs.seniorProject.domain.User;
@@ -14,15 +13,12 @@ import com.jhs.seniorProject.service.requestform.CreateMapDto;
 import com.jhs.seniorProject.service.responseform.MapInfoAdmin;
 import com.jhs.seniorProject.service.responseform.MapInfoResponse;
 import com.jhs.seniorProject.service.responseform.MapInfoUser;
-import com.jhs.seniorProject.service.responseform.MapList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service
@@ -56,7 +52,7 @@ public class MapService {
     }
 
     /**
-     *
+     * 기존 지도 추가
      * @param addMapDto
      * @return
      * @throws NoSuchMapException
@@ -74,17 +70,6 @@ public class MapService {
     }
 
     /**
-     * @param user
-     * @return 사용자가 가진 지도 리스트
-     */
-    @Transactional(readOnly = true)
-    public List<MapList> getMaps(LoginUser user) {
-        return mapRepository.findAll(user.getId()).stream()
-                .map(MapList::from)
-                .collect(toList());
-    }
-
-    /**
      * 지도 정보 확인 시 사용
      * @param mapId 아이디 가지고 지도 검색
      * @param userId 최초 만든 사용자인지 확인 --> 해당 지도 추가한 사용자 목록 검색
@@ -92,12 +77,13 @@ public class MapService {
      * @throws NoSuchMapException
      */
     @Transactional(readOnly = true)
-    public MapInfoResponse getMap(Long mapId, String userId) throws NoSuchMapException {
+    public MapInfoResponse getMapInfo(Long mapId, String userId) throws NoSuchMapException {
         Map findMap = mapRepository.findById(mapId)
                 .orElseThrow(() -> new NoSuchMapException("지도를 찾을 수 없습니다."));
 
         if (findMap.getCreatedBy().equals(userId)) {
             MapInfoAdmin mapInfo = MapInfoAdmin.builder()
+                    .mapId(findMap.getId())
                     .mapName(findMap.getName())
                     .password(findMap.getPassword())
                     .build();
@@ -107,6 +93,7 @@ public class MapService {
             return mapInfo;
         }
         return MapInfoUser.builder()
+                .mapId(findMap.getId())
                 .mapName(findMap.getName())
                 .password(findMap.getPassword())
                 .build();

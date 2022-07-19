@@ -59,7 +59,7 @@ public class LocationController {
             , Model model) {
         log.info("lat = {}, lng = {}", lat, lng);
         try {
-            MapInfoResponse findMapInfo = mapService.getMap(mapId, user.getId());
+            MapInfoResponse findMapInfo = mapService.getMapInfo(mapId, user.getId());
 
             saveLocationForm.setLongitude(lng);
             saveLocationForm.setLatitude(lat);
