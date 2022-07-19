@@ -105,13 +105,14 @@ public class MapController {
      * @param userId
      * @return
      */
-    @PostMapping("/give_auth")
-    public String giveAuthToUser(Long mapId, String userId) {
+    @ResponseBody
+    @PostMapping("/give_auth/{mapId}/{userId}")
+    public String giveAuthToUser(@PathVariable Long mapId, @PathVariable String userId) {
         try {
             mapService.accessMap(mapId, userId);
         } catch (NoSuchMapException e) {
             e.printStackTrace();
         }
-        return "map/mapinfo";
+        return "ok";
     }
 }
