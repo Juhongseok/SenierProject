@@ -13,12 +13,14 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class MapInfoAdmin implements MapInfoResponse{
+    private Long mapId;
     private String mapName;
     private String password;
     private List<UserInfo> userInfos = new ArrayList<>();
 
     @Builder
-    public MapInfoAdmin(String mapName, String password) {
+    public MapInfoAdmin(Long mapId, String mapName, String password) {
+        this.mapId = mapId;
         this.mapName = mapName;
         this.password = password;
     }
