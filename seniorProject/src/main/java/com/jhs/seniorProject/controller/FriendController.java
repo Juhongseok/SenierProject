@@ -40,22 +40,13 @@ public class FriendController {
 
     @ResponseBody
     @PostMapping("/api/add")
-    public void addFriend(@Valid @RequestBody FriendForm friendForm, BindingResult bindingResult, @Login LoginUser loginUser) throws BindException {
+    public void addFriend(@Valid @RequestBody FriendForm friendForm, BindingResult bindingResult, @Login LoginUser loginUser) throws BindException, NoSuchUserException, DuplicateFriendException {
         log.info("add friend {}", friendForm);
         if (bindingResult.hasErrors()) {
             log.info("bindingResult has error, ", bindingResult);
-            //TODO ControllerAdvice 만들어서 에러 메세지 관리
             throw new BindException(bindingResult);
         }
-        //TODO 예외처리 로직 기능 추가
-        //TODO Entity -> DTO 변경
-        try {
-            friendService.addFriend(loginUser, friendForm.getId());
-        } catch (DuplicateFriendException e) {
-            e.printStackTrace();
-        } catch (NoSuchUserException e) {
-            e.printStackTrace();
-        }
+        friendService.addFriend(loginUser, friendForm.getId());
     }
 
     private static String getFriendName(FriendList friend) {
