@@ -29,4 +29,11 @@ public class SignUpForm {
     public User toEntity(){
         return new User(userId, password, name);
     }
+
+    public void setBlankAllData(){
+        userId = "";
+        password = "";
+        passwordCheck = "";
+        name = "";
+    }
 }
