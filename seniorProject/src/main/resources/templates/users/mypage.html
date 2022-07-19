@@ -32,12 +32,17 @@
                     <tr>
                         <th>번호</th>
                         <th>지도 이름</th>
+                        <th>지도 보기</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="map : *{maps}">
                         <td th:text="${mapStat.index + 1}" style="cursor: pointer; font-weight: bold" th:onclick="|location.href='@{/map/list/{mapId} (mapId=${map.mapId})}'|"></td>
                         <td th:text="${map.mapName}" style="cursor: pointer; font-weight: bold" th:onclick="|location.href='@{/map/list/{mapId} (mapId=${map.mapId})}'|"></td>
+                        <td>
+                            <a href="#" th:onclick="|location.href='@{/location/{mapId}/view (mapId=${map.mapId})}'|"
+                               class="btn btn-primary">보기</a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
