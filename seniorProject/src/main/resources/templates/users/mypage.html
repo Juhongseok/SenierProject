@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:replace="fragments/config::config"/>
+    <title>마이페이지</title>
+</head>
+<body>
+    <header th:replace="fragments/header::afterHeader"></header>
+    <div class="container">
+        <form action="/map/create" th:object="${userInfo}" method="post">
+            <div class="form-group">
+                <label for="id">아이디</label>
+                <input type="text" class="form-control" id="id" th:field="*{id}" disabled>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="name">이름</label>
+                <input type="text" class="form-control" id="name" th:field="*{name}" disabled>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input type="text" class="form-control" id="password" th:field="*{password}" disabled>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="maps">지도리스트</label>
+                <hr>
+                <table id="maps" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>지도 이름</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="map : *{maps}">
+                        <b>
+                            <a href="#"><td th:text="${mapStat.index + 1}"></td></a>
+                        </b>
+                        <b>
+                            <a href="#"><td th:text="${map.mapName}"></td></a>
+                        </b>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
