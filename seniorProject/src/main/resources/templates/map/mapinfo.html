@@ -2,9 +2,65 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <th:block th:replace="fragments/config::config"/>
     <title>map info</title>
 </head>
 <body>
-<h2>map info</h2>
+    <header th:replace="fragments/header::afterHeader"></header>
+    <div class="container">
+        <form action="/map/create" th:object="${info}" method="post">
+            <div class="form-group">
+                <label for="mapId">아이디</label>
+                <input type="text" class="form-control" id="mapId" th:field="*{mapId}" disabled>
+            </div>
+            <div class="form-group">
+                <label for="mapName">이름</label>
+                <input type="text" class="form-control" id="mapName" th:field="*{mapName}" disabled>
+            </div>
+            <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input type="text" class="form-control" id="password" th:field="*{password}" disabled>
+            </div>
+            <br>
+            <div class="form-group" th:if="${info instanceof T(com.jhs.seniorProject.service.responseform.MapInfoAdmin)}">
+                <label for="userInfo">사용자 리스트</label>
+                <hr>
+                <table id="userInfo" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>사용자 이름</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="userInfo : *{userInfos}">
+                        <td th:text="${userInfoStat.index + 1}" style="font-weight: bold"></td>
+                        <td th:text="${userInfo.userId}" style="font-weight: bold"></td>
+                        <td th:text="${userInfo.visibility}" style="font-weight: bold"></td>
+                        <td>
+                            <a th:if="${userInfo.visibility.name() == 'CLOSE'}" href="#"
+                               th:onclick="accept([[${userInfo.userId}]],[[${mapId}]])"
+                               class="btn btn-primary">accept</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
 </body>
+<script>
+    function accept(userId, mapId) {
+        $.ajax({
+            type:"POST",
+            url:"/map/give_auth/"+mapId+"/"+userId+"",
+            contentType:"application/json; charset=utf-8",
+        }).done(function(){
+            alert("지도 사용 승인");
+            location.reload();
+        }).fail(function(response){
+            console.log(response.status + " " + response.responseText)
+        });
+    }
+</script>
 </html>
