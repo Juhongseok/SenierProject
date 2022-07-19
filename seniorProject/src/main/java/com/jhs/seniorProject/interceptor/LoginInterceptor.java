@@ -21,6 +21,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession(false);
         if (cannotAccessThisURI(session)) {
             log.info("cannot access this {}", requestURI);
+            request.getSession().setAttribute("redirectURL", requestURI);
             response.sendRedirect("/users/login?redirectURL="+requestURI);
             return false;
         }
