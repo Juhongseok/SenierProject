@@ -43,16 +43,17 @@ public class UserController {
             return "users/signUpForm";
         }
 
-        if (!signUpForm.checkPassword()) {
-            bindingResult.reject("NotCorrectPassword", "비밀번호가 일치하지 않습니다");
-            return "users/signUpForm";
-        }
-
         try {
             userService.join(signUpForm);
         } catch (DuplicatedUserException e) {
             log.error("userController.signUp error ", e);
             bindingResult.reject("duplicateUser", "중복된 회원입니다.");
+            signUpForm.setBlankAllData();
+            return "users/signUpForm";
+        }
+
+        if (!signUpForm.checkPassword()) {
+            bindingResult.reject("NotCorrectPassword", "비밀번호가 일치하지 않습니다");
             return "users/signUpForm";
         }
 
