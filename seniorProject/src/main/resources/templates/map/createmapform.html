@@ -2,19 +2,26 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <th:block th:replace="fragments/config::config"/>
     <title>create map</title>
 </head>
 <body>
-<h2>create map</h2>
 
-    <form action="/map/create" th:object="${mapForm}" method="post">
-        <div>
-            <label for="name">지도 이름</label>
-            <input type="text" id="name" th:field="*{name}">
-        </div>
-        <br>
-        <button type="submit">새 지도 생성</button>
-    </form>
-    <a href="/map/add"><button type="button">기존 지도 추가</button></a>
+    <header th:replace="fragments/header::afterHeader"></header>
+    <div class="container">
+        <form action="/map/create" th:object="${mapForm}" method="post">
+            <div class="form-group">
+                <label for="name">지도 이름</label>
+                <input type="text" class="form-control" id="name" th:field="*{name}"
+                       th:errorclass="field-error" placeholder="Enter Id">
+                <b><p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorclass="field-error">Incorrect date</p></b>
+            </div>
+            <br>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">새 지도 생성</button>
+                <a href="/map/add"><button type="button" class="btn btn-primary float-right">기존 지도 추가</button></a>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

@@ -2,24 +2,29 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <th:block th:replace="fragments/config::config"/>
     <title>create map</title>
 </head>
 <body>
-<h2>create map</h2>
+    <header th:replace="fragments/header::afterHeader"></header>
+    <div class="container">
+        <form action="/map/add" th:object="${addMapForm}" method="post">
+            <div class="form-group">
+                <label for="password">지도 비밀번호</label>
+                <input type="password" class="form-control" id="password" th:field="*{password}"
+                       th:errorclass="field-error" placeholder="Enter password">
+                <b><p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:errorclass="field-error">Incorrect date</p></b>
 
-    <form action="/map/add" th:object="${addMapForm}" method="post">
-        <div>
-            <label for="password">지도 비밀번호</label>
-            <input type="text" id="password" th:field="*{password}">
-
-            <select th:name="id">
-                <option value="">선택</option>
-                <option th:each="friend : ${friends}"
-                        th:value="${friend.id}" th:text="${friend.name}"></option>
-            </select>
-        </div>
-        <br>
-        <button type="submit">지도 추가</button>
-    </form>
+                <label for="select">만든 사람</label>
+                <select class="form-control form-control-sm" th:name="id" id="select">
+                    <option value="">선택</option>
+                    <option th:each="friend : ${friends}"
+                            th:value="${friend.id}" th:text="${friend.name}"></option>
+                </select>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">지도 추가</button>
+        </form>
+    </div>
 </body>
 </html>
