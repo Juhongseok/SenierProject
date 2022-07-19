@@ -5,30 +5,44 @@
     <th:block th:replace="fragments/config::config"/>
     <title>회원가입</title>
 </head>
+<style>
+    .field-error {
+        border-color: #bd2130;
+        color: #bd2130;
+    }
+</style>
 <body>
     <header th:replace="fragments/header::header"></header>
     <div class="container">
         <form action="/users/signup" th:object="${signUpForm}" method="post">
             <div class="form-group">
                 <label for="id">ID</label>
-                <input type="text" class="form-control" id="id" th:field="*{userId}" placeholder="Enter Id">
+                <input type="text" class="form-control" id="id" th:field="*{userId}"
+                       th:errorclass="field-error" placeholder="Enter Id">
+                <b><p th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}" th:errorclass="field-error">Incorrect date</p></b>
             </div>
             <br>
             <div class="form-group">
                 <label for="name">name</label>
-                <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Name">
+                <input type="text" id="name" th:field="*{name}" class="form-control" th:errorclass="field-error" placeholder="Name">
+                <b><p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorclass="field-error">Incorrect date</p></b>
             </div>
             <br>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" th:field="*{password}" class="form-control" placeholder="Password">
+                <input type="password" id="password" th:field="*{password}" class="form-control" th:errorclass="field-error" placeholder="Password">
+                <b><p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:errorclass="field-error">Incorrect date</p></b>
             </div>
             <br>
             <div class="form-group">
                 <label for="passwordCheck">PasswordCheck</label>
-                <input type="password" id="passwordCheck" th:field="*{passwordCheck}" class="form-control" placeholder="Password check">
+                <input type="password" id="passwordCheck" th:field="*{passwordCheck}" class="form-control" th:errorclass="field-error" placeholder="Password check">
+                <b><p th:if="${#fields.hasErrors('passwordCheck')}" th:errors="*{passwordCheck}" th:errorclass="field-error">Incorrect date</p></b>
             </div>
             <hr>
+            <div th:if="${#fields.hasGlobalErrors()}">
+                <b><p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}"/></b>
+            </div>
             <button type="submit" class="btn btn-primary">Sign Up</button>
         </form>
     </div>
