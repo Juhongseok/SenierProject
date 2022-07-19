@@ -42,7 +42,7 @@ public class TestDataInit {
             userService.join(userC_);
 
             friendService.addFriend(new LoginUser(userA.getId(), userA.getName()), "userB");
-            String mapName = mapService.createMap(new CreateMapDto(userA.getName(), userA.getId()));
+            String mapName = mapService.createMap(new CreateMapDto("UserA's Map1", userA.getId()));
             /*List<SmallSubject> smallSubjects = map.getSmallSubjects();
             locationService.saveLocation(
                     new SaveLocationForm(37.566826, 126.9786567, "save location1", "location1"
