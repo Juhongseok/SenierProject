@@ -68,7 +68,7 @@
     const makingErrorField = function(response){
         const errorFields = response.responseJSON.error;
         $( 'p.error-message' ).remove();
-        $('#inputId').append('<p class="error-message">'+errorFields+'</p>')
+        $('#inputId').append('<p class="field-error">'+errorFields+'</p>')
     };
 </script>
 </html>
