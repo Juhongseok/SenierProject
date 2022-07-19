@@ -1,6 +1,8 @@
 package com.jhs.seniorProject.service;
 
 import com.jhs.seniorProject.argumentresolver.LoginUser;
+import com.jhs.seniorProject.domain.Map;
+import com.jhs.seniorProject.repository.MapRepository;
 import com.jhs.seniorProject.service.requestform.LoginForm;
 import com.jhs.seniorProject.service.requestform.SignUpForm;
 import com.jhs.seniorProject.domain.User;
@@ -8,10 +10,17 @@ import com.jhs.seniorProject.domain.exception.DuplicatedUserException;
 import com.jhs.seniorProject.domain.exception.IncorrectPasswordException;
 import com.jhs.seniorProject.domain.exception.NoSuchUserException;
 import com.jhs.seniorProject.repository.UserRepository;
+import com.jhs.seniorProject.service.responseform.MapInfoResponse;
+import com.jhs.seniorProject.service.responseform.MapInfoUser;
+import com.jhs.seniorProject.service.responseform.UserInfoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -20,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final MapRepository mapRepository;
 
     public void join(SignUpForm signUpForm) throws DuplicatedUserException {
         User user = signUpForm.toEntity();
@@ -40,12 +50,28 @@ public class UserService {
         return new LoginUser(findUser.getId(), findUser.getName());
     }
 
+    @Transactional(readOnly = true)
+    public UserInfoResponse getUserInfo(String id) throws NoSuchUserException {
+        User user = findUser(id);
+        List<Map> all = mapRepository.findAll(id);
+        List<MapInfoResponse> maps = all.stream()
+                .map(map -> new MapInfoUser(map.getId(), map.getName(), map.getPassword()))
+                .collect(Collectors.toList());
+
+        return UserInfoResponse.builder()
+                .id(id)
+                .password(user.getPassword())
+                .name(user.getName())
+                .maps(maps)
+                .build();
+    }
+
     private User findUser(String id) throws NoSuchUserException {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchUserException("일치하는 회원이 없습니다"));
     }
-
     //== 내부 검증 로직 ==//
+
     private void validateDuplicateUser(User user) throws DuplicatedUserException {
         if (userRepository.findById(user.getId()).isPresent())
             throw new DuplicatedUserException("이미 존재하는 회원입니다");
