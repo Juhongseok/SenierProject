@@ -36,12 +36,8 @@
                     </thead>
                     <tbody>
                     <tr th:each="map : *{maps}">
-                        <b>
-                            <a href="#"><td th:text="${mapStat.index + 1}"></td></a>
-                        </b>
-                        <b>
-                            <a href="#"><td th:text="${map.mapName}"></td></a>
-                        </b>
+                        <td th:text="${mapStat.index + 1}" style="cursor: pointer; font-weight: bold" th:onclick="|location.href='@{/map/list/{mapId} (mapId=${map.mapId})}'|"></td>
+                        <td th:text="${map.mapName}" style="cursor: pointer; font-weight: bold" th:onclick="|location.href='@{/map/list/{mapId} (mapId=${map.mapId})}'|"></td>
                     </tr>
                     </tbody>
                 </table>
