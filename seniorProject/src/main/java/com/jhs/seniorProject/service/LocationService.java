@@ -37,6 +37,7 @@ public class LocationService {
         }
         return locationRepository.findLocationsByMapId(findMap).stream()
                 .map(location -> LocationList.builder()
+                        .locationId(location.getId())
                         .latitude(location.getLatitude())
                         .longitude(location.getLongitude())
                         .name(location.getName())
