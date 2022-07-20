@@ -1,4 +1,3 @@
-let markers = [];
 let mapContainer = document.getElementById('map'),
     mapOption = {
         center: new kakao.maps.LatLng(37.566826, 126.9786567),
@@ -7,9 +6,14 @@ let mapContainer = document.getElementById('map'),
 let map = new kakao.maps.Map(mapContainer, mapOption);
 let ps = new kakao.maps.services.Places();
 
+/**
+ * 기본 페이지 열때 저장 위치 마커 표시
+ */
 showMarker();
 
-//기존에 저장되어 있던 위치들 찾아오기
+/**
+ * 기존에 저장되어 있던 위치들 찾아오기
+ */
 function showMarker() {
     let mapId = window.location.pathname.split('/')[2];
     $.ajax({
@@ -18,6 +22,7 @@ function showMarker() {
         data: {"mapId": mapId},
         success: function (data) {
             for (let i = 0; i < data.length; i++) {
+                let locationId = data[i].locationId;
                 let lat = data[i].latitude;
                 let lng = data[i].longitude;
                 let name = data[i].name;
@@ -28,9 +33,12 @@ function showMarker() {
                     title: name
                 });
 
+                let ref = "/location/" + locationId + "/update?mapId=" + mapId
+                console.log(ref);
                 let iwContent = '<div class="customoverlay" style="padding:5px; width: max-content;">' +
                         '제목 : ' + name +
-                        '<br><a href="#" style="color:blue" target="_blank">상세보기</a>';
+                        `<br><a href=${ref}` +
+                        ' style="color:blue">상세보기</a>';
                 kakao.maps.event.addListener(marker, 'click', function () {
                     new kakao.maps.InfoWindow({
                         content: iwContent,
@@ -48,6 +56,10 @@ function showMarker() {
     })
 }
 
+/**
+ * 검색 값 가져오기
+ * @returns {boolean}
+ */
 function searchPlaces() {
     let keyword = document.getElementById('keyword').value;
     document.getElementById('keyword').value = '';
@@ -59,7 +71,12 @@ function searchPlaces() {
     ps.keywordSearch(keyword, placesSearchCB);
 }
 
-function placesSearchCB(data, status, pagination) {
+/**
+ * 위치 검색
+ * @param data
+ * @param status
+ */
+function placesSearchCB(data, status) {
     if (status === kakao.maps.services.Status.OK) {
         let bounds = new kakao.maps.LatLngBounds();
         for (let i=0; i<data.length; i++) {
@@ -76,6 +93,22 @@ function placesSearchCB(data, status, pagination) {
     }
 }
 
+/**
+ * 마커 overlay 모두 닫기
+ * @type {*[]}
+ */
+let overlayArr = [];
+let selectedMarker = null;
+function closeAllOverlay() {
+    for(let i=0; i<overlayArr.length; i++){
+        overlayArr[i].setMap(null);
+    }
+}
+
+/**
+ * 검색으로 찾은 위치 마커 표시
+ * @param place
+ */
 function displayMarker(place) {
     let placeName = place.place_name;
 
@@ -85,16 +118,47 @@ function displayMarker(place) {
         position: latLng
     });
 
-    let infoWindow = new kakao.maps.InfoWindow({zIndex: 1});
-    let content = '<div style="padding:5px;font-size:12px;">' + placeName + '</div>' +
-        `<br><button onclick="addLocation(${latLng.getLat()}, ${latLng.getLng()}, '${placeName}')">저장</button>`;
+    let content =
+        `<div class="wrap">
+            <div class="infoWindow">
+                <div style="padding:5px;font-size:12px;"> 
+                    ${placeName}  
+                </div>
+                <br>
+                <button class="btn btn_primary btn_sm" 
+                    onclick="addLocation(${latLng.getLat()}, ${latLng.getLng()}, '${placeName}')">저장
+                </button>
+            </div>
+        </div>`;
 
+    let overlay = new kakao.maps.CustomOverlay({
+        content: content,
+        position: marker.getPosition()
+    });
+
+    overlayArr.push(overlay);
+
+    /**
+     * 클릭 시 overlay open
+     * 나머지 마커들은 infoWindow close
+     **/
     kakao.maps.event.addListener(marker, 'click', function() {
-        infoWindow.setContent(content);
-        infoWindow.open(map, marker);
+        closeAllOverlay()
+        if (selectedMarker != marker) {
+            overlay.setMap(map);
+            selectedMarker = marker;
+        } else {
+            selectedMarker = null;
+        }
     });
 }
 
+/**
+ * 위치 저장 페이지 호출
+ * @param lat
+ * @param lng
+ * @param placeName
+ */
 function addLocation(lat, lng, placeName) {
     let currentURL = location.href;
     window.location.href=currentURL.substr(0, currentURL.length - 5)

@@ -1,3 +1,9 @@
+.map_wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
 .map_wrap, .map_wrap * {
     margin: 0;
     padding: 0;
@@ -10,20 +16,14 @@
     text-decoration: none;
 }
 
-.map_wrap {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
 .bg_white {
     background: #fff;
 }
 
 #map {
+    position: relative;
     width: 100%;
     height: 100vh;
-    position: relative;
     overflow: hidden;
 }
 
@@ -32,7 +32,7 @@
     top: 0;
     left: 0;
     bottom: 0;
-    height: 20px;
+    height: 35px;
     width: 250px;
     margin: 10px 0 30px 10px;
     padding: 5px;
@@ -49,4 +49,25 @@
 
 #menu_wrap .option button {
     margin-left: 5px;
+}
+
+/*
+    TODO infoWindow 스타일 지정
+*/
+.infoWindow {
+    background-color: lightcyan;
+}
+
+.wrap {
+    position: absolute;
+    left: 0;
+    bottom: 20px;
+    width: 200px;
+    height: 100px;
+    margin-left: -100px;
+    text-align: left;
+    overflow: hidden;
+    font-size: 12px;
+    font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+    line-height: 1.5;
 }
