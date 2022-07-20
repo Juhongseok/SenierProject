@@ -23,6 +23,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static com.jhs.seniorProject.domain.enumeration.BigSubject.TOGO;
@@ -98,7 +99,9 @@ public class LocationController {
      * @return
      */
     @GetMapping("/{location}/update")
-    public String modifyLocationForm(@PathVariable(name = "location") Long locationId, Model model) {
+    public String modifyLocationForm(@PathVariable(name = "location") Long locationId,
+                                     @RequestParam Long mapId, Model model) {
+        model.addAttribute("mapId", mapId);
         setModelAttribute(locationId, model);
         return "location/updatelocationform";
     }
@@ -112,14 +115,15 @@ public class LocationController {
      * @return
      */
     @PostMapping("/{location}/update")
-    public String modifyLocation(@PathVariable(name = "location") Long locationId, @Validated @ModelAttribute UpdateLocationForm updateLocationForm, BindingResult bindingResult) {
+    public String modifyLocation(@PathVariable(name = "location") Long locationId, @Validated @ModelAttribute UpdateLocationForm updateLocationForm, BindingResult bindingResult,
+                                 @RequestParam("mapId") Long mapId) {
         log.info("locationId = {}", locationId);
         if (bindingResult.hasErrors()) {
             return "location/updatelocationform";
         }
 
         locationService.updateLocation(locationId, updateLocationForm);
-        return "redirect:/"; // 지도화면 만든 후 경로 변경
+        return "redirect:/location/" + mapId + "/view";
     }
 
     private void setModelAttribute(Long locationId, Model model) {
