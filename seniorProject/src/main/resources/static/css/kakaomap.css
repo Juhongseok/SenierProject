@@ -43,11 +43,30 @@
     border-radius: 10px;
 }
 
-#menu_wrap .option {
+/*
+    TODO 디자인 변경
+ */
+#savedPlaceSearch {
+    position: absolute;
+    top: 0;
+    left: 400px;
+    bottom: 0;
+    height: 35px;
+    width: 250px;
+    margin: 10px 0 30px 10px;
+    padding: 5px;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 1;
+    font-size: 12px;
+    border-radius: 10px;
+}
+
+#menu_wrap .option, #savedPlaceSearch .option {
     text-align: center;
 }
 
-#menu_wrap .option button {
+#menu_wrap .option button, #savedPlaceSearch .option button {
     margin-left: 5px;
 }
 
