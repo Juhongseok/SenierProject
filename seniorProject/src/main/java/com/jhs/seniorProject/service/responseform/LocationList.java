@@ -1,5 +1,6 @@
 package com.jhs.seniorProject.service.responseform;
 
+import com.jhs.seniorProject.domain.Location;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,5 +17,14 @@ public class LocationList {
         this.latitude = latitude;
         this.longitude = longitude;
         this.name = name;
+    }
+
+    public static LocationList from(Location location) {
+        return LocationList.builder()
+                .locationId(location.getId())
+                .latitude(location.getLatitude())
+                .longitude(location.getLongitude())
+                .name(location.getName())
+                .build();
     }
 }
