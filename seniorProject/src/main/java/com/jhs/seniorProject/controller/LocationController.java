@@ -5,13 +5,11 @@ import com.jhs.seniorProject.argumentresolver.LoginUser;
 import com.jhs.seniorProject.controller.form.SaveLocationForm;
 import com.jhs.seniorProject.controller.form.UpdateLocationForm;
 import com.jhs.seniorProject.domain.Location;
-import com.jhs.seniorProject.domain.User;
 import com.jhs.seniorProject.domain.enumeration.BigSubject;
-import com.jhs.seniorProject.domain.exception.NoSuchMapException;
 import com.jhs.seniorProject.service.LocationService;
 import com.jhs.seniorProject.service.MapService;
 import com.jhs.seniorProject.service.responseform.LocationList;
-import com.jhs.seniorProject.service.responseform.MapInfoResponse;
+import com.jhs.seniorProject.service.responseform.LocationSearch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,7 +21,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static com.jhs.seniorProject.domain.enumeration.BigSubject.TOGO;
@@ -39,12 +36,13 @@ public class LocationController {
     private final MapService mapService;
     private static List<BigSubject> togo;
 
-    static{
+    static {
         togo = List.of(TOGO, WENT);
     }
 
+    //TODO 지도에 저장되어 있는 주제 검색 후 model 값에 넘기기
     @GetMapping("/{mapId}/view")
-    public String Locations(@PathVariable("mapId") Long mapId) {
+    public String Locations(@PathVariable("mapId") Long mapId, Model model) {
         return "location/locationviewmap";
     }
 
@@ -55,28 +53,23 @@ public class LocationController {
     }
 
     @GetMapping("/{mapId}/add")
-    public String addLocationForm(@Login User user, @ModelAttribute(name = "saveLocationForm") SaveLocationForm saveLocationForm
+    public String addLocationForm(@ModelAttribute(name = "saveLocationForm") SaveLocationForm saveLocationForm
             , @PathVariable Long mapId, @RequestParam Double lat, @RequestParam Double lng, @RequestParam String placeName
             , Model model) {
         log.info("lat = {}, lng = {}", lat, lng);
-        try {
-            MapInfoResponse findMapInfo = mapService.getMapInfo(mapId, user.getId());
 
-            saveLocationForm.setLongitude(lng);
-            saveLocationForm.setLatitude(lat);
-            saveLocationForm.setName(placeName);
+        saveLocationForm.setLongitude(lng);
+        saveLocationForm.setLatitude(lat);
+        saveLocationForm.setName(placeName);
 
-            model.addAttribute("mapId", mapId)
-                    .addAttribute("bigSubjects", togo)
-                    .addAttribute("smallSubjects", locationService.getSmallSubjectList(mapId));
-        } catch (NoSuchMapException e) {
-            e.printStackTrace();
-        }
+        model.addAttribute("mapId", mapId)
+                .addAttribute("bigSubjects", togo)
+                .addAttribute("smallSubjects", locationService.getSmallSubjectList(mapId));
         return "location/addlocationform";
     }
 
     @PostMapping("/{mapId}/add")
-    public String addLocation(@Login User user, @PathVariable Long mapId, @Validated @ModelAttribute SaveLocationForm locationForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String addLocation(@Login LoginUser user, @PathVariable Long mapId, @Validated @ModelAttribute SaveLocationForm locationForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "location/addlocationform";
         }
@@ -126,6 +119,20 @@ public class LocationController {
         return "redirect:/location/" + mapId + "/view";
     }
 
+    /**
+     * 저장된 위치 검색
+     *
+     * @param locationSearch
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/search")
+    public List<LocationList> findLocationWithCond(@RequestBody LocationSearch locationSearch) {
+        return locationService.findLocationWithCondV1(locationSearch);
+//        return locationService.findLocationWithCondV2(locationSearch);
+    }
+
+    //== 기타 세팅 로직 ==//
     private void setModelAttribute(Long locationId, Model model) {
         Location findLocation = locationService.findLocation(locationId);
 
