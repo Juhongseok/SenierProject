@@ -5,7 +5,7 @@
 
 # Directory 구조
 ```bash
-       `src
+       `-- src
         |-- main
         |   |-- generated
         |   |-- java
@@ -15,6 +15,7 @@
         |   |               |-- argumentresolver
         |   |               |-- configuration
         |   |               |-- controller
+        |   |               |   |-- advice
         |   |               |   |-- form
         |   |               |   `-- logic
         |   |               |-- domain
@@ -24,13 +25,17 @@
         |   |               |   `-- exception
         |   |               |-- interceptor
         |   |               |-- repository
+        |   |               |   `-- customRepository
         |   |               `-- service
+        |   |                   |-- requestform
+        |   |                   `-- responseform
         |   `-- resources
         |       |-- static
         |       |   |-- css
         |       |   |-- image
         |       |   `-- js
         |       `-- templates
+        |           |-- fragments
         |           |-- friend
         |           |-- location
         |           |-- map
@@ -43,5 +48,6 @@
                         `-- seniorProject
                             |-- repository
                             `-- service
+
 
 ```
