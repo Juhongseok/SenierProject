@@ -3,13 +3,18 @@ package com.jhs.seniorProject.repository;
 import com.jhs.seniorProject.domain.Location;
 import com.jhs.seniorProject.domain.Map;
 import com.jhs.seniorProject.domain.SmallSubject;
+import com.jhs.seniorProject.domain.enumeration.BigSubject;
+import com.jhs.seniorProject.service.responseform.LocationSearch;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.List;
+
+import static com.jhs.seniorProject.domain.enumeration.BigSubject.TOGO;
 
 @SpringBootTest
 @Transactional
@@ -25,6 +30,9 @@ class LocationRepositoryTest {
     @Autowired
     MapRepository mapRepository;
 
+    @Autowired
+    EntityManager em;
+
     @Test
     void findLocationsByMapId(){
         Map map = mapRepository.findById(1L).get();
@@ -39,6 +47,29 @@ class LocationRepositoryTest {
         List<SmallSubject> byMapId = smallSubjectRepository.findByMapId(1L);
         for (SmallSubject smallSubject : byMapId) {
             System.out.println("smallSubject = " + smallSubject.getSubjectName());
+        }
+    }
+
+    @Test
+    void smallSubject(){
+        List<Location> result = em.createQuery(
+                "select l from Location l join l.smallSubject " +
+                        "where l.smallSubject.subjectName =:subjectName"
+                        ,Location.class)
+                .setParameter("subjectName", "카페")
+                .getResultList();
+
+//        for (Location l : result) {
+//            System.out.println(l.getSmallSubject());
+//        }
+
+    }
+
+    @Test
+    void customRepository(){
+        List<Location> locationCond = locationRepository.findLocationCond(new LocationSearch(1L, "location1", TOGO, "카페"));
+        for (Location location : locationCond) {
+            System.out.println(location.getSmallSubject().getSubjectName());
         }
     }
 }
