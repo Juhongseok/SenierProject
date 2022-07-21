@@ -54,10 +54,13 @@ public class TestDataInit {
             friendService.addFriend(new LoginUser(userA.getId(), userA.getName()), "userC");
             friendService.addFriend(new LoginUser(userB.getId(), userB.getName()), "userA");
             mapService.createMap(new CreateMapDto("UserA's Map1", userA.getId()));
+            mapService.createMap(new CreateMapDto("UserA's Map2", userA.getId()));
 
             UserInfoResponse userAInfo = userService.getUserInfo("userA");
             MapInfoUser maps = (MapInfoUser) userAInfo.getMaps().get(0);
+            MapInfoUser maps2 = (MapInfoUser) userAInfo.getMaps().get(1);
             Map map = mapRepository.findById(maps.getMapId()).get();
+            Map map2 = mapRepository.findById(maps2.getMapId()).get();
             List<SmallSubject> smallSubjects = smallSubjectRepository.findByMapId(map.getId());
             locationService.saveLocation(
                     new SaveLocationForm(37.566826, 126.9786567, "save location1", "location1"
@@ -67,13 +70,19 @@ public class TestDataInit {
 
             locationService.saveLocation(
                     new SaveLocationForm( 37.65358170124324, 127.04783326913316, "save location1", "location1"
-                            , BigSubject.TOGO, smallSubjects.get(0), map.getId())
+                            , BigSubject.TOGO, smallSubjects.get(1), map.getId())
                     ,userA.getId()
             );
 
             locationService.saveLocation(
                     new SaveLocationForm( 37.615355069395335, 127.01335100479028 , "save location1", "location1"
                             , BigSubject.TOGO, smallSubjects.get(0), map.getId())
+                    ,userA.getId()
+            );
+
+            locationService.saveLocation(
+                    new SaveLocationForm( 37.615355069395335, 127.01335100479028 , "save location1", "location1"
+                            , BigSubject.TOGO, smallSubjects.get(1), map2.getId())
                     ,userA.getId()
             );
         } catch (DuplicatedUserException e) {
