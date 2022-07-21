@@ -47,7 +47,6 @@ public class Location extends TimeAndPersonInfo {
     @JoinColumn(name = "MAP_ID")
     private Map map;
 
-    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "SMALL_SUBJECT_ID")
     private SmallSubject smallSubject;
