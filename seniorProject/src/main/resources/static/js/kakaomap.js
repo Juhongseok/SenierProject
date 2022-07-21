@@ -5,7 +5,7 @@ let mapContainer = document.getElementById('map'),
     };
 let map = new kakao.maps.Map(mapContainer, mapOption);
 let ps = new kakao.maps.services.Places();
-
+let savedMarker = [];
 /**
  * 기본 페이지 열때 저장 위치 마커 표시
  */
@@ -33,12 +33,17 @@ function showMarker() {
                     title: name
                 });
 
+                savedMarker.push(marker);
+
                 let ref = "/location/" + locationId + "/update?mapId=" + mapId
-                console.log(ref);
-                let iwContent = '<div class="customoverlay" style="padding:5px; width: max-content;">' +
-                        '제목 : ' + name +
-                        `<br><a href=${ref}` +
-                        ' style="color:blue">상세보기</a>';
+                let iwContent =
+                    `<div class="customoverlay" style="padding:5px; width: max-content;">
+                        제목 :  ${name} 
+                        <br>
+                        <a href=${ref} style="color:blue">
+                            상세보기
+                        </a>
+                    </div>`;
                 kakao.maps.event.addListener(marker, 'click', function () {
                     new kakao.maps.InfoWindow({
                         content: iwContent,
@@ -71,6 +76,10 @@ function searchPlaces() {
     ps.keywordSearch(keyword, placesSearchCB);
 }
 
+// TODO ajax 통신을 통한 검색 로직 작성
+function searchSavedPlaces(){
+
+}
 /**
  * 위치 검색
  * @param data
@@ -130,6 +139,20 @@ function displayMarker(place) {
                 </button>
             </div>
         </div>`;
+
+    for (const savedMarkerElement of savedMarker) {
+        if(marker.getPosition().getLat() == savedMarkerElement.getPosition().getLat()
+            && marker.getPosition().getLng() == savedMarkerElement.getPosition().getLng()){
+            content =
+                `<div class="wrap">
+                    <div class="infoWindow">
+                        <div style="padding:5px;font-size:12px;"> 
+                            제목 :  ${savedMarkerElement.getTitle()} 
+                        </div>
+                    </div>
+                </div>`;
+        }
+    }
 
     let overlay = new kakao.maps.CustomOverlay({
         content: content,
