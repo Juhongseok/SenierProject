@@ -32,9 +32,22 @@
     <div id="savedPlaceSearch" class="bg_white">
         <div class="option">
             <div>
-                <form onsubmit="searchSavedPlaces(); return false;">
-                    이름 : <input type="text" value="" id="name" size="15">
-                    <button type="submit">검색하기</button>
+                <form th:object="${mapInfo}">
+                    <input type="text" id="mapId" th:value="${mapId}" hidden>
+                    이름 : <input type="text" value="" id="name" size="15"><br>
+                    <label for="bigSubject">대주제</label>
+                    <select class="form-control form-control-sm" th:name="bigSubject" id="bigSubject">
+                        <option th:value="${null}">선택</option>
+                        <option th:each="bigSubject : *{bigSubjects}"
+                                th:value="${bigSubject}" th:text="${bigSubject.name()}"></option>
+                    </select>
+                    <label for="smallSubject">소주제</label>
+                    <select class="form-control form-control-sm" th:name="smallSubject" id="smallSubject">
+                        <option value="">선택</option>
+                        <option th:each="smallSubject : *{smallSubjects}"
+                                th:value="${smallSubject.subjectId}" th:text="${smallSubject.subjectName}"></option>
+                    </select>
+                    <button type="button" onclick="searchSavedPlaces(); return false;">검색하기</button>
                 </form>
             </div>
         </div>
