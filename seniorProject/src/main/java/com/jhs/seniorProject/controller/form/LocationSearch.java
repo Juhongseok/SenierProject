@@ -1,6 +1,5 @@
-package com.jhs.seniorProject.service.responseform;
+package com.jhs.seniorProject.controller.form;
 
-import com.jhs.seniorProject.domain.enumeration.BigSubject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class LocationSearch {
     private Long mapId;
     private String name;
-    private BigSubject bigSubject;
+    private String bigSubject;
     private String smallSubject;
 }
