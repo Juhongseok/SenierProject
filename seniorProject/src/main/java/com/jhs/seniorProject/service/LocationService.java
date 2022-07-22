@@ -9,8 +9,9 @@ import com.jhs.seniorProject.domain.enumeration.Visibility;
 import com.jhs.seniorProject.repository.LocationRepository;
 import com.jhs.seniorProject.repository.MapRepository;
 import com.jhs.seniorProject.repository.SmallSubjectRepository;
+import com.jhs.seniorProject.service.requestform.LocationSearchDto;
 import com.jhs.seniorProject.service.responseform.LocationList;
-import com.jhs.seniorProject.service.responseform.LocationSearch;
+import com.jhs.seniorProject.controller.form.LocationSearch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -82,13 +83,13 @@ public class LocationService {
 
     @Transactional(readOnly = true)
     public List<LocationList> findLocationWithCondV1(LocationSearch locationSearch) {
-        return locationRepository.findLocationCond(locationSearch).stream()
+        return locationRepository.findLocationCond(LocationSearchDto.from(locationSearch)).stream()
                 .map(LocationList::from)
                 .collect(toList());
     }
 
     @Transactional(readOnly = true)
     public List<LocationList> findLocationWithCondV2(LocationSearch locationSearch) {
-        return locationRepository.findLocationCondDto(locationSearch);
+        return locationRepository.findLocationCondDto(LocationSearchDto.from(locationSearch));
     }
 }
