@@ -3,8 +3,7 @@ package com.jhs.seniorProject.repository;
 import com.jhs.seniorProject.domain.Location;
 import com.jhs.seniorProject.domain.Map;
 import com.jhs.seniorProject.domain.SmallSubject;
-import com.jhs.seniorProject.domain.enumeration.BigSubject;
-import com.jhs.seniorProject.service.responseform.LocationSearch;
+import com.jhs.seniorProject.service.requestform.LocationSearchDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -67,7 +66,12 @@ class LocationRepositoryTest {
 
     @Test
     void customRepository(){
-        List<Location> locationCond = locationRepository.findLocationCond(new LocationSearch(1L, "location1", TOGO, "카페"));
+        List<Location> locationCond = locationRepository.findLocationCond(LocationSearchDto.builder()
+                .mapId(1L)
+                .name("location1")
+                .bigSubject(TOGO)
+                .smallSubject("카페")
+                .build());
         for (Location location : locationCond) {
             System.out.println(location.getSmallSubject().getSubjectName());
         }
