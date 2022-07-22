@@ -13,12 +13,15 @@ import com.jhs.seniorProject.service.requestform.CreateMapDto;
 import com.jhs.seniorProject.service.responseform.MapInfoAdmin;
 import com.jhs.seniorProject.service.responseform.MapInfoResponse;
 import com.jhs.seniorProject.service.responseform.MapInfoUser;
+import com.jhs.seniorProject.service.responseform.SmallSubjectInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service
@@ -115,6 +118,13 @@ public class MapService {
                 break;
             }
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<SmallSubjectInfo> getSmallSubjects(Long mapId){
+        return mapRepository.findSmallSubject(mapId).stream()
+                .map(subject -> new SmallSubjectInfo(subject.getId(), subject.getSubjectName()))
+                .collect(toList());
     }
 
     private Map findMap(AddMapDto addMapDto) throws NoSuchMapException {
