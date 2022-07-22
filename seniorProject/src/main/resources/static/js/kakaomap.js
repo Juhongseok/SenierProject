@@ -76,10 +76,48 @@ function searchPlaces() {
     ps.keywordSearch(keyword, placesSearchCB);
 }
 
-// TODO ajax 통신을 통한 검색 로직 작성
-function searchSavedPlaces(){
+function searchSavedPlaces() {
+    let param = {
+        mapId: $("#mapId").val(),
+        name: $("#name").val(),
+        bigSubject: $("#bigSubject").val(),
+        smallSubject: $("#smallSubject").val()
+    }
+    $.ajax({
+        type: "POST",
+        url: "/location/search",
+        data: JSON.stringify(param),
+        contentType: "application/json; charset=utf-8",
+    }).done(function (data) {
+        console.log(data);
+        alert("위치 검색 성공");
 
+        console.log(data[0].latitude);
+        for (let i = 0; i < savedMarker.length; i++) {
+            savedMarker[i].setVisible(false);
+        }
+
+        for (let i = 0; i < data.length; i++) {
+            for (let j = 0; j < savedMarker.length; j++) {
+                const position = savedMarker[j].getPosition();
+                const lat = position.getLat();
+                const lng = position.getLng();
+
+                let saveLat = data[j].latitude;
+                let saveLng = data[j].longitude;
+
+                if (saveLat == lat && saveLng == lng){
+                    savedMarker[i].setVisible(true);
+                    break;
+                }
+            }
+        }
+
+    }).fail(function (response) {
+        console.log(response.status + " " + response.responseText)
+    });
 }
+
 /**
  * 위치 검색
  * @param data
