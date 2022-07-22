@@ -20,4 +20,7 @@ public interface MapRepository extends JpaRepository<Map, Long> {
 
     @Query("select m.smallSubjects from Map m where m.id =:mapId")
     List<SmallSubject> findSmallSubject(@Param("mapId") Long mapId);
+
+    @Query("select m from Map m join fetch m.smallSubjects where m.id =:mapId")
+    Optional<Map> findByIdFlatSmallSubject(@Param("mapId") Long mapId);
 }
