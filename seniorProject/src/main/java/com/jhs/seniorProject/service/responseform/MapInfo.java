@@ -1,5 +1,6 @@
 package com.jhs.seniorProject.service.responseform;
 
+import com.jhs.seniorProject.domain.SmallSubject;
 import com.jhs.seniorProject.domain.UserMap;
 import com.jhs.seniorProject.domain.enumeration.Visibility;
 import lombok.AllArgsConstructor;
@@ -12,14 +13,15 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class MapInfoAdmin extends MapInfoResponse{
+public class MapInfo {
     private Long mapId;
     private String mapName;
     private String password;
+    private List<SmallSubjectInfo> smallSubjects = new ArrayList<>();
     private List<UserInfo> userInfos = new ArrayList<>();
 
     @Builder
-    public MapInfoAdmin(Long mapId, String mapName, String password) {
+    public MapInfo(Long mapId, String mapName, String password) {
         this.mapId = mapId;
         this.mapName = mapName;
         this.password = password;
@@ -27,6 +29,10 @@ public class MapInfoAdmin extends MapInfoResponse{
 
     public void addUserInfo(UserMap userMap) {
         userInfos.add(new UserInfo(userMap.getId().getUserId(), userMap.getVisibility()));
+    }
+
+    public void addSmallSubject(SmallSubject smallSubject) {
+        smallSubjects.add(new SmallSubjectInfo(smallSubject.getId(), smallSubject.getSubjectName()));
     }
 
     @Data
