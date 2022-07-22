@@ -9,7 +9,8 @@ import com.jhs.seniorProject.domain.enumeration.BigSubject;
 import com.jhs.seniorProject.service.LocationService;
 import com.jhs.seniorProject.service.MapService;
 import com.jhs.seniorProject.service.responseform.LocationList;
-import com.jhs.seniorProject.service.responseform.LocationSearch;
+import com.jhs.seniorProject.controller.form.LocationSearch;
+import com.jhs.seniorProject.service.responseform.MapSearchInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,9 +24,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-import static com.jhs.seniorProject.domain.enumeration.BigSubject.TOGO;
-import static com.jhs.seniorProject.domain.enumeration.BigSubject.WENT;
-
 @Slf4j
 @Controller
 @RequestMapping("/location")
@@ -34,15 +32,14 @@ public class LocationController {
 
     private final LocationService locationService;
     private final MapService mapService;
-    private static List<BigSubject> togo;
 
-    static {
-        togo = List.of(TOGO, WENT);
-    }
-
-    //TODO 지도에 저장되어 있는 주제 검색 후 model 값에 넘기기
     @GetMapping("/{mapId}/view")
     public String Locations(@PathVariable("mapId") Long mapId, Model model) {
+        MapSearchInfo mapInfo = new MapSearchInfo();
+        mapInfo.setBigSubjects(BigSubject.values());
+        mapInfo.setSmallSubjects(mapService.getSmallSubjects(mapId));
+        model.addAttribute("mapInfo", mapInfo);
+        model.addAttribute("mapId", mapId);
         return "location/locationviewmap";
     }
 
@@ -63,7 +60,7 @@ public class LocationController {
         saveLocationForm.setName(placeName);
 
         model.addAttribute("mapId", mapId)
-                .addAttribute("bigSubjects", togo)
+                .addAttribute("bigSubjects", BigSubject.values())
                 .addAttribute("smallSubjects", locationService.getSmallSubjectList(mapId));
         return "location/addlocationform";
     }
@@ -126,10 +123,10 @@ public class LocationController {
      * @return
      */
     @ResponseBody
-    @GetMapping("/search")
+    @PostMapping("/search")
     public List<LocationList> findLocationWithCond(@RequestBody LocationSearch locationSearch) {
+        log.info("request body data : {}", locationSearch);
         return locationService.findLocationWithCondV1(locationSearch);
-//        return locationService.findLocationWithCondV2(locationSearch);
     }
 
     //== 기타 세팅 로직 ==//
@@ -139,7 +136,7 @@ public class LocationController {
         model.addAttribute("locationId", locationId)
                 .addAttribute("updateLocation", getUpdateLocationForm(findLocation))
                 .addAttribute("smallSubjects", locationService.getSmallSubjectList(findLocation.getMap().getId()))
-                .addAttribute("bigSubjects", togo);
+                .addAttribute("bigSubjects", BigSubject.values());
     }
 
     private UpdateLocationForm getUpdateLocationForm(Location findLocation) {
