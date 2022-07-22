@@ -89,25 +89,22 @@ function searchSavedPlaces() {
         data: JSON.stringify(param),
         contentType: "application/json; charset=utf-8",
     }).done(function (data) {
-        console.log(data);
         alert("위치 검색 성공");
 
-        console.log(data[0].latitude);
         for (let i = 0; i < savedMarker.length; i++) {
             savedMarker[i].setVisible(false);
         }
 
         for (let i = 0; i < data.length; i++) {
+            let saveLat = data[i]["latitude"];
+            let saveLng = data[i]["longitude"];
             for (let j = 0; j < savedMarker.length; j++) {
                 const position = savedMarker[j].getPosition();
                 const lat = position.getLat();
                 const lng = position.getLng();
 
-                let saveLat = data[j].latitude;
-                let saveLng = data[j].longitude;
-
                 if (saveLat == lat && saveLng == lng){
-                    savedMarker[i].setVisible(true);
+                    savedMarker[j].setVisible(true);
                     break;
                 }
             }
