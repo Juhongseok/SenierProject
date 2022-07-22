@@ -2,12 +2,16 @@ package com.jhs.seniorProject.repository.customRepository;
 
 import com.jhs.seniorProject.domain.Location;
 import com.jhs.seniorProject.domain.enumeration.BigSubject;
+import com.jhs.seniorProject.service.requestform.LocationSearchDto;
 import com.jhs.seniorProject.service.responseform.LocationList;
-import com.jhs.seniorProject.service.responseform.LocationSearch;
+import com.jhs.seniorProject.controller.form.LocationSearch;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.EnumPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
@@ -18,19 +22,20 @@ import static com.jhs.seniorProject.domain.QLocation.location;
 import static com.jhs.seniorProject.domain.QMap.map;
 import static com.jhs.seniorProject.domain.QSmallSubject.smallSubject;
 
+@Slf4j
 @RequiredArgsConstructor
 public class LocationRepositoryImpl implements LocationRepositoryCustom {
 
     private final EntityManager em;
 
     @Override
-    public List<Location> findLocationCond(LocationSearch locationSearch) {
+    public List<Location> findLocationCond(LocationSearchDto locationSearch) {
 //        return getLocationListV1(locationSearch);
         return getLocationListV2(locationSearch);
     }
 
     @Override
-    public List<LocationList> findLocationCondDto(LocationSearch locationSearch) {
+    public List<LocationList> findLocationCondDto(LocationSearchDto locationSearch) {
         return getLocationListV3(locationSearch);
     }
 
@@ -50,7 +55,7 @@ public class LocationRepositoryImpl implements LocationRepositoryCustom {
             isName = true;
         }
 
-        if (StringUtils.hasText(locationSearch.getBigSubject().name())) {
+        if (StringUtils.hasText(locationSearch.getBigSubject())) {
             query += " and l.bigSubject=:bigSubject";
             isBigSubject = true;
         }
@@ -78,20 +83,20 @@ public class LocationRepositoryImpl implements LocationRepositoryCustom {
                 .getResultList();
     }
 
-    private List<Location> getLocationListV2(LocationSearch locationSearch) {
+    private List<Location> getLocationListV2(LocationSearchDto locationSearch) {
         return query().selectFrom(location)
                 .join(location.map, map).fetchJoin()
                 .join(location.smallSubject, smallSubject).fetchJoin()
                 .where(
                         mapIdEq(locationSearch.getMapId()),
                         locationSmallSubjectEq(locationSearch.getSmallSubject()),
-                        locationNameEq(locationSearch.getName()),
+                        locationNameContain(locationSearch.getName()),
                         locationBigSubjectEq(locationSearch.getBigSubject())
                 )
                 .fetch();
     }
 
-    private List<LocationList> getLocationListV3(LocationSearch locationSearch) {
+    private List<LocationList> getLocationListV3(LocationSearchDto locationSearch) {
         return query().select(Projections.constructor(LocationList.class,
                         location.id.as("locationId"),
                         location.latitude,
@@ -104,7 +109,7 @@ public class LocationRepositoryImpl implements LocationRepositoryCustom {
                 .where(
                         mapIdEq(locationSearch.getMapId()),
                         locationSmallSubjectEq(locationSearch.getSmallSubject()),
-                        locationNameEq(locationSearch.getName()),
+                        locationNameContain(locationSearch.getName()),
                         locationBigSubjectEq(locationSearch.getBigSubject())
                 )
                 .fetch();
@@ -114,16 +119,16 @@ public class LocationRepositoryImpl implements LocationRepositoryCustom {
         return location.map.id.eq(mapId);
     }
 
-    private BooleanExpression locationNameEq(String locationName) {
-        return location.name.eq(locationName);
+    private BooleanExpression locationNameContain(String locationName) {
+        return StringUtils.hasText(locationName) ? location.name.contains(locationName) : null;
     }
 
     private BooleanExpression locationSmallSubjectEq(String smallSubjectName) {
-        return location.smallSubject.subjectName.eq(smallSubjectName);
+        return StringUtils.hasText(smallSubjectName) ? location.smallSubject.subjectName.eq(smallSubjectName) : null;
     }
 
     private BooleanExpression locationBigSubjectEq(BigSubject bigSubjectName) {
-        return location.bigSubject.eq(bigSubjectName);
+        return ObjectUtils.isEmpty(bigSubjectName) ? null : location.bigSubject.eq(bigSubjectName);
     }
 
     private JPAQueryFactory query() {
