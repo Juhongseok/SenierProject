@@ -30,4 +30,8 @@ public class SmallSubject extends TimeAndPersonInfo {
         this.subjectName = subjectName;
         this.map = map;
     }
+
+    public void changeSubjectName(String subjectName) {
+        this.subjectName = subjectName;
+    }
 }
