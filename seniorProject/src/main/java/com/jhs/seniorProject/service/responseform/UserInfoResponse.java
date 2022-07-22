@@ -14,5 +14,5 @@ public class UserInfoResponse {
     private String id;
     private String password;
     private String name;
-    private List<MapInfoResponse> maps;
+    private List<UserMapList> maps;
 }

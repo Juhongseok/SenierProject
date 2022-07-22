@@ -10,9 +10,7 @@ import com.jhs.seniorProject.repository.MapRepository;
 import com.jhs.seniorProject.repository.UserRepository;
 import com.jhs.seniorProject.service.requestform.AddMapDto;
 import com.jhs.seniorProject.service.requestform.CreateMapDto;
-import com.jhs.seniorProject.service.responseform.MapInfoAdmin;
-import com.jhs.seniorProject.service.responseform.MapInfoResponse;
-import com.jhs.seniorProject.service.responseform.MapInfoUser;
+import com.jhs.seniorProject.service.responseform.MapInfo;
 import com.jhs.seniorProject.service.responseform.SmallSubjectInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -80,26 +78,25 @@ public class MapService {
      * @throws NoSuchMapException
      */
     @Transactional(readOnly = true)
-    public MapInfoResponse getMapInfo(Long mapId, String userId) throws NoSuchMapException {
-        Map findMap = mapRepository.findById(mapId)
+    public MapInfo getMapInfo(Long mapId, String userId) throws NoSuchMapException {
+        Map findMap = mapRepository.findByIdFlatSmallSubject(mapId)
                 .orElseThrow(() -> new NoSuchMapException("지도를 찾을 수 없습니다."));
 
+        MapInfo mapInfo = MapInfo.builder()
+                .mapId(findMap.getId())
+                .mapName(findMap.getName())
+                .password(findMap.getPassword())
+                .build();
         if (findMap.getCreatedBy().equals(userId)) {
-            MapInfoAdmin mapInfo = MapInfoAdmin.builder()
-                    .mapId(findMap.getId())
-                    .mapName(findMap.getName())
-                    .password(findMap.getPassword())
-                    .build();
+            for (SmallSubject smallSubject : findMap.getSmallSubjects()) {
+                mapInfo.addSmallSubject(smallSubject);
+            }
             for (UserMap userMap : findMap.getUserMaps()) {
                 mapInfo.addUserInfo(userMap);
             }
             return mapInfo;
         }
-        return MapInfoUser.builder()
-                .mapId(findMap.getId())
-                .mapName(findMap.getName())
-                .password(findMap.getPassword())
-                .build();
+        return mapInfo;
     }
 
     /**

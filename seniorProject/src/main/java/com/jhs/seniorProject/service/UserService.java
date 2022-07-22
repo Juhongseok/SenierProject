@@ -10,15 +10,13 @@ import com.jhs.seniorProject.domain.exception.DuplicatedUserException;
 import com.jhs.seniorProject.domain.exception.IncorrectPasswordException;
 import com.jhs.seniorProject.domain.exception.NoSuchUserException;
 import com.jhs.seniorProject.repository.UserRepository;
-import com.jhs.seniorProject.service.responseform.MapInfoResponse;
-import com.jhs.seniorProject.service.responseform.MapInfoUser;
 import com.jhs.seniorProject.service.responseform.UserInfoResponse;
+import com.jhs.seniorProject.service.responseform.UserMapList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,8 +52,8 @@ public class UserService {
     public UserInfoResponse getUserInfo(String id) throws NoSuchUserException {
         User user = findUser(id);
         List<Map> all = mapRepository.findAll(id);
-        List<MapInfoResponse> maps = all.stream()
-                .map(map -> new MapInfoUser(map.getId(), map.getName(), map.getPassword()))
+        List<UserMapList> maps = all.stream()
+                .map(map -> new UserMapList(map.getId(), map.getName(), map.getPassword()))
                 .collect(Collectors.toList());
 
         return UserInfoResponse.builder()
