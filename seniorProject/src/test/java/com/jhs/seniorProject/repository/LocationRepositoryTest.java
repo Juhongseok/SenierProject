@@ -70,7 +70,7 @@ class LocationRepositoryTest {
                 .mapId(1L)
                 .name("location1")
                 .bigSubject(TOGO)
-                .smallSubject("카페")
+                .smallSubject(2l)
                 .build());
         for (Location location : locationCond) {
             System.out.println(location.getSmallSubject().getSubjectName());
