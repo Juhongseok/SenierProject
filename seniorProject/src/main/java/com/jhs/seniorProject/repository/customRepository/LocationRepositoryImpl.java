@@ -7,7 +7,6 @@ import com.jhs.seniorProject.service.responseform.LocationList;
 import com.jhs.seniorProject.controller.form.LocationSearch;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.EnumPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,7 +59,7 @@ public class LocationRepositoryImpl implements LocationRepositoryCustom {
             isBigSubject = true;
         }
 
-        if (StringUtils.hasText(locationSearch.getSmallSubject())) {
+        if (locationSearch.getSmallSubject() != null) {
             query += " and l.smallSubject.subjectName=:smallSubject";
             isSmallSubject = true;
         }
@@ -123,8 +122,8 @@ public class LocationRepositoryImpl implements LocationRepositoryCustom {
         return StringUtils.hasText(locationName) ? location.name.contains(locationName) : null;
     }
 
-    private BooleanExpression locationSmallSubjectEq(String smallSubjectName) {
-        return StringUtils.hasText(smallSubjectName) ? location.smallSubject.subjectName.eq(smallSubjectName) : null;
+    private BooleanExpression locationSmallSubjectEq(Long smallSubjectId) {
+        return smallSubjectId != null ? location.smallSubject.id.eq(smallSubjectId) : null;
     }
 
     private BooleanExpression locationBigSubjectEq(BigSubject bigSubjectName) {

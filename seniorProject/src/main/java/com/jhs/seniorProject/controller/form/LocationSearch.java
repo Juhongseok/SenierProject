@@ -11,5 +11,5 @@ public class LocationSearch {
     private Long mapId;
     private String name;
     private String bigSubject;
-    private String smallSubject;
+    private Long smallSubject;
 }

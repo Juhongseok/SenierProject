@@ -10,10 +10,10 @@ public class LocationSearchDto {
     private Long mapId;
     private String name;
     private BigSubject bigSubject;
-    private String smallSubject;
+    private Long smallSubject;
 
     @Builder
-    private LocationSearchDto(Long mapId, String name, BigSubject bigSubject, String smallSubject) {
+    private LocationSearchDto(Long mapId, String name, BigSubject bigSubject, Long smallSubject) {
         this.mapId = mapId;
         this.name = name;
         this.bigSubject = bigSubject;
