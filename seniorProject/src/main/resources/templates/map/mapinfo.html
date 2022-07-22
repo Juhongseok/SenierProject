@@ -8,7 +8,7 @@
 <body>
     <header th:replace="fragments/header::afterHeader"></header>
     <div class="container">
-        <form action="/map/create" th:object="${info}" method="post">
+        <form th:object="${info}">
             <div class="form-group">
                 <label for="mapId">아이디</label>
                 <input type="text" class="form-control" id="mapId" th:field="*{mapId}" disabled>
@@ -21,8 +21,21 @@
                 <label for="password">비밀번호</label>
                 <input type="text" class="form-control" id="password" th:field="*{password}" disabled>
             </div>
-            <br>
-            <div class="form-group" th:if="${info instanceof T(com.jhs.seniorProject.service.responseform.MapInfoAdmin)}">
+            <label for="smallSubjectWrap">소 주제</label>
+            <button type="button" id="addSmallSubjectButton" onclick="addSubject()">+</button>
+            <button type="button" id="cancel" style="visibility: hidden" onclick="cancelAddSubject()">취소</button>
+            <hr>
+            <div id="smallSubjectWrap">
+                <div th:each="smallSubject : *{smallSubjects}">
+                    <div>
+                        <input type="text" class="form-control" th:id="${smallSubject.subjectId}" th:value="${smallSubject.subjectName}"><br>
+                        <button type="button" class="btn btn-primary" th:onclick="'javascript:updateSmallSubject('+ ${smallSubject.subjectId} + ');'">수정</button>
+                    </div>
+                    <br>
+                </div>
+            </div>
+            <div class="form-group" th:if="*{userInfos.size() != 0}">
+                <br>
                 <label for="userInfo">사용자 리스트</label>
                 <hr>
                 <table id="userInfo" class="table table-striped">
@@ -61,6 +74,96 @@
         }).fail(function(response){
             console.log(response.status + " " + response.responseText)
         });
+    }
+
+    function updateSmallSubject(smallSubjectId){
+        const inputValue = document.getElementById(smallSubjectId).value;
+        $.ajax({
+            type:"PATCH",
+            url:"/subject/" + smallSubjectId,
+            contentType:"application/json; charset=utf-8",
+            data: inputValue
+        }).done(function(response){
+            alert("수정 완료");
+            inputValue.value = response
+        }).fail(function(response){
+            console.log(response.status + " " + response.responseText)
+        });
+    }
+
+    function addSubject(){
+        const div = document.createElement('div');
+        const input = document.createElement('input');
+        const button = document.createElement('button');
+        const addButton = document.getElementById('addSmallSubjectButton');
+        const cancelButton = document.getElementById('cancel');
+
+        div.id = 'addDiv';
+
+        input.id = "newSubject";
+        input.className = "form-control";
+        input.placeholder = "소 주제 이름 입력";
+
+        button.className = "btn btn-primary";
+        button.textContent = '추가';
+        button.type = 'button';
+        button.onclick = function add(){
+            const data = {
+                mapId: $('#mapId').val(),
+                subjectName: $('#newSubject').val()
+            }
+
+            $.ajax({
+                type:"POST",
+                url:"/subject/add",
+                contentType:"application/json; charset=utf-8",
+                data: JSON.stringify(data)
+            }).done(function(response){
+                alert("추가완료");
+                console.log(response);
+                $("#smallSubjectWrap").empty();
+
+                for (const smallSubject of response) {
+                    const id = smallSubject.subjectId;
+                    const name = smallSubject.subjectName;
+
+                    $("#smallSubjectWrap").append(
+                        `<div>
+                            <input type="text" class="form-control" id="${id}" value="${name}"><br>
+                            <button type="button" class="btn btn-primary" onclick="updateSmallSubject(${id});">수정</button>
+                        </div><br>`
+                    )
+                }
+            }).fail(function(response){
+                console.log(response.status + " " + response.responseText)
+            });
+
+            addButton.style.visibility = 'visible';
+            cancelButton.style.visibility = 'hidden';
+            $('div').remove('#addDiv');
+
+        };
+
+        div.appendChild(input);
+        div.appendChild(document.createElement('br'));
+        div.appendChild(button)
+        div.appendChild(document.createElement('br'));
+
+        let smallSubjectWrap = document.getElementById('smallSubjectWrap');
+        smallSubjectWrap.appendChild(div);
+
+        addButton.style.visibility = 'hidden';
+        cancelButton.style.visibility = 'visible';
+    }
+
+    function cancelAddSubject(){
+        const addButton = document.getElementById('addSmallSubjectButton');
+        const cancelButton = document.getElementById('cancel');
+
+        addButton.style.visibility = 'visible';
+        cancelButton.style.visibility = 'hidden';
+
+        $('div').remove('#addDiv');
     }
 </script>
 </html>
