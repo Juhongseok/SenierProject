@@ -7,7 +7,7 @@
 </head>
 <body>
     <header th:replace="fragments/header::afterHeader"></header>
-    <div class="container">
+    <div class="container container_width">
         <form th:action="|/location/${mapId}/add|" th:object="${saveLocationForm}" method="post">
             <div style="visibility: hidden">
                 <label for="latitude">위도</label>

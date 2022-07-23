@@ -7,7 +7,7 @@
 </head>
 <body>
     <header th:replace="fragments/header::afterHeader"></header>
-    <div class="container">
+    <div class="container container_width">
         <form id="form" th:object="${friend}">
             <div class="form-group" id="inputId">
                 <input type="text" class="form-control" th:field="*{id}" placeholder="회원명"/>

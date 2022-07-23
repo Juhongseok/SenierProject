@@ -7,7 +7,7 @@
 </head>
 <body>
     <header th:replace="fragments/header::afterHeader"></header>
-    <div class="container">
+    <div class="container container_width">
         <form th:action="|/location/${locationId}/update?mapId=${mapId}|" th:object="${updateLocation}" method="post">
             <div class="form-group">
                 <label for="name">이름</label>
