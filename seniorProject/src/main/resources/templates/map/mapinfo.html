@@ -20,16 +20,21 @@
             <div class="form-group">
                 <label for="password">비밀번호</label>
                 <input type="text" class="form-control" id="password" th:field="*{password}" disabled>
-            </div>
+            </div><br>
             <label for="smallSubjectWrap">소 주제</label>
             <button type="button" id="addSmallSubjectButton" onclick="addSubject()">+</button>
             <button type="button" id="cancel" style="visibility: hidden" onclick="cancelAddSubject()">취소</button>
             <hr>
             <div id="smallSubjectWrap">
                 <div th:each="smallSubject : *{smallSubjects}">
-                    <div>
-                        <input type="text" class="form-control" th:id="${smallSubject.subjectId}" th:value="${smallSubject.subjectName}"><br>
-                        <button type="button" class="btn btn-primary" th:onclick="'javascript:updateSmallSubject('+ ${smallSubject.subjectId} + ');'">수정</button>
+                    <div class="row mb-3">
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-sm" id="colFormLabelSm"
+                                   th:id="${smallSubject.subjectId}" th:value="${smallSubject.subjectName}"
+                                   style="margin-right: 10px">
+                        </div>
+                        <button type="button" class="btn btn-primary col-sm-2 col-form-label col-form-label-sm"
+                                th:onclick="'javascript:updateSmallSubject('+ ${smallSubject.subjectId} + ');'">수정</button>
                     </div>
                     <br>
                 </div>
@@ -92,19 +97,23 @@
     }
 
     function addSubject(){
-        const div = document.createElement('div');
+        const innerDiv = document.createElement('div');
+        const outerDiv = document.createElement('div');
         const input = document.createElement('input');
         const button = document.createElement('button');
         const addButton = document.getElementById('addSmallSubjectButton');
         const cancelButton = document.getElementById('cancel');
 
-        div.id = 'addDiv';
+        outerDiv.id = 'addDiv';
+        outerDiv.className = 'row mb-3';
 
+        innerDiv.className = 'col-sm-10';
         input.id = "newSubject";
-        input.className = "form-control";
+        input.className = "form-control form-control-sm";
+        input.style.marginRight = '10px';
         input.placeholder = "소 주제 이름 입력";
 
-        button.className = "btn btn-primary";
+        button.className = "btn btn-primary col-sm-2";
         button.textContent = '추가';
         button.type = 'button';
         button.onclick = function add(){
@@ -119,8 +128,6 @@
                 contentType:"application/json; charset=utf-8",
                 data: JSON.stringify(data)
             }).done(function(response){
-                alert("추가완료");
-                console.log(response);
                 $("#smallSubjectWrap").empty();
 
                 for (const smallSubject of response) {
@@ -128,12 +135,21 @@
                     const name = smallSubject.subjectName;
 
                     $("#smallSubjectWrap").append(
-                        `<div>
-                            <input type="text" class="form-control" id="${id}" value="${name}"><br>
-                            <button type="button" class="btn btn-primary" onclick="updateSmallSubject(${id});">수정</button>
-                        </div><br>`
+                        `<div class="row mb-3">
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control form-control-sm"
+                                       id="${id}" value="${name}"
+                                       style="margin-right: 10px">
+                            </div>
+                            <button type="button" class="btn btn-primary col-sm-2"
+                                    onclick="updateSmallSubject(${id});">추가
+                            </button>
+                        </div>
+                        <br>`
                     )
+
                 }
+                alert("추가완료");
             }).fail(function(response){
                 console.log(response.status + " " + response.responseText)
             });
@@ -141,16 +157,15 @@
             addButton.style.visibility = 'visible';
             cancelButton.style.visibility = 'hidden';
             $('div').remove('#addDiv');
-
         };
 
-        div.appendChild(input);
-        div.appendChild(document.createElement('br'));
-        div.appendChild(button)
-        div.appendChild(document.createElement('br'));
+        innerDiv.appendChild(input);
 
-        let smallSubjectWrap = document.getElementById('smallSubjectWrap');
-        smallSubjectWrap.appendChild(div);
+        outerDiv.appendChild(innerDiv);
+        outerDiv.appendChild(button);
+        outerDiv.appendChild(document.createElement('br'));
+
+        document.getElementById('smallSubjectWrap').appendChild(outerDiv);
 
         addButton.style.visibility = 'hidden';
         cancelButton.style.visibility = 'visible';
