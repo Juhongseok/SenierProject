@@ -8,6 +8,17 @@
 <body>
     <header th:replace="fragments/header::header"></header>
     <div class="container container_width">
+        <div style="text-align: center">
+            <div style="line-height: 1.8">
+                <div style="font-size: xxx-large; font-weight: 800; color: rgb(30,144,255); transform: scaleY(1.3);">
+                    <span style="color: rgba(255,165,0,0.8)">T</span>RAVEL
+                </div>
+                <div style="font-size: xxx-large; font-weight: 800; margin-left: 150px; color: rgb(30,144,255); transform: scaleY(1.3);">
+                    <span style="color: rgba(255,165,0,0.8)">T</span>OGETHER
+                </div>
+            </div>
+        </div>
+
         <form action="/users/login" th:object="${loginForm}" method="post">
             <div class="form-group">
                 <label for="id">ID</label>
@@ -24,11 +35,21 @@
             <div th:if="${#fields.hasGlobalErrors()}">
                 <b><p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}"/></b>
             </div>
-            <button type="submit" class="btn btn-primary">login</button>
-            <a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=102364fc8aaacc13b119bdf84ae58bcd&redirect_uri=http://localhost:8080/users/kakao_login">
-                <img src="/image/kakao_login.png">
-            </a>
+            <div style="text-align: center">
+                <button type="submit" class="btn btn-primary" style="width: 183px">login</button><br><br>
+                <a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=102364fc8aaacc13b119bdf84ae58bcd&redirect_uri=http://localhost:8080/users/kakao_login">
+                    <img src="/image/kakao_login.png">
+                </a>
+            </div>
         </form>
     </div>
 </body>
+<script>
+    document.addEventListener("keypress", function(event) {
+        if (event.key === "/") {
+            event.preventDefault();
+            $('#id').focus()
+        }
+    });
+</script>
 </html>

@@ -6,20 +6,20 @@
     <title>create map</title>
 </head>
 <body>
-
     <header th:replace="fragments/header::afterHeader"></header>
     <div class="container container_width">
+        <h3 style="color: rgb(30,144,255); display: inline; font-weight: 600">지도 이름</h3>
+        <hr>
         <form action="/map/create" th:object="${mapForm}" method="post">
             <div class="form-group">
-                <label for="name">지도 이름</label>
                 <input type="text" class="form-control" id="name" th:field="*{name}"
                        th:errorclass="field-error" placeholder="Enter Id">
                 <b><p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorclass="field-error">Incorrect date</p></b>
             </div>
             <br>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">새 지도 생성</button>
-                <a href="/map/add"><button type="button" class="btn btn-primary float-right">기존 지도 추가</button></a>
+            <div class="form-group" style="text-align: center">
+                <button type="submit" class="btn btn-primary" style="width: 183px">새 지도 생성</button><br><br>
+                <a href="/map/add"><button type="button" class="btn btn-primary float-right" style="width: 183px">기존 지도 추가</button></a>
             </div>
         </form>
     </div>

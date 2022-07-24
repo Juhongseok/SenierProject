@@ -8,6 +8,8 @@
 <body>
     <header th:replace="fragments/header::afterHeader"></header>
     <div class="container container_width">
+        <h3 style="color: rgb(30,144,255); font-weight: 600">지도정보</h3>
+        <hr>
         <form th:object="${info}">
             <div class="form-group">
                 <label for="mapId">아이디</label>
@@ -20,10 +22,23 @@
             <div class="form-group">
                 <label for="password">비밀번호</label>
                 <input type="text" class="form-control" id="password" th:field="*{password}" disabled>
-            </div><br>
-            <label for="smallSubjectWrap">소 주제</label>
-            <button type="button" id="addSmallSubjectButton" onclick="addSubject()">+</button>
-            <button type="button" id="cancel" style="visibility: hidden" onclick="cancelAddSubject()">취소</button>
+            </div>
+
+            <br><br>
+            <h3 style="color: rgb(30,144,255); display: inline; font-weight: 600">소주제</h3>
+            <button type="button" class="btn btn-link"
+                    id="addSmallSubjectButton"
+                    onclick="addSubject()"
+                    style="border: solid 0.02rem rgba(255,165,0,0.8); text-decoration: none;"
+            >+
+            </button>
+            <button type="button" class="btn btn-link"
+                    id="cancel"
+                    onclick="cancelAddSubject()"
+                    style="visibility: hidden;
+                            border: solid 0.02rem rgba(255,165,0,0.8); text-decoration: none;"
+            >취소
+            </button>
             <hr>
             <div id="smallSubjectWrap">
                 <div th:each="smallSubject : *{smallSubjects}">
@@ -36,12 +51,11 @@
                         <button type="button" class="btn btn-primary col-sm-2 col-form-label col-form-label-sm"
                                 th:onclick="'javascript:updateSmallSubject('+ ${smallSubject.subjectId} + ');'">수정</button>
                     </div>
-                    <br>
                 </div>
             </div>
+            <br>
+            <h3 style="color: rgb(30,144,255); font-weight: 600">사용자 리스트</h3>
             <div class="form-group" th:if="*{userInfos.size() != 0}">
-                <br>
-                <label for="userInfo">사용자 리스트</label>
                 <hr>
                 <table id="userInfo" class="table table-striped">
                     <thead>
