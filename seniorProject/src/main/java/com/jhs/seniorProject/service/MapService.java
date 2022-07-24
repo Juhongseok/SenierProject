@@ -35,7 +35,7 @@ public class MapService {
      * @param createMapDto
      * @return
      */
-    public String createMap(CreateMapDto createMapDto) {
+    public Long createMap(CreateMapDto createMapDto) {
         Map map = new Map(createMapDto.getMapName(), createMapDto.getUserId());
         User findUser = userRepository.findById(createMapDto.getUserId()).get();
 
@@ -49,7 +49,7 @@ public class MapService {
         map.getSmallSubjects().add(subject2);
 
         Map saveMap = mapRepository.save(map);
-        return saveMap.getName();
+        return saveMap.getId();
     }
 
     /**
@@ -58,7 +58,7 @@ public class MapService {
      * @return
      * @throws NoSuchMapException
      */
-    public String addMap(AddMapDto addMapDto) throws NoSuchMapException {
+    public Long addMap(AddMapDto addMapDto) throws NoSuchMapException {
         Map findMap = findMap(addMapDto);
         User findUser = userRepository.findById(addMapDto.getAddUserId()).get();
 
@@ -67,7 +67,7 @@ public class MapService {
 
         //연관관계 같이 등록 되도록 설정
         findMap.getUserMaps().add(userMap);
-        return findMap.getName();
+        return findMap.getId();
     }
 
     /**

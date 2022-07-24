@@ -43,8 +43,8 @@ public class MapController {
         if (bindingResult.hasErrors()) {
             return "map/createmapform";
         }
-        String createMapName = mapService.createMap(new CreateMapDto(mapForm.getName(), user.getId()));
-        return "redirect:/";
+        Long mapId = mapService.createMap(new CreateMapDto(mapForm.getName(), user.getId()));
+        return "redirect:/location/"+mapId+"/view";
     }
 
     @GetMapping("/add")
@@ -66,6 +66,7 @@ public class MapController {
         if (bindingResult.hasErrors()) {
             return "map/addmapform";
         }
+        Long mapId = 0l;
         try {
             log.info("addForm = {}", addMapForm);
             AddMapDto addMapDto = AddMapDto.builder()
@@ -74,11 +75,11 @@ public class MapController {
                     .addUserId(user.getId())
                     .build();
 
-            String addMapName = mapService.addMap(addMapDto);
+            mapId = mapService.addMap(addMapDto);
         } catch (NoSuchMapException e) {
             bindingResult.reject("noUser","해당 사용자가 없습니다.");
         }
-        return "redirect:/";
+        return "redirect:/location/"+mapId+"/view";
     }
 
     /**
