@@ -40,49 +40,45 @@ public class TestDataInit {
     @PostConstruct
     public void init() {
         try {
-            SignUpForm userA_ = new SignUpForm("userA", "userA!", "userA","userA");
-            SignUpForm userB_ = new SignUpForm("userB", "userB!", "userB","userB");
-            SignUpForm userC_ = new SignUpForm("userC", "userC!", "userC","userC");
-            userService.join(userA_);
-            userService.join(userB_);
-            userService.join(userC_);
+            userService.join(new SignUpForm("userA", "userA!", "userA","userA"));
+            userService.join(new SignUpForm("userB", "userB!", "userB","userB"));
+            userService.join(new SignUpForm("userC", "userC!", "userC","userC"));
 
-            User userA = new User("userA", "userA!", "userA");
-            User userB = new User("userB", "userB!", "userB");
-            friendService.addFriend(new LoginUser(userA.getId(), userA.getName()), "userB");
-            friendService.addFriend(new LoginUser(userA.getId(), userA.getName()), "userC");
-            friendService.addFriend(new LoginUser(userB.getId(), userB.getName()), "userA");
-            mapService.createMap(new CreateMapDto("UserA's Map1", userA.getId()));
-            mapService.createMap(new CreateMapDto("UserA's Map2", userA.getId()));
+            friendService.addFriend(new LoginUser("userA", "userA"), "userB");
+            friendService.addFriend(new LoginUser("userA", "userA"), "userC");
+            friendService.addFriend(new LoginUser("userB", "userB"), "userA");
 
-            UserInfoResponse userAInfo = userService.getUserInfo("userA", PageRequest.of(0,10));
-            UserMapList maps = (UserMapList) userAInfo.getMaps().getContent().get(0);
-            UserMapList maps2 = (UserMapList) userAInfo.getMaps().getContent().get(1);
+            mapService.createMap(new CreateMapDto("UserA's Map1", "userA"));
+            mapService.createMap(new CreateMapDto("UserA's Map2", "userA"));
+
+            UserInfoResponse userAInfo = userService.getUserInfo("userA", PageRequest.of(0,5));
+            UserMapList maps = userAInfo.getMaps().getContent().get(0);
+            UserMapList maps2 = userAInfo.getMaps().getContent().get(1);
             Map map = mapRepository.findById(maps.getMapId()).get();
             Map map2 = mapRepository.findById(maps2.getMapId()).get();
             List<SmallSubject> smallSubjects = smallSubjectRepository.findByMapId(map.getId());
             locationService.saveLocation(
                     new SaveLocationForm(37.566826, 126.9786567, "save location1", "location1"
                             , BigSubject.TOGO, smallSubjects.get(0), map.getId())
-                    ,userA.getId()
+                    ,"userA"
             );
 
             locationService.saveLocation(
                     new SaveLocationForm( 37.65358170124324, 127.04783326913316, "save location1", "location1"
                             , BigSubject.TOGO, smallSubjects.get(1), map.getId())
-                    ,userA.getId()
+                    ,"userA"
             );
 
             locationService.saveLocation(
                     new SaveLocationForm( 37.615355069395335, 127.01335100479028 , "save location1", "location1"
                             , BigSubject.TOGO, smallSubjects.get(0), map.getId())
-                    ,userA.getId()
+                    ,"userA"
             );
 
             locationService.saveLocation(
                     new SaveLocationForm( 37.615355069395335, 127.01335100479028 , "save location1", "location1"
                             , BigSubject.TOGO, smallSubjects.get(1), map2.getId())
-                    ,userA.getId()
+                    ,"userA"
             );
         } catch (DuplicatedUserException e) {
 
