@@ -12,8 +12,8 @@ import java.util.Optional;
 public interface MapRepository extends JpaRepository<Map, Long> {
     Optional<Map> findByCreatedByAndPassword(String createBy, String password);
 
-    @Query("select m from Map m join fetch m.userMaps um where um.user.id = :userId")
-    List<Map> findAll(@Param("userId") String userId);
+    @Query("select m from Map m join fetch m.userMaps um where um.id.mapId in :mapIdList")
+    List<Map> findMyMap(@Param("mapIdList") List<Long> mapIdList);
 
     @Query("select m from Map m join fetch m.userMaps um where um.user.id =:userId and m.id =:mapId")
     Map findByIdWithUserMap(@Param("mapId") Long mapId, @Param("userId") String userId);
