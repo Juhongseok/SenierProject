@@ -10,7 +10,7 @@
 <div class="container container_width">
     <form action="/users/signup" th:object="${signUpForm}" method="post">
         <div class="form-group">
-            <label for="id">ID</label>
+            <label for="id" th:text="#{label.user.id}"/>
             <input type="text" class="form-control" id="id" th:field="*{userId}"
                    th:errorclass="field-error" placeholder="Enter Id">
             <b><p th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}" th:errorclass="field-error">Incorrect
@@ -18,7 +18,7 @@
         </div>
         <br>
         <div class="form-group">
-            <label for="name">name</label>
+            <label for="name" th:text="#{label.user.name}"/>
             <input type="text" id="name" th:field="*{name}" class="form-control" th:errorclass="field-error"
                    placeholder="Name">
             <b><p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorclass="field-error">Incorrect
@@ -26,7 +26,7 @@
         </div>
         <br>
         <div class="form-group">
-            <label for="password">Password</label>
+            <label for="password" th:text="#{label.user.password}"/>
             <input type="password" id="password" th:field="*{password}" class="form-control" th:errorclass="field-error"
                    placeholder="Password">
             <b><p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:errorclass="field-error">Incorrect
@@ -34,7 +34,7 @@
         </div>
         <br>
         <div class="form-group">
-            <label for="passwordCheck">PasswordCheck</label>
+            <label for="passwordCheck" th:text="#{label.user.passwordCheck}"/>
             <input type="password" id="passwordCheck" th:field="*{passwordCheck}" class="form-control"
                    th:errorclass="field-error" placeholder="Password check">
             <b><p th:if="${#fields.hasErrors('passwordCheck')}" th:errors="*{passwordCheck}"
@@ -45,7 +45,7 @@
             <b><p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}"/></b>
         </div>
         <div style="text-align: center">
-            <button type="submit" class="btn btn-primary">Sign Up</button>
+            <button type="submit" class="btn btn-primary" th:text="#{button.sign}"/>
         </div>
     </form>
 </div>
