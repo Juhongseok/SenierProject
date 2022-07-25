@@ -1,0 +1,17 @@
+div.search {
+    width: 20%;
+    float: left;
+    box-sizing: border-box;
+}
+div.map_wrap {
+    width: 80%;
+    float: right;
+    box-sizing: border-box;
+}
+#menu_wrap {
+    background-color: rgba(0,191,255,0.1) ;
+    padding: 30px 10px 30px 10px;
+    overflow-y: auto;
+    z-index: 1;
+    font-size: 12px;
+}
