@@ -6,16 +6,20 @@
         <nav class="navbar navbar-expand-lg" style="padding: 10px">
             <a class="navbar-brand" href="/">Home</a>
             <div class="justify-content-end collapse navbar-collapse">
-                <button type="button"
-                        style="margin-right: 10px; border: solid 0.13rem rgba(211,211,211,0.6); background-color: white; width: 100px; height: 34px"
-                th:onclick="|location.href='@{/users/signup}'|">회원가입</button>
+                <button
+                        type="button"
+                        class="indexButton"
+                        th:onclick="|location.href='@{/users/signup}'|"
+                        th:text="#{button.sign}"/>
 
-                <button type="button"
-                        style="margin-right: 10px; border: solid 0.13rem rgba(211,211,211,0.6); background-color: white; width: 100px; height: 34px"
-                        th:onclick="|location.href='@{/users/login}'|">로그인</button>
+                <button
+                        type="button"
+                        class="indexButton"
+                        th:onclick="|location.href='@{/users/login}'|"
+                        th:text="#{button.login}"/>
             </div>
         </nav>
-        <hr style="border: solid 0.03rem rgb(0,191,255)">
+        <hr>
         <br>
     </div>
 </div>
@@ -27,42 +31,19 @@
             <a class="navbar-brand" href="/">Home</a>
 
             <div class="justify-content-end collapse navbar-collapse">
-                <button type="button" class="btn btn-primary" style="margin-right: 10px"
-                        th:onclick="|location.href='@{/users/myPage}'|">마이페이지</button>
+                <button type="button" class="indexButton"
+                        th:onclick="|location.href='@{/users/myPage}'|"
+                        th:text="#{button.myPage}"/>
+                </button>
                 <form action="/users/logout" method="post">
-                    <button type="submit" class="btn btn-primary" style="margin-right: 10px"
-                            th:onclick="|location.href='@{/users/logout}'|">로그아웃</button>
-                </form>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        style="background-color: rgb(25, 56, 126)">
-                       추가기능
+                    <button type="submit" class="indexButton"
+                            th:onclick="|location.href='@{/users/logout}'|"
+                            th:text="#{button.logout}"/>
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" th:onclick="|location.href='@{/friend/list}'|">친구추가</a>
-                        <a class="dropdown-item" th:onclick="|location.href='@{/map/create}'|">지도추가</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-        <hr style="border: solid 0.03rem rgb(0,191,255)">
-        <br>
-    </div>
-</div>
-
-<div th:fragment="mapHeader">
-        <nav class="navbar navbar-expand-lg" style="padding: 10px">
-            <a class="navbar-brand" href="/">Home</a>
-
-            <div class="justify-content-end collapse navbar-collapse">
-                <button type="button" class="btn btn-primary" style="margin-right: 10px"
-                        th:onclick="|location.href='@{/users/myPage}'|">마이페이지</button>
-                <form action="/users/logout" method="post">
-                    <button type="submit" class="btn btn-primary" style="margin-right: 10px"
-                            th:onclick="|location.href='@{/users/logout}'|">로그아웃</button>
                 </form>
                 <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                             style="background-color: rgb(25, 56, 126)">
                         추가기능
                     </button>
@@ -73,6 +54,37 @@
                 </div>
             </div>
         </nav>
+        <hr>
+        <br>
+    </div>
+</div>
+
+<div th:fragment="mapHeader">
+    <nav class="navbar navbar-expand-lg" style="padding: 10px">
+        <a class="navbar-brand" href="/">Home</a>
+
+        <div class="justify-content-end collapse navbar-collapse">
+            <button type="button" class="btn btn-primary" style="margin-right: 10px"
+                    th:onclick="|location.href='@{/users/myPage}'|">마이페이지
+            </button>
+            <form action="/users/logout" method="post">
+                <button type="submit" class="btn btn-primary" style="margin-right: 10px"
+                        th:onclick="|location.href='@{/users/logout}'|">로그아웃
+                </button>
+            </form>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false"
+                        style="background-color: rgb(25, 56, 126)">
+                    추가기능
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" th:onclick="|location.href='@{/friend/list}'|">친구추가</a>
+                    <a class="dropdown-item" th:onclick="|location.href='@{/map/create}'|">지도추가</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 </div>
 
 </html>

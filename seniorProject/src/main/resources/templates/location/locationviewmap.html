@@ -5,57 +5,11 @@
     <title>지도</title>
     <th:block th:replace="fragments/config::config"/>
     <link href="/css/kakaomap.css" rel="stylesheet" type="text/css">
+    <link href="/css/search.css" rel="stylesheet" type="text/css">
     <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css">
-    <style>
-        div.search {
-            width: 20%;
-            float: left;
-            box-sizing: border-box;
-        }
-        div.map_wrap {
-            width: 80%;
-            float: right;
-            box-sizing: border-box;
-        }
-        #menu_wrap {
-            background-color: rgba(0,191,255,0.1) ;
-            padding: 30px 10px 30px 10px;
-            overflow-y: auto;
-            z-index: 1;
-            font-size: 12px;
-        }
-        /*
-
-        !*
-            TODO 디자인 변경
-         *!
-        #savedPlaceSearch {
-            position: absolute;
-            top: 0;
-            left: 400px;
-            bottom: 0;
-            height: 200px;
-            width: 500px;
-            margin: 10px 0 30px 10px;
-            padding: 5px;
-            overflow-y: auto;
-            background: rgba(255, 255, 255, 0.7);
-            z-index: 1;
-            font-size: 12px;
-            border-radius: 10px;
-        }
-
-        #menu_wrap .option, #savedPlaceSearch .option {
-            text-align: center;
-        }
-
-        #menu_wrap .option button, #savedPlaceSearch .option button {
-            margin-left: 5px;
-        }*/
-    </style>
 </head>
 <body>
 <header th:replace="fragments/header::mapHeader"></header>
@@ -65,7 +19,7 @@
                 <div>
                     <form onsubmit="searchPlaces(); return false;">
                         <input class="form-control" type="text" value="" id="keyword" size="15" placeholder="장소 위치 검색"><br>
-                        <button class="btn btn-primary" type="submit">검색</button>
+                        <button class="btn btn-primary" type="submit" th:text="#{button.search}"/>
                     </form>
                 </div>
             </div>
@@ -74,8 +28,8 @@
         <br>
         <div id="savedPlaceSearch" class="bg_white">
             <div class="option">
-                <div style="font-size: xx-large; font-weight: 600; color: rgb(30,144,255);">
-                    <span style="color: rgba(255,165,0,0.8)">C</span>ategory
+                <div class="smallFirstLine">
+                    <span class="yellow">C</span>ategory
                 </div>
                 <br>
                 <div style="text-align: left">
@@ -84,13 +38,13 @@
                             <input type="text" id="mapId" th:value="${mapId}" hidden>
                             장소<br>
                             <input class="form-control" type="text" value="" id="name" size="15"><br>
-                            <label for="bigSubject">대주제</label>
+                            <label for="bigSubject" th:text="#{label.bigSubject}"/>
                             <select class="form-control form-control-sm" th:name="bigSubject" id="bigSubject" style="height: 38px">
                                 <option th:value="${null}">선택</option>
                                 <option th:each="bigSubject : *{bigSubjects}"
                                         th:value="${bigSubject}" th:text="${bigSubject.name()}"></option>
                             </select><br>
-                            <label for="smallSubject">소주제</label>
+                            <label for="smallSubject" th:text="#{label.smallSubject}"/>
                             <select class="form-control form-control-sm" th:name="smallSubject" id="smallSubject" style="height: 38px">
                                 <option value="">선택</option>
                                 <option th:each="smallSubject : *{smallSubjects}"
@@ -101,7 +55,10 @@
 
                     </div>
                 </div>
-                <button type="button" class="btn btn-primary" onclick="searchSavedPlaces(); return false;">검색</button>
+                <button type="button"
+                        class="btn btn-primary"
+                        onclick="searchSavedPlaces(); return false;"
+                        th:text="#{button.search}"/>
             </div>
         </div>
     </div>

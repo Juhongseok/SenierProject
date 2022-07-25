@@ -8,7 +8,7 @@
 <body>
     <header th:replace="fragments/header::afterHeader"></header>
     <div class="container container_width">
-        <h3 style="color: rgb(30,144,255); display: inline; font-weight: 600">회원명</h3>
+        <h3 th:text="#{header.search}"/>
         <hr>
         <form id="form" th:object="${friend}">
             <div class="row mb-3">
@@ -17,12 +17,13 @@
                            style="margin-right: 10px"/>
                 </div>
                 <button type="button" class="btn btn-primary col-sm-2 col-form-label col-form-label-sm"
-                        id="submitButton"onclick="add()">검색</button>
+                        id="submitButton"onclick="add()"
+                        th:text="#{button.search}"/>
             </div>
         </form>
 
         <br>
-        <h3 style="color: rgb(30,144,255); display: inline; font-weight: 600">리스트</h3>
+        <h3 th:text="#{header.friendList}"/>
         <hr>
         <table id="friendTable" class="table table-striped">
             <thead>

@@ -9,30 +9,30 @@
     <header th:replace="fragments/header::afterHeader"></header>
     <div class="container container_width">
         <form th:action="|/location/${mapId}/add|" th:object="${saveLocationForm}" method="post">
-            <div style="visibility: hidden">
-                <label for="latitude">위도</label>
+            <div class="hidden">
+                <label for="latitude"/>
                 <input type="text" id="latitude" th:field="*{latitude}">
             </div>
-            <div style="visibility: hidden">
-                <label for="longitude">경도</label>
+            <div class="hidden">
+                <label for="longitude"/>
                 <input type="text" id="longitude" th:field="*{longitude}">
             </div>
-            <div style="visibility: hidden">
-                <label for="mapId">지도아이디</label>
+            <div class="hidden">
+                <label for="mapId"/>
                 <input type="text" id="mapId" th:field="*{mapId}">
             </div>
             <div class="form-group">
-                <label for="name">이름</label>
+                <label for="name" th:text="#{label.name}"/>
                 <input type="text" id="name" class="form-control" th:field="*{name}">
             </div>
 
             <div class="form-group">
-                <label for="memo">메모</label>
+                <label for="memo" th:text="#{label.memo}"/>
                 <input type="text" id="memo" class="form-control" th:field="*{memo}">
             </div>
 
             <div class="form-group">
-                <label for="bigSubject">대주제</label>
+                <label for="bigSubject" th:text="#{label.bigSubject}"/>
                 <select id="bigSubject" class="form-control" th:field="*{bigSubject}">
                     <option value="">==대 주제 선택==</option>
                     <option th:each="big : ${bigSubjects}" th:value="${big}"
@@ -41,7 +41,7 @@
             </div>
 
             <div class="form-group">
-                <label for="smallSubject">소주제</label>
+                <label for="smallSubject" th:text="#{label.smallSubject}"/>
                 <select id="smallSubject" class="form-control" th:field="*{smallSubject}">
                     <option value="">==소 주제 선택==</option>
                     <option th:each="small : ${smallSubjects}" th:value="${small.id}"
@@ -49,7 +49,7 @@
                 </select>
             </div>
             <br>
-            <button type="submit" class="btn bth-primary">저장</button>
+            <button type="submit" class="btn bth-primary" th:text="#{button.save}"/>
         </form>
     </div>
 </body>

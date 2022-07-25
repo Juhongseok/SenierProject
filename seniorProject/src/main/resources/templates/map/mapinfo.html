@@ -5,39 +5,40 @@
     <th:block th:replace="fragments/config::config"/>
     <title>map info</title>
 </head>
+<style>
+    .mapAddButton{
+        border: solid 0.02rem rgba(255,165,0,0.8); text-decoration: none;
+    }
+</style>
 <body>
     <header th:replace="fragments/header::afterHeader"></header>
     <div class="container container_width">
-        <h3 style="color: rgb(30,144,255); font-weight: 600">지도정보</h3>
+        <h3 th:text="#{header.mapInfo}"/>
         <hr>
         <form th:object="${info}">
             <div class="form-group">
-                <label for="mapId">아이디</label>
+                <label for="mapId" th:text="#{label.id}"/>
                 <input type="text" class="form-control" id="mapId" th:field="*{mapId}" disabled>
             </div>
             <div class="form-group">
-                <label for="mapName">이름</label>
+                <label for="mapName" th:text="#{label.name}"/>
                 <input type="text" class="form-control" id="mapName" th:field="*{mapName}" disabled>
             </div>
             <div class="form-group">
-                <label for="password">비밀번호</label>
+                <label for="password" th:text="#{label.password}"/>
                 <input type="text" class="form-control" id="password" th:field="*{password}" disabled>
             </div>
 
             <br><br>
-            <h3 style="color: rgb(30,144,255); display: inline; font-weight: 600">소주제</h3>
-            <button type="button" class="btn btn-link"
+            <h3 th:text="#{header.smallSubject}"/>
+            <button type="button" class="btn btn-link mapAddButton"
                     id="addSmallSubjectButton"
-                    onclick="addSubject()"
-                    style="border: solid 0.02rem rgba(255,165,0,0.8); text-decoration: none;"
-            >+
+                    onclick="addSubject()">+
             </button>
-            <button type="button" class="btn btn-link"
+            <button type="button" class="btn btn-link mapAddButton"
                     id="cancel"
                     onclick="cancelAddSubject()"
-                    style="visibility: hidden;
-                            border: solid 0.02rem rgba(255,165,0,0.8); text-decoration: none;"
-            >취소
+                    style="visibility: hidden;">취소
             </button>
             <hr>
             <div id="smallSubjectWrap">
@@ -54,7 +55,7 @@
                 </div>
             </div>
             <br>
-            <h3 style="color: rgb(30,144,255); font-weight: 600">사용자 리스트</h3>
+            <h3 th:text="#{header.userList}"/>
             <div class="form-group" th:if="*{userInfos.size() != 0}">
                 <hr>
                 <table id="userInfo" class="table table-striped">

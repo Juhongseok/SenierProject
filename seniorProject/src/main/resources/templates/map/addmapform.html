@@ -10,24 +10,24 @@
     <div class="container container_width">
         <form action="/map/add" th:object="${addMapForm}" method="post">
             <div class="form-group">
-                <h3 style="color: rgb(30,144,255); display: inline; font-weight: 600">지도 비밀번호</h3>
+                <h3 th:text="#{header.mapPassword}"/>
                 <hr>
                 <input type="password" class="form-control" id="password" th:field="*{password}"
                        th:errorclass="field-error" placeholder="Enter password">
                 <b><p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:errorclass="field-error">Incorrect date</p></b>
                 <br><br>
-                <h3 style="color: rgb(30,144,255); display: inline; font-weight: 600">만든 사람</h3>
+                <h3 th:text="#{header.createdBy}"/>
                 <hr>
                 <select class="form-control form-control-sm" th:name="id" id="select">
-                    <option value="">선택</option>
+                    <option>선택</option>
                     <option th:each="friend : ${friends}"
                             th:value="${friend.id}" th:text="${friend.name}"></option>
                 </select>
             </div>
             <br>
             <br>
-            <div style="text-align: center">
-                <button type="submit" class="btn btn-primary">지도 추가</button>
+            <div class="center">
+                <button type="submit" class="btn btn-primary" th:text="#{button.mapAdd}"/>
             </div>
         </form>
     </div>
