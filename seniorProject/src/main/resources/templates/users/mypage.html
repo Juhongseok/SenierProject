@@ -52,11 +52,11 @@
                 </table>
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
-                        <th:block th:each="page, index : ${#numbers.sequence(0,userInfo.maps.totalPages - 1)}">
+                        <th:block th:each="page : ${#numbers.sequence(1,userInfo.maps.totalPages)}">
                             <li class="page-item">
                                 <a class="page-link"
-                                     th:href="@{'/users/myPage?page=' + ${page}}"
-                                     th:text="${index.count}"/>
+                                     th:href="@{'/users/myPage?page=' + ${page - 1}}"
+                                     th:text="${pageStat.count}"/>
                             </li>
                         </th:block>
                     </ul>
