@@ -8,7 +8,7 @@
 <body>
     <header th:replace="fragments/header::afterHeader"></header>
     <div class="container container_width">
-        <form th:action="|/location/${mapId}/add|" th:object="${saveLocationForm}" method="post">
+        <form th:action="|/location/map/${mapId}|" th:object="${saveLocationForm}" method="post">
             <div class="hidden">
                 <label for="latitude"/>
                 <input type="text" id="latitude" th:field="*{latitude}">
@@ -49,7 +49,7 @@
                 </select>
             </div>
             <br>
-            <button type="submit" class="btn bth-primary" th:text="#{button.save}"/>
+            <button type="submit" class="btn btn-primary" th:text="#{button.save}"/>
         </form>
     </div>
 </body>

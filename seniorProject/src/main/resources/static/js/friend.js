@@ -12,7 +12,7 @@ function add(){
 
     $.ajax({
         type:"POST",
-        url:"/friend/api/add",
+        url:"/friend",
         data: JSON.stringify(param),
         contentType:"application/json; charset=utf-8",
     }).done(function(){

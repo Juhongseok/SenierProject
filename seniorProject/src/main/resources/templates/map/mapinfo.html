@@ -59,7 +59,7 @@
                     <th:block th:each="page : ${#numbers.sequence(1,info.smallSubjects.totalPages)}">
                         <li class="page-item">
                             <a class="page-link"
-                               th:href="@{'/map/list/1?subject_page=' + ${page - 1}}"
+                               th:href="@{'/map/'+ ${info.mapId} +'?subject_page=' + ${page - 1}}"
                                th:text="${pageStat.count}"/>
                         </li>
                     </th:block>
@@ -94,7 +94,7 @@
                         <th:block th:each="page : ${#numbers.sequence(1,info.userInfos.totalPages)}">
                             <li class="page-item">
                                 <a class="page-link"
-                                   th:href="@{'/map/list/1?user_page=' + ${page - 1}}"
+                                   th:href="@{'/map/'+ ${info.mapId} +'?user_page=' + ${page - 1}}"
                                    th:text="${pageStat.count}"/>
                             </li>
                         </th:block>

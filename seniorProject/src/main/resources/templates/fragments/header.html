@@ -9,13 +9,13 @@
                 <button
                         type="button"
                         class="indexButton"
-                        th:onclick="|location.href='@{/users/signup}'|"
+                        th:onclick="|location.href='@{/user/signup}'|"
                         th:text="#{button.sign}"/>
 
                 <button
                         type="button"
                         class="indexButton"
-                        th:onclick="|location.href='@{/users/login}'|"
+                        th:onclick="|location.href='@{/user/login}'|"
                         th:text="#{button.login}"/>
             </div>
         </nav>
@@ -32,12 +32,12 @@
 
             <div class="justify-content-end collapse navbar-collapse">
                 <button type="button" class="indexButton"
-                        th:onclick="|location.href='@{/users/myPage}'|"
+                        th:onclick="|location.href='@{/user/myPage}'|"
                         th:text="#{button.myPage}"/>
                 </button>
-                <form action="/users/logout" method="post">
+                <form action="/user/logout" method="post">
                     <button type="submit" class="indexButton"
-                            th:onclick="|location.href='@{/users/logout}'|"
+                            th:onclick="|location.href='@{/user/logout}'|"
                             th:text="#{button.logout}"/>
                     </button>
                 </form>
@@ -48,8 +48,8 @@
                         추가기능
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" th:onclick="|location.href='@{/friend/list}'|">친구추가</a>
-                        <a class="dropdown-item" th:onclick="|location.href='@{/map/create}'|">지도추가</a>
+                        <a class="dropdown-item" th:onclick="|location.href='@{/friends}'|">친구추가</a>
+                        <a class="dropdown-item" th:onclick="|location.href='@{/map}'|">지도추가</a>
                     </div>
                 </div>
             </div>
@@ -65,11 +65,11 @@
 
         <div class="justify-content-end collapse navbar-collapse">
             <button type="button" class="btn btn-primary" style="margin-right: 10px"
-                    th:onclick="|location.href='@{/users/myPage}'|">마이페이지
+                    th:onclick="|location.href='@{/user/myPage}'|">마이페이지
             </button>
-            <form action="/users/logout" method="post">
+            <form action="/user/logout" method="post">
                 <button type="submit" class="btn btn-primary" style="margin-right: 10px"
-                        th:onclick="|location.href='@{/users/logout}'|">로그아웃
+                        th:onclick="|location.href='@{/user/logout}'|">로그아웃
                 </button>
             </form>
             <div class="dropdown">
@@ -80,7 +80,7 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" th:onclick="|location.href='@{/friend/list}'|">친구추가</a>
-                    <a class="dropdown-item" th:onclick="|location.href='@{/map/create}'|">지도추가</a>
+                    <a class="dropdown-item" th:onclick="|location.href='@{/map}'|">지도추가</a>
                 </div>
             </div>
         </div>

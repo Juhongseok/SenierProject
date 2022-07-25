@@ -4,11 +4,13 @@ import com.jhs.seniorProject.argumentresolver.Login;
 import com.jhs.seniorProject.argumentresolver.LoginUser;
 import com.jhs.seniorProject.controller.form.AddMapForm;
 import com.jhs.seniorProject.controller.form.MapForm;
+import com.jhs.seniorProject.domain.enumeration.BigSubject;
 import com.jhs.seniorProject.domain.exception.NoSuchMapException;
 import com.jhs.seniorProject.service.FriendService;
 import com.jhs.seniorProject.service.MapService;
 import com.jhs.seniorProject.service.requestform.AddMapDto;
 import com.jhs.seniorProject.service.requestform.CreateMapDto;
+import com.jhs.seniorProject.service.responseform.MapSearchInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,7 +30,7 @@ public class MapController {
     private final MapService mapService;
     private final FriendService friendService;
 
-    @GetMapping("/create")
+    @GetMapping
     public String createMapForm(@ModelAttribute("mapForm") MapForm mapForm){
         return "map/createmapform";
     }
@@ -40,13 +42,13 @@ public class MapController {
      * @param user
      * @return
      */
-    @PostMapping("/create")
+    @PostMapping
     public String createMap(@ModelAttribute("mapForm") @Validated MapForm mapForm, BindingResult bindingResult, @Login LoginUser user){
         if (bindingResult.hasErrors()) {
             return "map/createmapform";
         }
         Long mapId = mapService.createMap(new CreateMapDto(mapForm.getName(), user.getId()));
-        return "redirect:/location/"+mapId+"/view";
+        return "redirect:/map/"+mapId+"/view";
     }
 
     @GetMapping("/add")
@@ -81,7 +83,17 @@ public class MapController {
         } catch (NoSuchMapException e) {
             bindingResult.reject("noUser","해당 사용자가 없습니다.");
         }
-        return "redirect:/location/"+mapId+"/view";
+        return "redirect:/map/"+mapId+"/view";
+    }
+
+    @GetMapping("/{mapId}/view")
+    public String Locations(@PathVariable("mapId") Long mapId, Model model) {
+        MapSearchInfo mapInfo = new MapSearchInfo();
+        mapInfo.setBigSubjects(BigSubject.values());
+        mapInfo.setSmallSubjects(mapService.getSmallSubjects(mapId));
+        model.addAttribute("mapInfo", mapInfo);
+        model.addAttribute("mapId", mapId);
+        return "map/view";
     }
 
     /**
@@ -91,7 +103,7 @@ public class MapController {
      * @param model
      * @return
      */
-    @GetMapping("/list/{mapId}")
+    @GetMapping("/{mapId}")
     public String getMapInfoPage(@PathVariable Long mapId, @Login LoginUser user, Model model,
                                  @Qualifier("subject")Pageable subjectPageable,
                                  @Qualifier("user")Pageable userPageable) {
@@ -111,7 +123,7 @@ public class MapController {
      * @return
      */
     @ResponseBody
-    @PostMapping("/give_auth/{mapId}/{userId}")
+    @PostMapping("/{mapId}/auth/user/{userId}")
     public String giveAuthToUser(@PathVariable Long mapId, @PathVariable String userId) {
         try {
             mapService.accessMap(mapId, userId);

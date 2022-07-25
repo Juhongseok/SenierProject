@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <form action="/users/login" th:object="${loginForm}" method="post">
+    <form action="/user/login" th:object="${loginForm}" method="post">
         <div class="form-group">
             <label for="id" th:text="#{label.id}"/>
             <input type="text" class="form-control" id="id" th:field="*{userId}" th:errorclass="field-error"

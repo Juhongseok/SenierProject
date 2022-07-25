@@ -26,30 +26,18 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequestMapping("/location")
 @RequiredArgsConstructor
 public class LocationController {
 
     private final LocationService locationService;
-    private final MapService mapService;
-
-    @GetMapping("/{mapId}/view")
-    public String Locations(@PathVariable("mapId") Long mapId, Model model) {
-        MapSearchInfo mapInfo = new MapSearchInfo();
-        mapInfo.setBigSubjects(BigSubject.values());
-        mapInfo.setSmallSubjects(mapService.getSmallSubjects(mapId));
-        model.addAttribute("mapInfo", mapInfo);
-        model.addAttribute("mapId", mapId);
-        return "location/locationviewmap";
-    }
 
     @ResponseBody
-    @GetMapping("/list")
+    @GetMapping("/locations")
     public ResponseEntity<List<LocationList>> getLocationList(@RequestParam Long mapId, @Login LoginUser user) {
         return new ResponseEntity<>(locationService.getLocations(mapId, user.getId()), HttpStatus.OK);
     }
 
-    @GetMapping("/{mapId}/add")
+    @GetMapping("/location/map/{mapId}")
     public String addLocationForm(@ModelAttribute(name = "saveLocationForm") SaveLocationForm saveLocationForm
             , @PathVariable Long mapId, @RequestParam Double lat, @RequestParam Double lng, @RequestParam String placeName
             , Model model) {
@@ -65,7 +53,7 @@ public class LocationController {
         return "location/addlocationform";
     }
 
-    @PostMapping("/{mapId}/add")
+    @PostMapping("/location/map/{mapId}")
     public String addLocation(@Login LoginUser user, @PathVariable Long mapId, @Validated @ModelAttribute SaveLocationForm locationForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "location/addlocationform";
@@ -76,7 +64,7 @@ public class LocationController {
 
 
         redirectAttributes.addAttribute("mapId", mapId);
-        return "redirect:/location/{mapId}/view";
+        return "redirect:/map/{mapId}/view";
     }
 
     /**
@@ -88,7 +76,7 @@ public class LocationController {
      * @param model
      * @return
      */
-    @GetMapping("/{location}/update")
+    @GetMapping("/location/{location}/update")
     public String modifyLocationForm(@PathVariable(name = "location") Long locationId,
                                      @RequestParam Long mapId, Model model) {
         model.addAttribute("mapId", mapId);
@@ -104,7 +92,7 @@ public class LocationController {
      * @param bindingResult
      * @return
      */
-    @PostMapping("/{location}/update")
+    @PostMapping("/location/{location}/update")
     public String modifyLocation(@PathVariable(name = "location") Long locationId, @Validated @ModelAttribute UpdateLocationForm updateLocationForm, BindingResult bindingResult,
                                  @RequestParam("mapId") Long mapId) {
         log.info("locationId = {}", locationId);
@@ -123,7 +111,7 @@ public class LocationController {
      * @return
      */
     @ResponseBody
-    @PostMapping("/search")
+    @PostMapping("/location/search")
     public List<LocationList> findLocationWithCond(@RequestBody LocationSearch locationSearch) {
         log.info("request body data : {}", locationSearch);
         return locationService.findLocationWithCondV1(locationSearch);

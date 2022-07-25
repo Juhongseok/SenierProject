@@ -18,7 +18,7 @@ function showMarker() {
     let mapId = window.location.pathname.split('/')[2];
     $.ajax({
         method: 'get',
-        url: "/location/list",
+        url: "/locations",
         data: {"mapId": mapId},
         success: function (data) {
             for (let i = 0; i < data.length; i++) {
@@ -218,7 +218,6 @@ function displayMarker(place) {
  * @param placeName
  */
 function addLocation(lat, lng, placeName) {
-    let currentURL = location.href;
-    window.location.href=currentURL.substr(0, currentURL.length - 5)
-        + "/add?lat=" + lat +"&lng=" + lng + "&placeName="+placeName;
+    const mapId = document.getElementById('mapId').value
+    window.location.href="/location/map/" + mapId + "?lat=" + lat +"&lng=" + lng + "&placeName="+placeName;
 }

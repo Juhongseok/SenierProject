@@ -10,7 +10,7 @@
     <div class="container container_width">
         <h3 th:text="#{header.mapName}"/>
         <hr>
-        <form action="/map/create" th:object="${mapForm}" method="post">
+        <form action="/map" th:object="${mapForm}" method="post">
             <div class="form-group">
                 <input type="text" class="form-control" id="name" th:field="*{name}"
                        th:errorclass="field-error" placeholder="Enter Id">

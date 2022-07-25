@@ -25,7 +25,7 @@ import static com.jhs.seniorProject.controller.SessionConst.*;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;

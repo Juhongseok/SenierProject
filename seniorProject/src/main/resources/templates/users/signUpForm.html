@@ -8,7 +8,7 @@
 <body>
 <header th:replace="fragments/header::header"></header>
 <div class="container container_width">
-    <form action="/users/signup" th:object="${signUpForm}" method="post">
+    <form action="/user/signup" th:object="${signUpForm}" method="post">
         <div class="form-group">
             <label for="id" th:text="#{label.id}"/>
             <input type="text" class="form-control" id="id" th:field="*{userId}"

@@ -24,7 +24,7 @@ public class SmallSubjectController {
         return changeName;
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public List<SmallSubjectInfo> addSubject(@RequestBody AddSubjectRequest addSubjectRequest, @Login LoginUser user) {
         Long mapId = smallSubjectService.addSubject(AddSubjectDto.from(addSubjectRequest, user.getId()));
         return smallSubjectService.getSubjects(mapId);

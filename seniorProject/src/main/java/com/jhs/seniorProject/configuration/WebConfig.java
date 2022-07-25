@@ -18,8 +18,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/", "/users/login", "/users/signup", "/users/withdrawal", "/users/logout",
-                        "/users/kakao_login", "/css/**","/js/**","/*.ico", "/error", "/image/*.png");
+                .excludePathPatterns("/", "/user/login", "/user/signup", "/user/withdrawal", "/user/logout",
+                        "/user/kakao_login", "/css/**","/js/**","/*.ico", "/error", "/image/*.png");
     }
 
     @Override

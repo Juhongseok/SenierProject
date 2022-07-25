@@ -23,13 +23,12 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Controller
-@RequestMapping("/friend")
 @RequiredArgsConstructor
 public class FriendController {
 
     private final FriendService friendService;
 
-    @GetMapping("/list")
+    @GetMapping("/friends")
     public String getFriends(@Login LoginUser loginUser, @ModelAttribute("friend") FriendForm friendForm, Model model) {
         List<String> result = friendService.getFriends(loginUser).stream()
                 .map(FriendController::getFriendName)
@@ -39,7 +38,7 @@ public class FriendController {
     }
 
     @ResponseBody
-    @PostMapping("/api/add")
+    @PostMapping("/friend")
     public void addFriend(@Valid @RequestBody FriendForm friendForm, BindingResult bindingResult, @Login LoginUser loginUser) throws BindException, NoSuchUserException, DuplicateFriendException {
         log.info("add friend {}", friendForm);
         if (bindingResult.hasErrors()) {

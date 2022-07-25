@@ -1,7 +1,7 @@
 function accept(userId, mapId) {
     $.ajax({
         type:"POST",
-        url:"/map/give_auth/"+mapId+"/"+userId+"",
+        url:"/map/"+mapId+"/auth/user/"+userId,
         contentType:"application/json; charset=utf-8",
     }).done(function(){
         alert("지도 사용 승인");
@@ -54,32 +54,11 @@ function addSubject(){
 
         $.ajax({
             type:"POST",
-            url:"/subject/add",
+            url:"/subject",
             contentType:"application/json; charset=utf-8",
             data: JSON.stringify(data)
-        }).done(function(response){
-            $("#smallSubjectWrap").empty();
-
-            for (const smallSubject of response) {
-                const id = smallSubject.subjectId;
-                const name = smallSubject.subjectName;
-
-                $("#smallSubjectWrap").append(
-                    `<div class="row mb-3">
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control form-control-sm"
-                                       id="${id}" value="${name}"
-                                       style="margin-right: 10px">
-                            </div>
-                            <button type="button" class="btn btn-primary col-sm-2"
-                                    onclick="updateSmallSubject(${id});">추가
-                            </button>
-                        </div>
-                        <br>`
-                )
-
-            }
-            alert("추가완료");
+        }).done(function(){
+            location.reload();
         }).fail(function(response){
             console.log(response.status + " " + response.responseText)
         });
