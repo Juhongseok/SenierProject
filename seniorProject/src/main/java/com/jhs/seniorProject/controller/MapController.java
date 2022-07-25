@@ -11,6 +11,8 @@ import com.jhs.seniorProject.service.requestform.AddMapDto;
 import com.jhs.seniorProject.service.requestform.CreateMapDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -90,10 +92,12 @@ public class MapController {
      * @return
      */
     @GetMapping("/list/{mapId}")
-    public String getMapInfoPage(@PathVariable Long mapId, @Login LoginUser user, Model model) {
+    public String getMapInfoPage(@PathVariable Long mapId, @Login LoginUser user, Model model,
+                                 @Qualifier("subject")Pageable subjectPageable,
+                                 @Qualifier("user")Pageable userPageable) {
         log.info("mapId = {}", mapId);
         try {
-            model.addAttribute("info", mapService.getMapInfo(mapId, user.getId()));
+            model.addAttribute("info", mapService.getMapInfo(mapId, user.getId(), subjectPageable, userPageable));
         } catch (NoSuchMapException e) {
             e.printStackTrace();
         }

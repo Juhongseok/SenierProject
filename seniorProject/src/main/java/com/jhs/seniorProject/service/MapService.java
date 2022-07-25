@@ -7,16 +7,23 @@ import com.jhs.seniorProject.domain.UserMap;
 import com.jhs.seniorProject.domain.compositid.UserMapId;
 import com.jhs.seniorProject.domain.exception.NoSuchMapException;
 import com.jhs.seniorProject.repository.MapRepository;
+import com.jhs.seniorProject.repository.SmallSubjectRepository;
+import com.jhs.seniorProject.repository.UserMapRepository;
 import com.jhs.seniorProject.repository.UserRepository;
 import com.jhs.seniorProject.service.requestform.AddMapDto;
 import com.jhs.seniorProject.service.requestform.CreateMapDto;
 import com.jhs.seniorProject.service.responseform.MapInfo;
 import com.jhs.seniorProject.service.responseform.SmallSubjectInfo;
+import com.jhs.seniorProject.service.responseform.UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -29,9 +36,12 @@ public class MapService {
 
     private final MapRepository mapRepository;
     private final UserRepository userRepository;
+    private final SmallSubjectRepository smallSubjectRepository;
+    private final UserMapRepository userMapRepository;
 
     /**
      * 새로운 지도 생성
+     *
      * @param createMapDto
      * @return
      */
@@ -54,6 +64,7 @@ public class MapService {
 
     /**
      * 기존 지도 추가
+     *
      * @param addMapDto
      * @return
      * @throws NoSuchMapException
@@ -72,35 +83,39 @@ public class MapService {
 
     /**
      * 지도 정보 확인 시 사용
-     * @param mapId 아이디 가지고 지도 검색
+     *
+     * @param mapId  아이디 가지고 지도 검색
      * @param userId 최초 만든 사용자인지 확인 --> 해당 지도 추가한 사용자 목록 검색
      * @return
      * @throws NoSuchMapException
      */
     @Transactional(readOnly = true)
-    public MapInfo getMapInfo(Long mapId, String userId) throws NoSuchMapException {
-        Map findMap = mapRepository.findByIdFlatSmallSubject(mapId)
+    public MapInfo getMapInfo(Long mapId, String userId, Pageable subjectPageable, Pageable userPageable) throws NoSuchMapException {
+        Map findMap = mapRepository.findById(mapId)
                 .orElseThrow(() -> new NoSuchMapException("지도를 찾을 수 없습니다."));
+
+        Page<SmallSubjectInfo> subject = smallSubjectRepository.findByMapId(mapId, subjectPageable)
+                .map(s -> new SmallSubjectInfo(s.getId(), s.getSubjectName()));
 
         MapInfo mapInfo = MapInfo.builder()
                 .mapId(findMap.getId())
                 .mapName(findMap.getName())
                 .password(findMap.getPassword())
+                .smallSubjects(subject)
+                .userInfos(Page.empty())
                 .build();
         if (findMap.getCreatedBy().equals(userId)) {
-            for (SmallSubject smallSubject : findMap.getSmallSubjects()) {
-                mapInfo.addSmallSubject(smallSubject);
-            }
-            for (UserMap userMap : findMap.getUserMaps()) {
-                mapInfo.addUserInfo(userMap);
-            }
-            return mapInfo;
+            mapInfo.setUserInfos(
+                    userMapRepository.findByIdMapId(mapId, userPageable)
+                            .map(um -> new UserInfo(um.getId().getUserId(), um.getVisibility()))
+            );
         }
         return mapInfo;
     }
 
     /**
      * 지도 접근 권한 부여
+     *
      * @param mapId
      * @param userId
      * @throws NoSuchMapException
@@ -118,7 +133,7 @@ public class MapService {
     }
 
     @Transactional(readOnly = true)
-    public List<SmallSubjectInfo> getSmallSubjects(Long mapId){
+    public List<SmallSubjectInfo> getSmallSubjects(Long mapId) {
         return mapRepository.findSmallSubject(mapId).stream()
                 .map(subject -> new SmallSubjectInfo(subject.getId(), subject.getSubjectName()))
                 .collect(toList());

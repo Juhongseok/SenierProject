@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UserMapRepository extends JpaRepository<UserMap, UserMapId> {
 
     Page<UserMap> findByIdUserId(String userId, Pageable pageable);
+
+    Page<UserMap> findByIdMapId(Long mapId, Pageable pageable);
 }
