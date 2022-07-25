@@ -9,9 +9,9 @@ import com.jhs.seniorProject.domain.exception.DuplicatedUserException;
 import com.jhs.seniorProject.domain.exception.IncorrectPasswordException;
 import com.jhs.seniorProject.domain.exception.NoSuchUserException;
 import com.jhs.seniorProject.service.UserService;
-import com.jhs.seniorProject.service.responseform.UserInfoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -127,8 +127,8 @@ public class UserController {
     }
 
     @GetMapping("/myPage")
-    public String myPage(@Login LoginUser user, Model model) throws NoSuchUserException {
-        model.addAttribute("userInfo", userService.getUserInfo(user.getId()));
+    public String myPage(@Login LoginUser user, Model model, Pageable pageable) throws NoSuchUserException {
+        model.addAttribute("userInfo", userService.getUserInfo(user.getId(), pageable));
         return "users/mypage";
     }
 

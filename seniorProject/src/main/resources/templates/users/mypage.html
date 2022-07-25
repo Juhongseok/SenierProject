@@ -38,7 +38,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="map : *{maps}">
+                    <tr th:each="map : *{maps.content}">
                         <td th:text="${mapStat.index + 1}" style="cursor: pointer; font-weight: bold" th:onclick="|location.href='@{/map/list/{mapId} (mapId=${map.mapId})}'|"></td>
                         <td th:text="${map.mapName}" style="cursor: pointer; font-weight: bold" th:onclick="|location.href='@{/map/list/{mapId} (mapId=${map.mapId})}'|"></td>
                         <td>
@@ -48,6 +48,16 @@
                     </tr>
                     </tbody>
                 </table>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <th:block th:each="page, index : ${#numbers.sequence(0,userInfo.maps.totalPages - 1)}">
+                            <li class="page-item">
+                                <a class="page-link"
+                                     th:href="@{'/users/myPage?page=' + ${page}}"
+                                     th:text="${index.count}">1</a></li>
+                        </th:block>
+                    </ul>
+                </nav>
             </div>
         </form>
     </div>

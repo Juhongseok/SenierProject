@@ -1,7 +1,6 @@
 package com.jhs.seniorProject.service;
 
 import com.jhs.seniorProject.argumentresolver.LoginUser;
-import com.jhs.seniorProject.domain.Map;
 import com.jhs.seniorProject.repository.MapRepository;
 import com.jhs.seniorProject.service.requestform.LoginForm;
 import com.jhs.seniorProject.service.requestform.SignUpForm;
@@ -14,11 +13,10 @@ import com.jhs.seniorProject.service.responseform.UserInfoResponse;
 import com.jhs.seniorProject.service.responseform.UserMapList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -49,12 +47,11 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserInfoResponse getUserInfo(String id) throws NoSuchUserException {
+    public UserInfoResponse getUserInfo(String id, Pageable pageable) throws NoSuchUserException {
         User user = findUser(id);
-        List<Map> all = mapRepository.findAll(id);
-        List<UserMapList> maps = all.stream()
-                .map(map -> new UserMapList(map.getId(), map.getName(), map.getPassword()))
-                .collect(Collectors.toList());
+
+        Page<UserMapList> maps = mapRepository.findAll(pageable)
+                .map(map -> new UserMapList(map.getId(), map.getName(), map.getPassword()));
 
         return UserInfoResponse.builder()
                 .id(id)

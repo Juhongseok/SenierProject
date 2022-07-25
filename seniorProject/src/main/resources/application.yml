@@ -15,6 +15,10 @@ spring:
             open-in-view: false
     messages:
         basename: messages
+    data:
+        web:
+            pageable:
+                default-page-size: 5
 logging.level:
     org.hibernate.type: trace
 

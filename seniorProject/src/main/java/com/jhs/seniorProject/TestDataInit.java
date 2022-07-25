@@ -20,6 +20,7 @@ import com.jhs.seniorProject.service.requestform.SignUpForm;
 import com.jhs.seniorProject.service.responseform.UserInfoResponse;
 import com.jhs.seniorProject.service.responseform.UserMapList;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -54,9 +55,9 @@ public class TestDataInit {
             mapService.createMap(new CreateMapDto("UserA's Map1", userA.getId()));
             mapService.createMap(new CreateMapDto("UserA's Map2", userA.getId()));
 
-            UserInfoResponse userAInfo = userService.getUserInfo("userA");
-            UserMapList maps = (UserMapList) userAInfo.getMaps().get(0);
-            UserMapList maps2 = (UserMapList) userAInfo.getMaps().get(1);
+            UserInfoResponse userAInfo = userService.getUserInfo("userA", PageRequest.of(0,10));
+            UserMapList maps = (UserMapList) userAInfo.getMaps().getContent().get(0);
+            UserMapList maps2 = (UserMapList) userAInfo.getMaps().getContent().get(1);
             Map map = mapRepository.findById(maps.getMapId()).get();
             Map map2 = mapRepository.findById(maps2.getMapId()).get();
             List<SmallSubject> smallSubjects = smallSubjectRepository.findByMapId(map.getId());
