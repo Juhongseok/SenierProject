@@ -1,8 +1,6 @@
 package com.jhs.seniorProject.service;
 
 import com.jhs.seniorProject.argumentresolver.LoginUser;
-import com.jhs.seniorProject.domain.UserMap;
-import com.jhs.seniorProject.repository.MapRepository;
 import com.jhs.seniorProject.repository.UserMapRepository;
 import com.jhs.seniorProject.service.requestform.LoginForm;
 import com.jhs.seniorProject.service.requestform.SignUpForm;
@@ -16,13 +14,9 @@ import com.jhs.seniorProject.service.responseform.UserMapList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -31,7 +25,6 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final MapRepository mapRepository;
     private final UserMapRepository userMapRepository;
 
     public void join(SignUpForm signUpForm) throws DuplicatedUserException {
@@ -54,9 +47,6 @@ public class UserService {
     }
 
     /**
-     * 1. 조건 검색 및 페이징 처리 -> pk만 조회
-     * 2. pk 목록을 where in 으로 조회 및 fetch join
-     * 한방 쿼리로는 one to many 조인하면 무조건 full list fetch + in memory paging 발생
      *
      * @param id
      * @param pageable
@@ -67,15 +57,9 @@ public class UserService {
     public UserInfoResponse getUserInfo(String id, Pageable pageable) throws NoSuchUserException {
         User user = findUser(id);
 
-        Page<UserMap> userMap = userMapRepository.findByIdUserId(user.getId(), pageable);
-        List<UserMapList> result = mapRepository.findMyMap(
-                        userMap.stream()
-                                .map(um -> um.getId().getMapId())
-                                .collect(Collectors.toList())
-                ).stream().map(m -> new UserMapList(m.getId(), m.getName(), m.getPassword()))
-                .collect(Collectors.toList());
+        Page<UserMapList> maps = userMapRepository.findByIdUserId(user.getId(), pageable)
+                .map(UserMapList::new);
 
-        PageImpl<UserMapList> maps = new PageImpl<>(result, pageable , userMap.getTotalElements());
         return UserInfoResponse.builder()
                 .id(id)
                 .password(user.getPassword())
@@ -88,6 +72,7 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchUserException("일치하는 회원이 없습니다"));
     }
+
     //== 내부 검증 로직 ==//
 
     private void validateDuplicateUser(User user) throws DuplicatedUserException {
