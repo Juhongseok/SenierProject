@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@Rollback(value = false)
+//@Rollback(value = false)
 class FriendRepositoryTest {
 
     @Autowired
@@ -29,7 +29,7 @@ class FriendRepositoryTest {
     private User userB;
     private FriendId id;
 
-    @BeforeEach
+   /* @BeforeEach
     void before() {
         userA = userRepository.findById("userA").get();
         userB = userRepository.findById("userB").get();
@@ -90,5 +90,5 @@ class FriendRepositoryTest {
         //when
         System.out.println(find);
         //then
-    }
+    }*/
 }
