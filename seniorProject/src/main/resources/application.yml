@@ -23,10 +23,10 @@ logging.level:
     org.hibernate.type: trace
 
 server:
-    address: 0.0.0.0
-    port: 8080
     servlet:
         session:
-        tracking-modes: cookie
+            tracking-modes: cookie
     error:
         include-binding-errors: always
+    address: 0.0.0.0
+    port: 8080
