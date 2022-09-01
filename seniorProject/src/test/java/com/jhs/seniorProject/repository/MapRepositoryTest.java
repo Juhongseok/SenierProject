@@ -24,7 +24,7 @@ class MapRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Test
+    /*@Test
     @DisplayName("지도 생성")
     void createNewMap(){
         //given
@@ -42,5 +42,5 @@ class MapRepositoryTest {
         assertThat(savedMap).isEqualTo(userMap.getMap());
         assertThat(savedMap.getId()).isEqualTo(userMap.getId().getMapId());
         assertThat(userA.getId()).isEqualTo(userMap.getId().getUserId());
-    }
+    }*/
 }

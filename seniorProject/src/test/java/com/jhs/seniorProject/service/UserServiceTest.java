@@ -26,7 +26,7 @@ class UserServiceTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Test
+    /*@Test
     @DisplayName("회원가입 성공로직")
     void joinSuccess() throws DuplicatedUserException {
         //given
@@ -126,5 +126,5 @@ class UserServiceTest {
         //then
         assertThatThrownBy(() -> userService.login(user))
                 .isInstanceOf(NoSuchUserException.class);
-    }
+    }*/
 }

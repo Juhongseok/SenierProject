@@ -29,7 +29,7 @@ class MapServiceTest {
     private User userA;
     private User userB;
 
-    @BeforeEach
+   /* @BeforeEach
     void before() {
         mapService.createMap(new CreateMapDto("mapA", userRepository.findById("userA").get().getId()));
         userA = userRepository.findById("userA").get();
@@ -57,5 +57,5 @@ class MapServiceTest {
     void addMap() throws NoSuchMapException {
 //        mapService.addMap(new AddMapDto("userA", savedMap.getPassword(), userB.getId()));
 
-    }
+    }*/
 }

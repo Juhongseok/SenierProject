@@ -21,7 +21,7 @@ public class OneToManyTest {
     @Autowired
     MapService mapService;
 
-    @Test
+    /*@Test
     void test(){
         for (int i = 1; i <= 10; i++) {
             mapService.createMap(new CreateMapDto("map" + i, "userA"));
@@ -46,5 +46,5 @@ public class OneToManyTest {
         for (Map map : mapResult) {
             System.out.println(map.getName());
         }
-    }
+    }*/
 }

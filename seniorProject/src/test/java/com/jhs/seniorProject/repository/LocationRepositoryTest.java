@@ -32,7 +32,7 @@ class LocationRepositoryTest {
     @Autowired
     EntityManager em;
 
-    @Test
+    /*@Test
     void findLocationsByMapId(){
         Map map = mapRepository.findById(1L).get();
         List<Location> list = locationRepository.findLocationsByMapId(map);
@@ -75,5 +75,5 @@ class LocationRepositoryTest {
         for (Location location : locationCond) {
             System.out.println(location.getSmallSubject().getSubjectName());
         }
-    }
+    }*/
 }

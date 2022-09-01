@@ -16,7 +16,7 @@ class UserRepositoryTest {
     private UserRepository userRepository;
     private User savedUser;
 
-    @BeforeEach
+    /*@BeforeEach
     void saveUser() {
         User user = new User("userA", "userA@", "userAName");
         savedUser = userRepository.save(user);
@@ -69,6 +69,6 @@ class UserRepositoryTest {
         //then
         User newFindUser = userRepository.findById(id).orElse(null);
         assertThat(newFindUser).isNull();
-    }
+    }*/
 
 }
