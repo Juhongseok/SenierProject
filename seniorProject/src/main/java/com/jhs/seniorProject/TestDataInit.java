@@ -20,12 +20,14 @@ import com.jhs.seniorProject.service.requestform.SignUpForm;
 import com.jhs.seniorProject.service.responseform.UserInfoResponse;
 import com.jhs.seniorProject.service.responseform.UserMapList;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 
+@Profile("local")
 @Component
 @RequiredArgsConstructor
 public class TestDataInit {
