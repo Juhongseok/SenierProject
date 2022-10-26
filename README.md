@@ -11,7 +11,7 @@
         |   |-- java
         |   |   `-- com
         |   |       `-- jhs
-        |   |           `-- seniorProject
+        |   |           `-- travleMap
         |   |               |-- argumentresolver
         |   |               |-- configuration
         |   |               |-- controller
