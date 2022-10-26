@@ -45,7 +45,7 @@
             `-- java
                 `-- com
                     `-- jhs
-                        `-- seniorProject
+                        `-- travelMap
                             |-- repository
                             `-- service
 
