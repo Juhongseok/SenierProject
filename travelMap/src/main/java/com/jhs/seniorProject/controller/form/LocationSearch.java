@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LocationSearch {
     private Long mapId;
-    private String name;
     private String bigSubject;
     private Long smallSubject;
 }

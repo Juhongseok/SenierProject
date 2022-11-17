@@ -39,20 +39,13 @@ public class LocationRepositoryImpl implements LocationRepositoryCustom {
     }
 
     private List<LocationList> getLocationListV1(LocationSearch locationSearch) {
-//        String query = "select l from Location l join fetch l.map m where m.id=: mapId";
         String query = "select new com.jhs.seniorProject.service.responseform.LocationList(l.id, l.latitude, l.longitude, l.name) " +
                         "from Location l " +
                         "join fetch l.map m " +
                         "where m.id=: mapId";
 
-        boolean isName = false;
         boolean isBigSubject = false;
         boolean isSmallSubject = false;
-
-        if (StringUtils.hasText(locationSearch.getName())) {
-            query += " and l.name=:name";
-            isName = true;
-        }
 
         if (StringUtils.hasText(locationSearch.getBigSubject())) {
             query += " and l.bigSubject=:bigSubject";
@@ -65,10 +58,6 @@ public class LocationRepositoryImpl implements LocationRepositoryCustom {
         }
 
         TypedQuery<LocationList> typedQuery = em.createQuery(query, LocationList.class);
-
-        if (isName) {
-            typedQuery.setParameter("name", locationSearch.getName());
-        }
 
         if (isBigSubject) {
             typedQuery.setParameter("bigSubject", locationSearch.getBigSubject());
@@ -89,7 +78,6 @@ public class LocationRepositoryImpl implements LocationRepositoryCustom {
                 .where(
                         mapIdEq(locationSearch.getMapId()),
                         locationSmallSubjectEq(locationSearch.getSmallSubject()),
-                        locationNameContain(locationSearch.getName()),
                         locationBigSubjectEq(locationSearch.getBigSubject())
                 )
                 .fetch();
@@ -108,7 +96,6 @@ public class LocationRepositoryImpl implements LocationRepositoryCustom {
                 .where(
                         mapIdEq(locationSearch.getMapId()),
                         locationSmallSubjectEq(locationSearch.getSmallSubject()),
-                        locationNameContain(locationSearch.getName()),
                         locationBigSubjectEq(locationSearch.getBigSubject())
                 )
                 .fetch();
@@ -116,10 +103,6 @@ public class LocationRepositoryImpl implements LocationRepositoryCustom {
 
     private BooleanExpression mapIdEq(Long mapId) {
         return location.map.id.eq(mapId);
-    }
-
-    private BooleanExpression locationNameContain(String locationName) {
-        return StringUtils.hasText(locationName) ? location.name.contains(locationName) : null;
     }
 
     private BooleanExpression locationSmallSubjectEq(Long smallSubjectId) {

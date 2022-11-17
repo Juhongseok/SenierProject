@@ -36,8 +36,6 @@
                     <div style="padding: 0 10px 0 10px">
                         <form th:object="${mapInfo}">
                             <input type="text" id="mapId" th:value="${mapId}" hidden>
-                            장소<br>
-                            <input class="form-control" type="text" value="" id="name" size="15"><br>
                             <label for="bigSubject" th:text="#{label.bigSubject}"/>
                             <select class="form-control form-control-sm" th:name="bigSubject" id="bigSubject" style="height: 38px">
                                 <option th:value="${null}">선택</option>
@@ -69,5 +67,5 @@
 
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=226036c7cbb60353bce92ae3327f96e0&libraries=services"></script>
-<script src="/js/kakaomap.js?ver=1"></script>
+<script src="/js/kakaomap.js?ver=4"></script>
 </html>

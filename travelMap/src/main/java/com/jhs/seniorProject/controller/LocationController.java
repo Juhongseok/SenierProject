@@ -101,7 +101,7 @@ public class LocationController {
         }
 
         locationService.updateLocation(locationId, updateLocationForm);
-        return "redirect:/location/" + mapId + "/view";
+        return "redirect:/map/" + mapId + "/view";
     }
 
     /**

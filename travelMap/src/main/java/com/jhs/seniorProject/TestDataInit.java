@@ -42,44 +42,34 @@ public class TestDataInit {
     @PostConstruct
     public void init() {
         try {
-            userService.join(new SignUpForm("userA", "userA!", "userA","userA"));
+            userService.join(new SignUpForm("userA", "userA!", "userA","주홍석"));
             userService.join(new SignUpForm("userB", "userB!", "userB","userB"));
-            userService.join(new SignUpForm("userC", "userC!", "userC","userC"));
 
-            friendService.addFriend(new LoginUser("userA", "userA"), "userB");
-            friendService.addFriend(new LoginUser("userA", "userA"), "userC");
+            friendService.addFriend(new LoginUser("userA", "주홍석"), "userB");
             friendService.addFriend(new LoginUser("userB", "userB"), "userA");
 
-            mapService.createMap(new CreateMapDto("UserA's Map1", "userA"));
-            mapService.createMap(new CreateMapDto("UserA's Map2", "userA"));
+            mapService.createMap(new CreateMapDto("크리스마스 여행 지도", "userA"));
+            mapService.createMap(new CreateMapDto("Sample Map", "userA"));
 
             UserInfoResponse userAInfo = userService.getUserInfo("userA", PageRequest.of(0,5));
             UserMapList maps = userAInfo.getMaps().getContent().get(0);
-            UserMapList maps2 = userAInfo.getMaps().getContent().get(1);
             Map map = mapRepository.findById(maps.getMapId()).get();
-            Map map2 = mapRepository.findById(maps2.getMapId()).get();
             List<SmallSubject> smallSubjects = smallSubjectRepository.findByMapId(map.getId());
             locationService.saveLocation(
-                    new SaveLocationForm(37.566826, 126.9786567, "save location1", "location1"
-                            , BigSubject.TOGO, smallSubjects.get(0), map.getId())
+                    new SaveLocationForm(37.53867557858969, 126.893055915673, "12월 24일 갈 숙소", "유니언호텔"
+                            , BigSubject.TOGO, smallSubjects.get(2), map.getId())
                     ,"userA"
             );
 
             locationService.saveLocation(
-                    new SaveLocationForm( 37.65358170124324, 127.04783326913316, "save location1", "location1"
+                    new SaveLocationForm( 37.54214533095778, 126.89108775182187, "클라이밍 짐", "서울볼더스컴퍼니"
+                            , BigSubject.TOGO, smallSubjects.get(3), map.getId())
+                    ,"userA"
+            );
+
+            locationService.saveLocation(
+                    new SaveLocationForm( 37.551507336391595, 126.917421754867 , "첫날 점심", "카와카츠 오토코"
                             , BigSubject.TOGO, smallSubjects.get(1), map.getId())
-                    ,"userA"
-            );
-
-            locationService.saveLocation(
-                    new SaveLocationForm( 37.615355069395335, 127.01335100479028 , "save location1", "location1"
-                            , BigSubject.TOGO, smallSubjects.get(0), map.getId())
-                    ,"userA"
-            );
-
-            locationService.saveLocation(
-                    new SaveLocationForm( 37.615355069395335, 127.01335100479028 , "save location1", "location1"
-                            , BigSubject.TOGO, smallSubjects.get(1), map2.getId())
                     ,"userA"
             );
         } catch (DuplicatedUserException e) {

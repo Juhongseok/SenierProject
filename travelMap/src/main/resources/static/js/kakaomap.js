@@ -6,6 +6,7 @@ let mapContainer = document.getElementById('map'),
 let map = new kakao.maps.Map(mapContainer, mapOption);
 let ps = new kakao.maps.services.Places();
 let savedMarker = [];
+let findMarker = [];
 /**
  * 기본 페이지 열때 저장 위치 마커 표시
  */
@@ -79,7 +80,6 @@ function searchPlaces() {
 function searchSavedPlaces() {
     let param = {
         mapId: $("#mapId").val(),
-        name: $("#name").val(),
         bigSubject: $("#bigSubject").val(),
         smallSubject: $("#smallSubject").val()
     }
@@ -90,7 +90,6 @@ function searchSavedPlaces() {
         contentType: "application/json; charset=utf-8",
     }).done(function (data) {
         alert("위치 검색 성공");
-
         for (let i = 0; i < savedMarker.length; i++) {
             savedMarker[i].setVisible(false);
         }
@@ -98,6 +97,7 @@ function searchSavedPlaces() {
         for (let i = 0; i < data.length; i++) {
             let saveLat = data[i]["latitude"];
             let saveLng = data[i]["longitude"];
+
             for (let j = 0; j < savedMarker.length; j++) {
                 const position = savedMarker[j].getPosition();
                 const lat = position.getLat();
@@ -121,6 +121,10 @@ function searchSavedPlaces() {
  * @param status
  */
 function placesSearchCB(data, status) {
+    for (let i = 0; i < findMarker.length; i++) {
+        findMarker[i].setVisible(false);
+    }
+    findMarker = [];
     if (status === kakao.maps.services.Status.OK) {
         let bounds = new kakao.maps.LatLngBounds();
         for (let i=0; i<data.length; i++) {
@@ -162,6 +166,7 @@ function displayMarker(place) {
         position: latLng
     });
 
+    findMarker.push(marker);
     let content =
         `<div class="wrap">
             <div class="infoWindow">

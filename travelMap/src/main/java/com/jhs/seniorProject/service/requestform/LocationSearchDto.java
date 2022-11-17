@@ -30,7 +30,6 @@ public class LocationSearchDto {
 
         return LocationSearchDto.builder()
                 .mapId(locationSearch.getMapId())
-                .name(locationSearch.getName())
                 .bigSubject(bigSubject)
                 .smallSubject(locationSearch.getSmallSubject())
                 .build();

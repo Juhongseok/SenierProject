@@ -52,11 +52,15 @@ public class MapService {
         UserMap userMap = new UserMap(new UserMapId(findUser.getId(), map.getId()), findUser, map);
         SmallSubject subject1 = new SmallSubject("카페", map, findUser.getName());
         SmallSubject subject2 = new SmallSubject("식당", map, findUser.getName());
+        SmallSubject subject3 = new SmallSubject("숙소", map, findUser.getName());
+        SmallSubject subject4 = new SmallSubject("놀거리", map, findUser.getName());
 
         //연관관계 같이 등록 되도록 설정
         map.getUserMaps().add(userMap);
         map.getSmallSubjects().add(subject1);
         map.getSmallSubjects().add(subject2);
+        map.getSmallSubjects().add(subject3);
+        map.getSmallSubjects().add(subject4);
 
         Map saveMap = mapRepository.save(map);
         return saveMap.getId();
